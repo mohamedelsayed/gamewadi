@@ -9,4 +9,7 @@ sudo apt install php7.3-tokenizer
 sudo apt install php7.3-json
 sudo apt install php7.3-xml
 sudo a2enmod ssl
+sudo a2enmod headers
+sudo a2enmod deflate
+sudo a2enmod rewrite
 sudo service apache2 restart
