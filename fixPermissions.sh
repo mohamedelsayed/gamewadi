@@ -11,4 +11,5 @@ sudo chmod 777 -R storage/logs
 sudo chmod 777 -R bootstrap/cache
 sudo chmod 777 -R public/zip
 sudo chmod 777 -R public/error-output.txt
+sudo chmod 777 -R public/images/media
 chmod 777 -R tmp
