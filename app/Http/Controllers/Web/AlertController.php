@@ -100,16 +100,16 @@ class AlertController extends Controller {
 
             //admin email
             if (!empty($ordersData['orders_data'][0]->admin_email)) {
-                try {
-                    Mail::send('/mail/orderEmail', ['ordersData' => $ordersData], function($m) use ($ordersData) {
-                        $m->to($ordersData['orders_data'][0]->admin_email)->subject(Lang::get("labels.Ecommerce App: An order has been placed"))->getSwiftMessage()
-                                ->getHeaders()
-                                ->addTextHeader('x-mailgun-native-send', 'true');
-                    });
-                } catch (\Exception $e) {
-
-                    return view('errors.not_install');
-                }
+//                try {
+                Mail::send('/mail/orderEmail', ['ordersData' => $ordersData], function($m) use ($ordersData) {
+                    $m->to($ordersData['orders_data'][0]->admin_email)->subject(Lang::get("labels.Ecommerce App: An order has been placed"))->getSwiftMessage()
+                            ->getHeaders()
+                            ->addTextHeader('x-mailgun-native-send', 'true');
+                });
+//                } catch (\Exception $e) {
+//
+//                    return view('errors.not_install');
+//                }
             }
 
             //customer email
