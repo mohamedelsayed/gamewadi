@@ -29,3 +29,4 @@ yarn-error.log
 
 /nbproject/private/
 tmp
+composer.lock
