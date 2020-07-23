@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel {
         //          ->hourly();
         $schedule->command('currency:update')
                 ->timezone('Africa/Cairo')
-                ->twiceDaily(1, 13);
+                ->twiceDaily(2, 14);
     }
 
     /**

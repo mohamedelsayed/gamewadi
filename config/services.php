@@ -41,11 +41,11 @@ return [
     'facebook' => [
         'client_id' => '336111277379676',
         'client_secret' => 'f3683cadb331208b67e3639360d11f2f',
-        'redirect' => env('FACEBOOK_REDIRECT', ''),
+        'redirect' => url('/') . '/login/facebook/callback',
     ],
     'google' => [
         'client_id' => '576365444659-nl5rt0v3bcqc58mls269q7q9g8a28cuf.apps.googleusercontent.com',
         'client_secret' => 'mRDyyq9hUa0pVQ_m82Gh2Adx',
-        'redirect' => env('GOOGLE_REDIRECT', ''),
+        'redirect' => url('/') . '/login/google/callback',
     ],
 ];
