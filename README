@@ -1,1 +1,6 @@
-This is gamewadi repo
+------------------------------------------------------------------------------
+#add this line to Scheduled Cron Jobs & run it every minute, to run update currency & so on:
+php /var/www/html/gamewadi/artisan schedule:run >> /dev/null 2>&1
+or
+/usr/bin/php7.3 /var/www/html/gamewadi/artisan schedule:run >> /dev/null 2>&1
+------------------------------------------------------------------------------

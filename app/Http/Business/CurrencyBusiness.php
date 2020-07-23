@@ -10,9 +10,10 @@ class CurrencyBusiness extends Controller {
     public function handleUpdateCurrency() {
         $egp = 'EGP';
         $usd = 'USD';
+        $endpoint = 'live';
         $key = \Config::get('currencylayer.key');
 //        $this->printLog($key);
-        $api = 'http://apilayer.net/api/live?access_key=' . $key . '&currencies=' . $egp . '&source=' . $usd . '&format=1';
+        $api = 'http://apilayer.net/api/' . $endpoint . '?access_key=' . $key . '&currencies=' . $egp . '&source=' . $usd . '&format=1';
         $result = $this->callApi($api, 'GET');
 //        print_r($result);
         if ($result && $result['success'] == 1) {
