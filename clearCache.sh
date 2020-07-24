@@ -4,4 +4,4 @@ php artisan config:clear
 php artisan view:clear
 #php artisan route:cache
 #php artisan api:cache
-php artisan view:clear
+#php artisan view:clear
