@@ -10,7 +10,10 @@
             <li class="active">{{ trans('labels.EditProduct') }}</li>
         </ol>
     </section>
-
+    <section class="content-header">
+        <a class="btn btn-warning" style="width: 20%;  margin-bottom: 5px;" href="{{url('admin/products/images/display/'. $result['product'][0]->products_id) }}">{{ trans('labels.ProductImages') }}</a>
+        <a class="btn btn-danger" style="width: 20%;  margin-bottom: 5px;" id="deleteProductId" products_id="{{ $result['product'][0]->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
+    </section>
     <!-- Main content -->
     <section class="content">
         <!-- Info boxes -->
@@ -67,9 +70,9 @@
                                                             <option value="">{{ trans('labels.Choose Manufacturer') }}</option>
                                                             @foreach ($result['manufacturer'] as $manufacturer)
                                                             <option @if($result['product'][0]->manufacturers_id == $manufacturer->id )
-                                                                selected
-                                                                @endif
-                                                                value="{{ $manufacturer->id }}">{{ $manufacturer->name }}</option>
+                                                                     selected
+                                                                     @endif
+                                                                     value="{{ $manufacturer->id }}">{{ $manufacturer->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
@@ -83,7 +86,7 @@
                                                 <div class="form-group">
                                                     <label for="name" class="col-sm-2 col-md-2 control-label">{{ trans('labels.Category') }}</label>
                                                     <div class="col-sm-10 col-md-9">
-                                                    <?php print_r($result['categories']); ?>
+                                                        <?php print_r($result['categories']); ?>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                             {{ trans('labels.ChooseCatgoryText') }}.</span>
                                                         <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
@@ -143,9 +146,9 @@
                                                             <option selected> {{ trans('labels.SelectTaxClass') }}</option>
                                                             @foreach ($result['taxClass'] as $taxClass)
                                                             <option @if($result['product'][0]->products_tax_class_id == $taxClass->tax_class_id )
-                                                                selected
-                                                                @endif
-                                                                value="{{ $taxClass->tax_class_id }}">{{ $taxClass->tax_class_title }}</option>
+                                                                     selected
+                                                                     @endif
+                                                                     value="{{ $taxClass->tax_class_id }}">{{ $taxClass->tax_class_title }}</option>
                                                             @endforeach
                                                         </select>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
@@ -248,7 +251,7 @@
                                             </div>
 
 
-                                           
+
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12 col-md-6">
@@ -289,7 +292,7 @@
                                                             <div id="selectedthumbnail" class="selectedthumbnail col-md-5"> </div>
                                                             <div class="closimage">
                                                                 <button type="button" class="close pull-left image-close " id="image-close"
-                                                                  style="display: none; position: absolute;left: 105px; top: 54px; background-color: black; color: white; opacity: 2.2; " aria-label="Close">
+                                                                        style="display: none; position: absolute;left: 105px; top: 54px; background-color: black; color: white; opacity: 2.2; " aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
@@ -318,11 +321,11 @@
                                                     <div class="col-sm-10 col-md-8">
                                                         <select class="form-control" onChange="showFlash()" name="isFlash" id="isFlash">
                                                             <option value="no" @if($result['flashProduct'][0]->flash_status == 0)
-                                                                selected
-                                                                @endif>{{ trans('labels.No') }}</option>
+                                                                    selected
+                                                                    @endif>{{ trans('labels.No') }}</option>
                                                             <option value="yes" @if($result['flashProduct'][0]->flash_status == 1)
-                                                                selected
-                                                                @endif>{{ trans('labels.Yes') }}</option>
+                                                                    selected
+                                                                    @endif>{{ trans('labels.Yes') }}</option>
                                                         </select>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                             {{ trans('labels.FlashSaleText') }}</span>
@@ -351,7 +354,7 @@
                                                         </div>
                                                         <div class="col-sm-10 col-md-4 bootstrap-timepicker">
                                                             <input type="text" class="form-control timepicker" readonly name="flash_start_time" id="flash_start_time"
-                                                              value="{{date('h:i:sA',  $result['flashProduct'][0]->flash_start_date ) }}">
+                                                                   value="{{date('h:i:sA',  $result['flashProduct'][0]->flash_start_date ) }}">
                                                             <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
                                                         </div>
                                                         @else
@@ -374,7 +377,7 @@
                                                         @if($result['flashProduct'][0]->flash_status == 1)
                                                         <div class="col-sm-10 col-md-4">
                                                             <input class="form-control datepicker" readonly type="text" name="flash_expires_date" id="flash_expires_date"
-                                                              value="{{ date('d/m/Y', $result['flashProduct'][0]->flash_expires_date )}}">
+                                                                   value="{{ date('d/m/Y', $result['flashProduct'][0]->flash_expires_date )}}">
                                                             <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                 {{ trans('labels.FlashExpireDateText') }}</span>
                                                             <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
@@ -418,13 +421,13 @@
                                                     <div class="col-sm-10 col-md-8">
                                                         <select class="form-control" onChange="showSpecial()" name="isSpecial" id="isSpecial">
                                                             <option @if($result['product'][0]->products_id != $result['specialProduct'][0]->products_id && $result['specialProduct'][0]->status == 0)
-                                                                selected
-                                                                @endif
-                                                                value="no">{{ trans('labels.No') }}</option>
+                                                                     selected
+                                                                     @endif
+                                                                     value="no">{{ trans('labels.No') }}</option>
                                                             <option @if($result['product'][0]->products_id == $result['specialProduct'][0]->products_id && $result['specialProduct'][0]->status == 1)
-                                                                selected
-                                                                @endif
-                                                                value="yes">{{ trans('labels.Yes') }}</option>
+                                                                     selected
+                                                                     @endif
+                                                                     value="yes">{{ trans('labels.Yes') }}</option>
                                                         </select>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;"> {{ trans('labels.SpecialProductText') }}</span>
                                                     </div>
@@ -459,128 +462,128 @@
                                                     <div class="form-group">
                                                         <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Status') }}</label>
                                                         <div class="col-sm-10 col-md-8">
-                                                          <select class="form-control" name="status">
+                                                            <select class="form-control" name="status">
+                                                                <option
+                                                                    @if($result['specialProduct'][0]->status == 1 )
+                                                                    selected
+                                                                    @endif
+                                                                    value="1">{{ trans('labels.Active') }}
+                                                            </option>
                                                             <option
-                                                             @if($result['specialProduct'][0]->status == 1 )
-                                                               selected
-                                                             @endif
-                                                             value="1">{{ trans('labels.Active') }}
-                                                             </option>
-                                                            <option
-                                                             @if($result['specialProduct'][0]->status == 0 )
-                                                               selected
-                                                             @endif
-                                                             value="0">{{ trans('labels.Inactive') }}</option>
-                                                          </select>
-                                                            <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
-                                                                {{ trans('labels.ActiveSpecialProductText') }}.</span>
-                                                        </div>
+                                                                @if($result['specialProduct'][0]->status == 0 )
+                                                                selected
+                                                                @endif
+                                                                value="0">{{ trans('labels.Inactive') }}</option>
+                                                        </select>
+                                                        <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                            {{ trans('labels.ActiveSpecialProductText') }}.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="tabbable tabs-left">
-                                                    <ul class="nav nav-tabs">
-                                                        @php
-                                                        $i = 0;
-                                                        @endphp
-                                                        @foreach($result['languages'] as $key=>$languages)
-                                                        <li class="@if($i==0) active @endif"><a href="#product_<?=$languages->languages_id?>" data-toggle="tab"><?=$languages->name?></a></li>
-                                                        @php
-                                                        $i++;
-                                                        @endphp
-                                                        @endforeach
-                                                    </ul>
-                                                    <div class="tab-content">
-                                                        @php
-                                                        $j = 0;
-                                                        @endphp
-                                                        @foreach($result['description'] as $key=>$description_data)
-                                                        <div style="margin-top: 15px;" class="tab-pane @if($j==0) active @endif" id="product_<?=$description_data['languages_id']?>">
-                                                            @php
-                                                            $j++;
-                                                            @endphp
-                                                            <div class="form-group">
-                                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductName') }} ({{ $description_data['language_name'] }})</label>
-                                                                <div class="col-sm-10 col-md-4">
-                                                                    <input type="text" name="products_name_<?=$description_data['languages_id']?>" class="form-control field-validate" value='{{$description_data['products_name']}}'>
-                                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
-                                                                        {{ trans('labels.EnterProductNameIn') }} {{ $description_data['language_name'] }} </span>
-                                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group external_link" style="display: none">
-                                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.External URL') }} ({{ $description_data['language_name'] }})</label>
-                                                                <div class="col-sm-10 col-md-4">
-                                                                    <input type="text" name="products_url_<?=$description_data['languages_id']?>" class="form-control products_url" value='{{$description_data['products_url']}}'>
-                                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
-                                                                        {{ trans('labels.External URL Text') }} ({{ $description_data['language_name'] }}) </span>
-                                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Description') }} ({{ $description_data['language_name'] }})</label>
-                                                                <div class="col-sm-10 col-md-8">
-                                                                    <textarea id="editor<?=$description_data['languages_id']?>" name="products_description_<?=$description_data['languages_id']?>" class="form-control"
-                                                                      rows="5">{{stripslashes($description_data['products_description'])}}</textarea>
-
-                                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
-                                                                        {{ trans('labels.EnterProductDetailIn') }} {{ $description_data['language_name'] }}</span> </div>
-                                                            </div>
-
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /.box-body -->
-                                        <div class="box-footer text-center">
-                                            <button type="submit" class="btn btn-primary pull-right" id="normal-btn">{{ trans('labels.Save_And_Continue') }} <i class="fa fa-angle-right 2x"></i></button>
-                                        </div>
-
-                                        <!-- /.box-footer -->
-                                        {!! Form::close() !!}
                                     </div>
+
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="tabbable tabs-left">
+                                                <ul class="nav nav-tabs">
+                                                    @php
+                                                    $i = 0;
+                                                    @endphp
+                                                    @foreach($result['languages'] as $key=>$languages)
+                                                    <li class="@if($i==0) active @endif"><a href="#product_<?= $languages->languages_id ?>" data-toggle="tab"><?= $languages->name ?></a></li>
+                                                    @php
+                                                    $i++;
+                                                    @endphp
+                                                    @endforeach
+                                                </ul>
+                                                <div class="tab-content">
+                                                    @php
+                                                    $j = 0;
+                                                    @endphp
+                                                    @foreach($result['description'] as $key=>$description_data)
+                                                    <div style="margin-top: 15px;" class="tab-pane @if($j==0) active @endif" id="product_<?= $description_data['languages_id'] ?>">
+                                                        @php
+                                                        $j++;
+                                                        @endphp
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductName') }} ({{ $description_data['language_name'] }})</label>
+                                                            <div class="col-sm-10 col-md-4">
+                                                                <input type="text" name="products_name_<?= $description_data['languages_id'] ?>" class="form-control field-validate" value='{{$description_data['products_name']}}'>
+                                                                       <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                                    {{ trans('labels.EnterProductNameIn') }} {{ $description_data['language_name'] }} </span>
+                                                                <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group external_link" style="display: none">
+                                                            <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.External URL') }} ({{ $description_data['language_name'] }})</label>
+                                                            <div class="col-sm-10 col-md-4">
+                                                                <input type="text" name="products_url_<?= $description_data['languages_id'] ?>" class="form-control products_url" value='{{$description_data['products_url']}}'>
+                                                                       <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                                    {{ trans('labels.External URL Text') }} ({{ $description_data['language_name'] }}) </span>
+                                                                <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Description') }} ({{ $description_data['language_name'] }})</label>
+                                                            <div class="col-sm-10 col-md-8">
+                                                                <textarea id="editor<?= $description_data['languages_id'] ?>" name="products_description_<?= $description_data['languages_id'] ?>" class="form-control"
+                                                                          rows="5">{{stripslashes($description_data['products_description'])}}</textarea>
+
+                                                                <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                                    {{ trans('labels.EnterProductDetailIn') }} {{ $description_data['language_name'] }}</span> </div>
+                                                        </div>
+
+                                                    </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer text-center">
+                                        <button type="submit" class="btn btn-primary pull-right" id="normal-btn">{{ trans('labels.Save_And_Continue') }} <i class="fa fa-angle-right 2x"></i></button>
+                                    </div>
+
+                                    <!-- /.box-footer -->
+                                    {!! Form::close() !!}
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <!-- /.box-body -->
+
                 </div>
-                <!-- /.box -->
+                <!-- /.box-body -->
             </div>
-            <!-- /.col -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    @include('admin.products.modals.deleteproductmodal')
+    <!-- Main row -->
 
-        <!-- Main row -->
-
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
+    <!-- /.row -->
+</section>
+<!-- /.content -->
 </div>
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script type="text/javascript">
-    $(function() {
+                                                            $(function () {
 
-        //for multiple languages
-        @foreach($result['languages'] as $languages)
-        // Replace the <textarea id="editor1"> with a CKEditor
-        // instance, using default configuration.
-        CKEDITOR.replace('editor{{$languages->languages_id}}');
-        @endforeach
-        //bootstrap WYSIHTML5 - text editor
-        $(".textarea").wysihtml5();
+                                                                //for multiple languages
+                                                                @foreach($result['languages'] as $languages)
+                                                                // Replace the <textarea id="editor1"> with a CKEditor
+                                                                // instance, using default configuration.
+                                                                CKEDITOR.replace('editor{{$languages->languages_id}}');
+                                                                @endforeach
+                                                                        //bootstrap WYSIHTML5 - text editor
+                                                                        $(".textarea").wysihtml5();
 
-    });
+                                                            });
 </script>
 @endsection
