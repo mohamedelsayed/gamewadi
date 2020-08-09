@@ -39,7 +39,7 @@ Vue.component('carousel4-slider-component', require('./components/sliders/carous
 Vue.component('carousel5-slider-component', require('./components/sliders/carousal5Component.vue').default);
 
 
-
+if( $('#app').length ){
 const app = new Vue({
     el: '#app',
     // mounted() {
@@ -51,6 +51,6 @@ const app = new Vue({
     // },
 
 });
-
+}
 
 
