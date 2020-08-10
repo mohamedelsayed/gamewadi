@@ -1177,9 +1177,9 @@
 
 <script type="application/javascript">
 
-    OneSignal.push(function() {
+    /*  OneSignal.push(function() {
     /* These examples are all valid */
-    OneSignal.getUserId(function(userId) {
+    /*OneSignal.getUserId(function(userId) {
     console.log("OneSignal User ID:", userId);
 
     //ajax request
@@ -1198,7 +1198,7 @@
     //console.log("OneSignal User ID:", userId);
     // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316
     });
-    });
+    });*/
 
     //header categories
     jQuery('.categories-list').on('click', function(e){
@@ -1236,7 +1236,7 @@
 
     jQuery( document ).ready( function () {
     jQuery('#loader').hide();
-    OneSignal.push(function () {
+    /*  OneSignal.push(function () {
     OneSignal.registerForPushNotifications();
     OneSignal.on('subscriptionChange', function (isSubscribed) {
     if (isSubscribed) {
@@ -1256,7 +1256,7 @@
     }
     });
 
-    });
+    });*/
 
     //load google map
     @if(Request::path() == 'contact-us')
