@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-
+@if($result['commonContent']['settings']['instauserid'])
 <script src="{!! asset('web/js/jquery.instagramFeed.min.js') !!}"></script>
+@endif
 @if(Request::path() == 'checkout')
 <script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>
 <script type="text/javascript">
@@ -189,7 +190,7 @@
     ///////////////// old code ///////////////////
 
     //insta feeds
-
+    @if($result['commonContent']['settings']['instauserid'])
     jQuery(document).ready(function($){
     jQuery.instagramFeed({
     'username': "{{ $result['commonContent']['settings']['instauserid']}}",
@@ -204,7 +205,7 @@
     'margin': 1
     });
     });
-
+    @endif
     // jQuery(document).ready(function($){
 
     // jQuery(document).on('click', '.btnrating', function(){
@@ -1326,7 +1327,7 @@
     });
     //hyperpayresponse
     var resposne = jQuery('#hyperpayresponse').val();
-    console.log(resposne);
+    //console.log(resposne);
     if(typeof resposne  !== "undefined"){
     if(resposne.trim() =='success'){
     jQuery('#loader').show();
