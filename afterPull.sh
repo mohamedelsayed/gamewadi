@@ -1,5 +1,5 @@
 ./clearCache.sh
-#./migrate.sh
+./migrate.sh
 ./fixPermissions.sh
 composer install
 #composer update

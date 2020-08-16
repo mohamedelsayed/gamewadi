@@ -61,13 +61,13 @@ class Controller extends BaseController {
             $log->url = $request->fullUrl();
             $log->method = $request->method();
 //            $log->body = json_decode($request->getContent(), true);
-            $log->params = $request->all();
+            $log->params = serialize($request->all());
 //            $log->header = $request->header();
             $log->ip = $request->ip();
             $log->user_id = $user_id;
 //            $log->status_code = $response->getStatusCode();
 //            $log->response_body = json_decode($response->getContent(), true);
-//            $log->save();
+            $log->save();
         }
     }
 
