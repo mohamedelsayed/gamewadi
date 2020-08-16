@@ -8,17 +8,16 @@ use App\Models\Core\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-class ShippingByWeightController extends Controller
-{
+class ShippingByWeightController extends Controller {
+
     //
-    public function __construct(Products_shipping_rate $products_shipping_rate, Setting $setting)
-    {
+    public function __construct(Products_shipping_rate $products_shipping_rate, Setting $setting) {
+        parent::__construct();
         $this->Products_shipping_rate = $products_shipping_rate;
         $this->Setting = $setting;
     }
 
-    public function shppingbyweight(Request $request)
-    {
+    public function shppingbyweight(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.shppingbyweight"));
         $products_shipping = $this->Products_shipping_rate->getshpippingRate();
         $result['products_shipping'] = $products_shipping;
@@ -26,8 +25,7 @@ class ShippingByWeightController extends Controller
         return view("admin.shippingmethods.shppingbyweight", $title)->with('result', $result);
     }
 
-    public function updateShppingWeightPrice(Request $request)
-    {
+    public function updateShppingWeightPrice(Request $request) {
         for ($i = 0; $i <= 4; $i++) {
             $weight_from = 'weight_from_' . $i;
             $weight_to = 'weight_to_' . $i;
@@ -39,7 +37,7 @@ class ShippingByWeightController extends Controller
             $re_weight_price = $request->$weight_price;
             $this->Products_shipping_rate->updateshippingprice($re_weight_from, $re_weight_to, $re_weight_price, $products_shipping_rates_id);
         }
-        
+
         $message = Lang::get("labels.WeightPriceUpdatedSuccessMessage");
         return redirect()->back()->withErrors([$message]);
     }

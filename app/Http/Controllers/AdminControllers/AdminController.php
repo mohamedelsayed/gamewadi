@@ -24,6 +24,7 @@ class AdminController extends Controller {
     private $domain;
 
     public function __construct(Admin $admin, Setting $setting, Order $order, Customers $customers) {
+        parent::__construct();
         $this->Setting = $setting;
         $this->Admin = $admin;
         $this->Order = $order;

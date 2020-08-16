@@ -11,36 +11,32 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 
-class CouponsController extends Controller
-{
+class CouponsController extends Controller {
+
     //
-    public function __construct(Coupon $coupon, Setting $setting)
-    {
+    public function __construct(Coupon $coupon, Setting $setting) {
+        parent::__construct();
         $this->Coupon = $coupon;
         $this->myVarSetting = new SiteSettingController($setting);
         $this->Setting = $setting;
-
     }
 
-    public function display(Request $request)
-    {
+    public function display(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.ListingCoupons"));
         $result = array();
         $message = array();
         $coupons = Coupon::sortable()
-            ->orderBy('created_at', 'DESC')
-            ->paginate(7);
+                ->orderBy('created_at', 'DESC')
+                ->paginate(7);
         $result['coupons'] = $coupons;
         //get function from other controller
         $result['currency'] = $this->myVarSetting->getSetting();
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.coupons.index", $title)->with('result', $result)->with('coupons', $coupons);
-
     }
 
-    public function filter(Request $request)
-    {
+    public function filter(Request $request) {
 
         $result = array();
         $message = array();
@@ -49,25 +45,25 @@ class CouponsController extends Controller
         $param = $request->parameter;
         switch ($name) {
             case 'Code':$coupons = Coupon::sortable()->where('code', 'LIKE', '%' . $param . '%')
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate(7);
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(7);
 
                 break;
             case 'CouponType':$coupons = Coupon::sortable()->where('discount_type', 'LIKE', '%' . $param . '%')
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate(7);
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(7);
 
                 break;
             case 'CouponAmount':
                 $coupons = Coupon::sortable()->where('amount', 'LIKE', '%' . $param . '%')
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate(7);
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(7);
 
                 break;
             case 'Description':
                 $coupons = Coupon::sortable()->where('description', 'LIKE', '%' . $param . '%')
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate(7);
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(7);
 
                 break;
             default:
@@ -82,8 +78,7 @@ class CouponsController extends Controller
         return view("admin.coupons.index", $title)->with('result', $result)->with('coupons', $coupons)->with('name', $name)->with('param', $param);
     }
 
-    public function add(Request $request)
-    {
+    public function add(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.AddCoupon"));
         $result = array();
@@ -99,8 +94,7 @@ class CouponsController extends Controller
         return view("admin.coupons.add", $title)->with('result', $result);
     }
 
-    public function insert(Request $request)
-    {
+    public function insert(Request $request) {
         if ($request->free_shipping !== null) {
             $free_shipping = $request->free_shipping;
         } else {
@@ -186,12 +180,12 @@ class CouponsController extends Controller
         }
 
         $validator = Validator::make(
-            array(
-                'code' => $request->code,
-            ),
-            array(
-                'code' => 'required',
-            )
+                        array(
+                            'code' => $request->code,
+                        ),
+                        array(
+                            'code' => 'required',
+                        )
         );
         //check validation
         if ($validator->fails()) {
@@ -209,19 +203,17 @@ class CouponsController extends Controller
 
                 //insert record
                 $coupon_id = $this->Coupon->addcoupon($code, $description,
-                    $discount_type, $amount, $individual_use, $product_ids,
-                    $exclude_product_ids, $usage_limit, $usage_limit_per_user, $usage_count
-                    , $used_by, $limit_usage_to_x_items, $product_categories, $excluded_product_categories,
-                    $exclude_sale_items, $email_restrictions, $minimum_amount, $maximum_amount, $expiry_date, $free_shipping);
+                        $discount_type, $amount, $individual_use, $product_ids,
+                        $exclude_product_ids, $usage_limit, $usage_limit_per_user, $usage_count
+                        , $used_by, $limit_usage_to_x_items, $product_categories, $excluded_product_categories,
+                        $exclude_sale_items, $email_restrictions, $minimum_amount, $maximum_amount, $expiry_date, $free_shipping);
 
                 return redirect('admin/coupons/add')->with('success', Lang::get("labels.CouponAddedMessage"));
             }
         }
-
     }
 
-    public function edit(Request $request, $id)
-    {
+    public function edit(Request $request, $id) {
 
         $title = array('pageTitle' => Lang::get("labels.EditCoupon"));
         $result = array();
@@ -240,8 +232,7 @@ class CouponsController extends Controller
         return view("admin.coupons.edit", $title)->with('result', $result);
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
 
         $coupans_id = $request->id;
         if (!empty($request->free_shipping)) {
@@ -291,12 +282,12 @@ class CouponsController extends Controller
         $minimum_amount = $request->minimum_amount;
         $maximum_amount = $request->maximum_amount;
         $validator = Validator::make(
-            array(
-                'code' => $request->code,
-            ),
-            array(
-                'code' => 'required',
-            )
+                        array(
+                            'code' => $request->code,
+                        ),
+                        array(
+                            'code' => 'required',
+                        )
         );
 
         if ($request->usage_count !== null) {
@@ -327,20 +318,17 @@ class CouponsController extends Controller
             } else {
                 //insert record
                 $coupon_id = $this->Coupon->couponupdate($coupans_id, $code, $description, $discount_type, $amount, $individual_use,
-                    $product_ids, $exclude_product_ids, $usage_limit, $usage_limit_per_user, $usage_count,
-                    $limit_usage_to_x_items, $product_categories, $used_by, $excluded_product_categories,
-                    $request, $email_restrictions, $minimum_amount, $maximum_amount, $expiry_date, $free_shipping);
+                        $product_ids, $exclude_product_ids, $usage_limit, $usage_limit_per_user, $usage_count,
+                        $limit_usage_to_x_items, $product_categories, $used_by, $excluded_product_categories,
+                        $request, $email_restrictions, $minimum_amount, $maximum_amount, $expiry_date, $free_shipping);
 
                 $message = Lang::get("labels.CouponUpdatedMessage");
                 return redirect()->back()->withErrors([$message]);
             }
-
         }
-
     }
 
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
         $deletecoupon = DB::table('coupons')->where('coupans_id', '=', $request->id)->delete();
         return redirect()->back()->withErrors([Lang::get("labels.CouponDeletedMessage")]);
     }

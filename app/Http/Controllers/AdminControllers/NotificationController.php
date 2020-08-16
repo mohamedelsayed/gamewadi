@@ -10,17 +10,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 
-class NotificationController extends Controller
-{
+class NotificationController extends Controller {
+
     //
-    public function __construct(Setting $setting)
-    {
+    public function __construct(Setting $setting) {
+        parent::__construct();
         $this->myVarSetting = new SiteSettingController($setting);
         $this->Setting = $setting;
     }
 
-    public function devices(Request $request)
-    {
+    public function devices(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingDevices"));
         $result = array();
         $message = array();
@@ -37,21 +36,21 @@ class NotificationController extends Controller
                 'status' => $status,
             ]);
         }
-        if (isset($request->filter) and !empty($request->filter)) {
+        if (isset($request->filter) and ! empty($request->filter)) {
             $devices = DB::table('devices')
-                ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
-                ->select('users.*', 'users.id as user_id', 'devices.*')
-                ->where('device_type', '=', $request->filter)
-                ->where('devices.is_notify', '=', '1')
-                ->orderBy('devices.id', 'DESC')
-                ->paginate(100);
+                    ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
+                    ->select('users.*', 'users.id as user_id', 'devices.*')
+                    ->where('device_type', '=', $request->filter)
+                    ->where('devices.is_notify', '=', '1')
+                    ->orderBy('devices.id', 'DESC')
+                    ->paginate(100);
         } else {
             $devices = DB::table('devices')
-                ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
-                ->select('users.*', 'users.id as user_id', 'devices.*')
-                ->orderBy('devices.id', 'DESC')
-                ->where('devices.is_notify', '=', '1')
-                ->paginate(100);
+                    ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
+                    ->select('users.*', 'users.id as user_id', 'devices.*')
+                    ->orderBy('devices.id', 'DESC')
+                    ->where('devices.is_notify', '=', '1')
+                    ->paginate(100);
         }
         $result['message'] = $message;
         $result['devices'] = $devices;
@@ -60,8 +59,7 @@ class NotificationController extends Controller
     }
 
     //viewDevices
-    public function viewdevices(Request $request)
-    {
+    public function viewdevices(Request $request) {
 
         $images = new Images;
         $allimage = $images->getimages();
@@ -71,10 +69,10 @@ class NotificationController extends Controller
         $result['message'] = array();
 
         $devices = DB::table('devices')
-            ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
-            ->select('users.*', 'users.id as user_id', 'devices.*')
-            ->where('devices.id', $request->id)
-            ->get();
+                ->LeftJoin('users', 'users.id', '=', 'devices.user_id')
+                ->select('users.*', 'users.id as user_id', 'devices.*')
+                ->where('devices.id', $request->id)
+                ->get();
 
         $result['devices'] = $devices;
         $result['commonContent'] = $this->Setting->commonContent();
@@ -82,8 +80,7 @@ class NotificationController extends Controller
     }
 
     //notifyUser
-    public function notifyUser(Request $request)
-    {
+    public function notifyUser(Request $request) {
 
         $device_type = $request->device_type;
         $device_id = $request->device_id;
@@ -106,8 +103,8 @@ class NotificationController extends Controller
             (
             'body' => $message,
             'title' => $title,
-            'icon' => 'myicon', /*Default Icon*/
-            'sound' => 'mySound', /*Default sound*/
+            'icon' => 'myicon', /* Default Icon */
+            'sound' => 'mySound', /* Default sound */
             'image' => $websiteURL,
         );
 
@@ -116,8 +113,7 @@ class NotificationController extends Controller
     }
 
     //notifications
-    public function notifications(Request $request)
-    {
+    public function notifications(Request $request) {
         $images = new Images;
         $allimage = $images->getimages();
         $title = array('pageTitle' => Lang::get("labels.SendNotifications"));
@@ -129,8 +125,7 @@ class NotificationController extends Controller
     }
 
     //sendNotification
-    public function sendNotifications(Request $request)
-    {
+    public function sendNotifications(Request $request) {
         $device_type = $request->device_type;
         $devices_status = $request->devices_status;
         $message = $request->message;
@@ -153,8 +148,8 @@ class NotificationController extends Controller
             (
             'body' => $message,
             'title' => $title,
-            'icon' => 'myicon', /*Default Icon*/
-            'sound' => 'mySound', /*Default sound*/
+            'icon' => 'myicon', /* Default Icon */
+            'sound' => 'mySound', /* Default sound */
             'image' => $websiteURL,
         );
 
@@ -165,9 +160,9 @@ class NotificationController extends Controller
         if ($device_type == 'all') { /* to all users notification */
 
             $devices = DB::table('devices')
-                ->where('status', '=', $devices_status)
-                ->where('devices.is_notify', '=', '1')
-                ->get();
+                    ->where('status', '=', $devices_status)
+                    ->where('devices.is_notify', '=', '1')
+                    ->get();
 
             if (count($devices) > 0) {
                 foreach ($devices as $devices_data) {
@@ -176,15 +171,14 @@ class NotificationController extends Controller
             } else {
                 $response[] = '2';
             }
-
         } else if ($device_type == '1') { /* apple notification */
 
             $devices = DB::table('devices')
-                ->select('devices.device_id')
-                ->where('status', '=', $devices_status)
-                ->where('devices.is_notify', '=', '1')
-                ->where('device_type', '=', $device_type)
-                ->get();
+                    ->select('devices.device_id')
+                    ->where('status', '=', $devices_status)
+                    ->where('devices.is_notify', '=', '1')
+                    ->where('device_type', '=', $device_type)
+                    ->get();
 
             if (count($devices) > 0) {
                 foreach ($devices as $devices_data) {
@@ -193,15 +187,14 @@ class NotificationController extends Controller
             } else {
                 $response[] = '2';
             }
-
         } else if ($device_type == '2') { /* android notification */
 
             $devices = DB::table('devices')
-                ->select('devices.device_id')
-                ->where('status', '=', $devices_status)
-                ->where('devices.is_notify', '=', '1')
-                ->where('device_type', '=', $device_type)
-                ->get();
+                    ->select('devices.device_id')
+                    ->where('status', '=', $devices_status)
+                    ->where('devices.is_notify', '=', '1')
+                    ->where('device_type', '=', $device_type)
+                    ->get();
 
             if (count($devices) > 0) {
                 foreach ($devices as $devices_data) {
@@ -210,15 +203,14 @@ class NotificationController extends Controller
             } else {
                 $response[] = '2';
             }
-
         } else if ($device_type == '3') { /* android notification */
 
             $devices = DB::table('devices')
-                ->select('devices.device_id')
-                ->where('status', '=', $devices_status)
-                ->where('devices.is_notify', '=', '1')
-                ->where('device_type', '=', $device_type)
-                ->get();
+                    ->select('devices.device_id')
+                    ->where('status', '=', $devices_status)
+                    ->where('devices.is_notify', '=', '1')
+                    ->where('device_type', '=', $device_type)
+                    ->get();
 
             if (count($devices) > 0) {
                 foreach ($devices as $devices_data) {
@@ -227,7 +219,6 @@ class NotificationController extends Controller
             } else {
                 $response[] = '2';
             }
-
         }
 
         if (in_array('1', $response)) {
@@ -248,28 +239,25 @@ class NotificationController extends Controller
     }
 
     //customerNotification
-    public function customerNotification(Request $request)
-    {
+    public function customerNotification(Request $request) {
         $devices = DB::table('devices')
-            ->leftJoin('users', 'users.id', '=', 'devices.users')
-            ->select('devices.*', 'users.first_name', 'users.last_name')
-            ->where('devices.users', '=', $request->user_id)
-            ->where('devices.is_notify', '=', '1')
-            ->orderBy('register_date', 'DESC')->take(1)->get();
+                        ->leftJoin('users', 'users.id', '=', 'devices.users')
+                        ->select('devices.*', 'users.first_name', 'users.last_name')
+                        ->where('devices.users', '=', $request->user_id)
+                        ->where('devices.is_notify', '=', '1')
+                        ->orderBy('register_date', 'DESC')->take(1)->get();
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin/devices/customerNotificationForm")->with('devices', $devices)->with('result', $result);
     }
 
     //deleteTaxRate
-    public function deletedevice(Request $request)
-    {
+    public function deletedevice(Request $request) {
         DB::table('devices')->where('device_id', $request->id)->delete();
         return redirect()->back()->withErrors([Lang::get("labels.DeviceDeletedMessage")]);
     }
 
-    public function fcmNotification($device_id, $sendData, $pageResponse)
-    {
+    public function fcmNotification($device_id, $sendData, $pageResponse) {
 
         //get function from other controller
         $setting = $this->myVarSetting->getSetting();
@@ -316,15 +304,13 @@ class NotificationController extends Controller
         } else {
             print $response;
         }
-
     }
 
-    public function onesignalNotification($device_id, $sendData, $pageResponse)
-    {
+    public function onesignalNotification($device_id, $sendData, $pageResponse) {
 
         //get function from other controller
         //$setting = $this->myVarSetting->getSetting();
-        
+
         $setting = $this->Setting->getallsetting();
         $settings = $setting->unique('id')->keyBy('id');
 

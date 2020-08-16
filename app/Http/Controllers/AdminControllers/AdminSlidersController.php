@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\AdminControllers;
 
 use App;
@@ -11,42 +12,39 @@ use App\Models\Core\Products;
 use App\Models\Core\Setting;
 use DB;
 use Illuminate\Http\Request;
-
 //for authenitcate login data
 use Lang;
 
 //for requesting a value
 
-class AdminSlidersController extends Controller
-{
+class AdminSlidersController extends Controller {
 
-    public function __construct(Setting $setting)
-    {
+    public function __construct(Setting $setting) {
+        parent::__construct();
         $this->Setting = $setting;
     }
 
     //listingTaxClass
-    public function sliders(Request $request)
-    {
+    public function sliders(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingSliders"));
 
         $result = array();
         $message = array();
 
-        
+
 
         $banner = DB::table('sliders_images')
-            ->leftJoin('languages', 'languages.languages_id', '=', 'sliders_images.languages_id')
-            ->leftJoin('image_categories', 'sliders_images.sliders_image', '=', 'image_categories.image_id')
-            ->select('sliders_images.*', 'image_categories.path', 'languages.name as language_name');
-            
-            if($request->sliderType){
-                $banner->where('carousel_id', $request->sliderType);
-            }
+                ->leftJoin('languages', 'languages.languages_id', '=', 'sliders_images.languages_id')
+                ->leftJoin('image_categories', 'sliders_images.sliders_image', '=', 'image_categories.image_id')
+                ->select('sliders_images.*', 'image_categories.path', 'languages.name as language_name');
 
-            
-            $banner->orderBy('sliders_images.sliders_id', 'ASC')
-            ->groupBy('sliders_images.sliders_id');
+        if ($request->sliderType) {
+            $banner->where('carousel_id', $request->sliderType);
+        }
+
+
+        $banner->orderBy('sliders_images.sliders_id', 'ASC')
+                ->groupBy('sliders_images.sliders_id');
 
         $banners = $banner->paginate(20);
 
@@ -57,8 +55,7 @@ class AdminSlidersController extends Controller
     }
 
     //addTaxClass
-    public function addsliderimage(Request $request)
-    {
+    public function addsliderimage(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddSliderImage"));
 
         $result = array();
@@ -77,7 +74,7 @@ class AdminSlidersController extends Controller
         //get function from other controller
         $myVar = new Languages();
         $result['languages'] = $myVar->getter();
-        
+
 
         $result['message'] = $message;
         $result['categories'] = $categories;
@@ -88,8 +85,7 @@ class AdminSlidersController extends Controller
     }
 
     //addNewZone
-    public function addNewSlide(Request $request)
-    {
+    public function addNewSlide(Request $request) {
 
         $images = new Images();
         $allimage = $images->getimages();
@@ -115,15 +111,15 @@ class AdminSlidersController extends Controller
         } else {
             $sliders_url = '';
         }
-        if($request->carousel_id == 1){
+        if ($request->carousel_id == 1) {
             $title = 'Full Screen Slider (1600x420)';
-        }elseif($request->carousel_id == 2){
+        } elseif ($request->carousel_id == 2) {
             $title = 'Full Page Slider (1170x420)';
-        }elseif($request->carousel_id == 3){
+        } elseif ($request->carousel_id == 3) {
             $title = 'Right Slider with Thumbs (770x400)';
-        }elseif($request->carousel_id == 4){
+        } elseif ($request->carousel_id == 4) {
             $title = 'Right Slider with Navigation (770x400)';
-        }elseif($request->carousel_id == 5){
+        } elseif ($request->carousel_id == 5) {
             $title = 'Left Slider with Thumbs (770x400)';
         }
 
@@ -144,18 +140,17 @@ class AdminSlidersController extends Controller
     }
 
     //editTaxClass
-    public function editslide(Request $request)
-    {
+    public function editslide(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditSliderImage"));
         $result = array();
         $result['message'] = array();
 
         $banners = DB::table('sliders_images')
-            ->leftJoin('image_categories', 'sliders_images.sliders_image', '=', 'image_categories.image_id')
-            ->select('sliders_images.*', 'image_categories.path')
-            ->where('sliders_id', $request->id)
-            ->groupBy('sliders_images.sliders_id')
-            ->first();
+                ->leftJoin('image_categories', 'sliders_images.sliders_image', '=', 'image_categories.image_id')
+                ->select('sliders_images.*', 'image_categories.path')
+                ->where('sliders_id', $request->id)
+                ->groupBy('sliders_images.sliders_id')
+                ->first();
         $result['sliders'] = $banners;
 
         //get function from other controller
@@ -180,8 +175,7 @@ class AdminSlidersController extends Controller
         return view('admin.settings.web.sliders.edit', $title)->with(['result' => $result, 'allimage' => $allimage]);
     }
 
-    public function updateSlide(Request $request)
-    {
+    public function updateSlide(Request $request) {
         $myVar = new Languages();
         $languages = $myVar->getter();
         $expiryDate = str_replace('/', '-', $request->expires_date);
@@ -196,15 +190,15 @@ class AdminSlidersController extends Controller
             $sliders_url = '';
         }
 
-        if($request->carousel_id == 1){
+        if ($request->carousel_id == 1) {
             $title = 'Full Screen Slider (1600x420)';
-        }elseif($request->carousel_id == 2){
+        } elseif ($request->carousel_id == 2) {
             $title = 'Full Page Slider (1170x420)';
-        }elseif($request->carousel_id == 3){
+        } elseif ($request->carousel_id == 3) {
             $title = 'Right Slider with Thumbs (770x400)';
-        }elseif($request->carousel_id == 4){
+        } elseif ($request->carousel_id == 4) {
             $title = 'Right Slider with Navigation (770x400)';
-        }elseif($request->carousel_id == 5){
+        } elseif ($request->carousel_id == 5) {
             $title = 'Left Slider with Thumbs (770x400)';
         }
 
@@ -239,9 +233,9 @@ class AdminSlidersController extends Controller
     }
 
     //deleteCountry
-    public function deleteSlider(Request $request)
-    {
+    public function deleteSlider(Request $request) {
         DB::table('sliders_images')->where('sliders_id', $request->sliders_id)->delete();
         return redirect()->back()->withErrors([Lang::get("labels.SliderDeletedMessage")]);
     }
+
 }

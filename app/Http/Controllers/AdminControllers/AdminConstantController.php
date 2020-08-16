@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\AdminControllers;
 
 use App;
@@ -12,31 +13,30 @@ use App\Models\Core\Setting;
 use Illuminate\Http\Request;
 use Lang;
 
-class AdminConstantController extends Controller
-{
-    public function __construct(Setting $setting, Languages $languages)
-    {
+class AdminConstantController extends Controller {
+
+    public function __construct(Setting $setting, Languages $languages) {
+        parent::__construct();
         $this->Setting = $setting;
         $this->Languages = $languages;
     }
+
     //constantBanners
-    public function constantBanners(Request $request)
-    {
+    public function constantBanners(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingConstantBanners"));
         $result = ConstantBanner::paginator($request);
         $result['commonContent'] = $this->Setting->commonContent();
         $result['languages'] = $this->Languages->getter();
-        if($request->bannerType){
-            $bannerType = $request->bannerType;    
-        }else{
+        if ($request->bannerType) {
+            $bannerType = $request->bannerType;
+        } else {
             $bannerType = '';
         }
-        
-        return view("admin.settings.web.banners.index", $title)->with(['result' => $result, 'bannerType'=>$bannerType]);
+
+        return view("admin.settings.web.banners.index", $title)->with(['result' => $result, 'bannerType' => $bannerType]);
     }
 
-    public function addconstantbanner(Request $request)
-    {
+    public function addconstantbanner(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddConstantBanner"));
 
         $result = array();
@@ -63,8 +63,7 @@ class AdminConstantController extends Controller
         return view("admin.settings.web.banners.add", $title)->with(['result' => $result, 'allimage' => $allimage]);
     }
 
-    public function addNewConstantBanner(Request $request)
-    {
+    public function addNewConstantBanner(Request $request) {
         //check exist banner
         $exist = ConstantBanner::existbanner($request);
 
@@ -77,11 +76,9 @@ class AdminConstantController extends Controller
 
             return redirect()->back()->with('success', Lang::get("labels.BannerAddedMessage"));
         }
-
     }
 
-    public function editconstantbanner(Request $request)
-    {
+    public function editconstantbanner(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditBanner"));
         $result = array();
         $result['message'] = array();
@@ -109,8 +106,7 @@ class AdminConstantController extends Controller
         return view("admin.settings.web.banners.edit", $title)->with(['result' => $result, 'allimage' => $allimage]);
     }
 
-    public function updateconstantBanner(Request $request)
-    {
+    public function updateconstantBanner(Request $request) {
         $exist = ConstantBanner::existbannerforupdate($request);
         $title = array('pageTitle' => Lang::get("labels.EditBanner"));
 
@@ -122,10 +118,9 @@ class AdminConstantController extends Controller
         }
     }
 
-    public function deleteconstantBanner(Request $request)
-    {
+    public function deleteconstantBanner(Request $request) {
         ConstantBanner::deletebanners($request);
         return redirect()->back()->withErrors([Lang::get("labels.BannerDeletedMessage")]);
-
     }
+
 }

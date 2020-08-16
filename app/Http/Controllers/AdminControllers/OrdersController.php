@@ -10,49 +10,47 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Core\Order;
 
-class OrdersController extends Controller
-{
+class OrdersController extends Controller {
+
     //
-    public function __construct( Setting $setting, Order $order )
-    {
+    public function __construct(Setting $setting, Order $order) {
+        parent::__construct();
         $this->myVarsetting = new SiteSettingController($setting);
         $this->Setting = $setting;
         $this->Order = $order;
     }
 
     //add listingOrders
-    public function display()
-    {
-        $title = array('pageTitle' => Lang::get("labels.ListingOrders"));        
+    public function display() {
+        $title = array('pageTitle' => Lang::get("labels.ListingOrders"));
 
         $message = array();
-        $errorMessage = array();        
-        
+        $errorMessage = array();
+
         $ordersData['orders'] = $this->Order->paginator();
         $ordersData['message'] = $message;
         $ordersData['errorMessage'] = $errorMessage;
-        $ordersData['currency'] = $this->myVarsetting->getSetting(); 
+        $ordersData['currency'] = $this->myVarsetting->getSetting();
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.Orders.index", $title)->with('listingOrders', $ordersData)->with('result', $result);
     }
 
     //view order detail
-    public function vieworder(Request $request)
-    {
+    public function vieworder(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.ViewOrder"));
         $message = array();
         $errorMessage = array();
 
         //orders data
-        $ordersData = $this->Order->detail($request);        
+        $ordersData = $this->Order->detail($request);
 
         // current order status
-        $orders_status_history = $this->Order->currentOrderStatus($request);  
+        $orders_status_history = $this->Order->currentOrderStatus($request);
 
-        //all statuses 
-        $orders_status = $this->Order->orderStatuses();  
-        
+        //all statuses
+        $orders_status = $this->Order->orderStatuses();
+
         $ordersData['message'] = $message;
         $ordersData['errorMessage'] = $errorMessage;
         $ordersData['orders_status'] = $orders_status;
@@ -68,8 +66,7 @@ class OrdersController extends Controller
     }
 
     //update order
-    public function updateOrder(Request $request)
-    {
+    public function updateOrder(Request $request) {
 
         $orders_status = $request->orders_status;
         $old_orders_status = $request->old_orders_status;
@@ -78,31 +75,28 @@ class OrdersController extends Controller
         $orders_id = $request->orders_id;
 
         //get function from other controller
-        $setting = $this->myVarsetting->getSetting();       
+        $setting = $this->myVarsetting->getSetting();
 
         if ($old_orders_status == $orders_status) {
             return redirect()->back()->with('error', Lang::get("labels.StatusChangeError"));
         } else {
             //update order
-            $orders_status = $this->Order->updateRecord($request);  
+            $orders_status = $this->Order->updateRecord($request);
             return redirect()->back()->with('message', Lang::get("labels.OrderStatusChangedMessage"));
         }
-
     }
 
     //deleteorders
-    public function deleteOrder(Request $request)
-    {       
+    public function deleteOrder(Request $request) {
         //reverse stock
-        $this->Order->reverseStock($request);     
+        $this->Order->reverseStock($request);
         $this->Order->deleteRecord($request);
-        
+
         return redirect()->back()->withErrors([Lang::get("labels.OrderDeletedMessage")]);
     }
 
     //view order detail
-    public function invoiceprint(Request $request)
-    {
+    public function invoiceprint(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.ViewOrder"));
         $language_id = '1';
@@ -112,22 +106,22 @@ class OrdersController extends Controller
         $errorMessage = array();
 
         DB::table('orders')->where('orders_id', '=', $orders_id)
-            ->where('customers_id', '!=', '')->update(['is_seen' => 1]);
+                ->where('customers_id', '!=', '')->update(['is_seen' => 1]);
 
         $order = DB::table('orders')
-            ->LeftJoin('orders_status_history', 'orders_status_history.orders_id', '=', 'orders.orders_id')
-            ->LeftJoin('orders_status', 'orders_status.orders_status_id', '=', 'orders_status_history.orders_status_id')
-            ->LeftJoin('orders_status_description', 'orders_status_description.orders_status_id', '=', 'orders_status.orders_status_id')
-            ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)
-            ->where('orders.orders_id', '=', $orders_id)->orderby('orders_status_history.date_added', 'DESC')->get();
+                        ->LeftJoin('orders_status_history', 'orders_status_history.orders_id', '=', 'orders.orders_id')
+                        ->LeftJoin('orders_status', 'orders_status.orders_status_id', '=', 'orders_status_history.orders_status_id')
+                        ->LeftJoin('orders_status_description', 'orders_status_description.orders_status_id', '=', 'orders_status.orders_status_id')
+                        ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)
+                        ->where('orders.orders_id', '=', $orders_id)->orderby('orders_status_history.date_added', 'DESC')->get();
 
         foreach ($order as $data) {
             $orders_id = $data->orders_id;
 
             $orders_products = DB::table('orders_products')
-                ->join('products', 'products.products_id', '=', 'orders_products.products_id')
-                ->select('orders_products.*', 'products.products_image as image')
-                ->where('orders_products.orders_id', '=', $orders_id)->get();
+                            ->join('products', 'products.products_id', '=', 'orders_products.products_id')
+                            ->select('orders_products.*', 'products.products_image as image')
+                            ->where('orders_products.orders_id', '=', $orders_id)->get();
             $i = 0;
             $total_price = 0;
             $total_tax = 0;
@@ -137,20 +131,20 @@ class OrdersController extends Controller
 
                 //categories
                 $categories = DB::table('products_to_categories')
-                    ->leftjoin('categories', 'categories.categories_id', 'products_to_categories.categories_id')
-                    ->leftjoin('categories_description', 'categories_description.categories_id', 'products_to_categories.categories_id')
-                    ->select('categories.categories_id', 'categories_description.categories_name', 'categories.categories_image', 'categories.categories_icon', 'categories.parent_id')
-                    ->where('products_id', '=', $orders_products_data->orders_products_id)
-                    ->where('categories_description.language_id', '=', $language_id)->get();
+                                ->leftjoin('categories', 'categories.categories_id', 'products_to_categories.categories_id')
+                                ->leftjoin('categories_description', 'categories_description.categories_id', 'products_to_categories.categories_id')
+                                ->select('categories.categories_id', 'categories_description.categories_name', 'categories.categories_image', 'categories.categories_icon', 'categories.parent_id')
+                                ->where('products_id', '=', $orders_products_data->orders_products_id)
+                                ->where('categories_description.language_id', '=', $language_id)->get();
 
                 $orders_products_data->categories = $categories;
 
                 $product_attribute = DB::table('orders_products_attributes')
-                    ->where([
-                        ['orders_products_id', '=', $orders_products_data->orders_products_id],
-                        ['orders_id', '=', $orders_products_data->orders_id],
-                    ])
-                    ->get();
+                        ->where([
+                            ['orders_products_id', '=', $orders_products_data->orders_products_id],
+                            ['orders_id', '=', $orders_products_data->orders_id],
+                        ])
+                        ->get();
 
                 $orders_products_data->attribute = $product_attribute;
                 $product[$i] = $orders_products_data;
@@ -165,14 +159,14 @@ class OrdersController extends Controller
         }
 
         $orders_status_history = DB::table('orders_status_history')
-            ->LeftJoin('orders_status', 'orders_status.orders_status_id', '=', 'orders_status_history.orders_status_id')
-            ->LeftJoin('orders_status_description', 'orders_status_description.orders_status_id', '=', 'orders_status.orders_status_id')
-            ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)
-            ->orderBy('orders_status_history.date_added', 'desc')
-            ->where('orders_id', '=', $orders_id)->get();
+                        ->LeftJoin('orders_status', 'orders_status.orders_status_id', '=', 'orders_status_history.orders_status_id')
+                        ->LeftJoin('orders_status_description', 'orders_status_description.orders_status_id', '=', 'orders_status.orders_status_id')
+                        ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)
+                        ->orderBy('orders_status_history.date_added', 'desc')
+                        ->where('orders_id', '=', $orders_id)->get();
 
         $orders_status = DB::table('orders_status')->LeftJoin('orders_status_description', 'orders_status_description.orders_status_id', '=', 'orders_status.orders_status_id')
-            ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)->get();
+                        ->where('orders_status_description.language_id', '=', $language_id)->where('role_id', '<=', 2)->get();
 
         $ordersData['message'] = $message;
         $ordersData['errorMessage'] = $errorMessage;
@@ -188,7 +182,6 @@ class OrdersController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.Orders.invoiceprint", $title)->with('data', $ordersData)->with('result', $result);
-
     }
 
 }

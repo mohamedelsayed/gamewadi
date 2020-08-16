@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\AdminControllers;
 
 use App;
@@ -7,7 +8,6 @@ use App\Http\Controllers\Controller;
 use DB;
 //for password encryption or hash protected
 use Illuminate\Http\Request;
-
 //for authenitcate login data
 use Lang;
 use Mail;
@@ -15,16 +15,15 @@ use App\Models\Core\Setting;
 
 //for requesting a value
 
-class AppLabelsController extends Controller
-{
-	public function __construct(Setting $setting)
-    {
+class AppLabelsController extends Controller {
+
+    public function __construct(Setting $setting) {
+        parent::__construct();
         $this->Setting = $setting;
     }
 
     //listingAppLabels
-    public function listingAppLabels(Request $request)
-    {
+    public function listingAppLabels(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.ListingLabels"));
 
@@ -34,20 +33,18 @@ class AppLabelsController extends Controller
         $message = array();
 
         $labels = DB::table('labels')
-            ->leftJoin('label_value', 'label_value.label_id', '=', 'labels.label_id')
-            ->where('language_id', '=', $language_id)
-            ->paginate(20);
+                ->leftJoin('label_value', 'label_value.label_id', '=', 'labels.label_id')
+                ->where('language_id', '=', $language_id)
+                ->paginate(20);
 
         $result['message'] = $message;
-        $result['labels'] = $labels;  
+        $result['labels'] = $labels;
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.settings.app.labels.listingAppLabels", $title)->with('result', $result);
-
     }
 
     //addAppLabel
-    public function manageAppLabel(Request $request)
-    {
+    public function manageAppLabel(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ManageLabel"));
 
         $result = array();
@@ -84,11 +81,11 @@ class AppLabelsController extends Controller
                 array_push($myVal, $labels_data);
 
                 $values = DB::table('label_value')
-                    ->Join('languages', 'languages.languages_id', '=', 'label_value.language_id')
-                    ->select('languages.name', 'label_value.*')
-                    ->where('label_id', '=', $labels_data->label_id)
-                    ->orderBy('label_value.language_id', 'ASC')
-                    ->get();
+                        ->Join('languages', 'languages.languages_id', '=', 'label_value.language_id')
+                        ->select('languages.name', 'label_value.*')
+                        ->where('label_id', '=', $labels_data->label_id)
+                        ->orderBy('label_value.language_id', 'ASC')
+                        ->get();
 
                 $myVal[$index++]->values = $values;
             }
@@ -97,29 +94,25 @@ class AppLabelsController extends Controller
             $i++;
         }
 
-        $result['labels'] = $data;  
+        $result['labels'] = $data;
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.settings.app.labels.manageAppLabel", $title)->with('result', $result);
-
     }
 
     //addAppKey
-    public function addappkey(Request $request)
-    {
+    public function addappkey(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.AddKeyLabel"));
 
         $result = array();
-        $message = array();  
+        $message = array();
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.settings.app.labels.addappkey", $title)->with('result', $result);
-
     }
 
     //addNewAppLabel
-    public function addNewAppLabel(Request $request)
-    {
+    public function addNewAppLabel(Request $request) {
 
         $label_name = $request->label_name;
 
@@ -133,7 +126,6 @@ class AppLabelsController extends Controller
 
             $message = Lang::get("labels.Labelkeyalreadyexist");
             return redirect()->back()->withErrors([$message]);
-
         } else {
 
             DB::table('labels')->insert([
@@ -141,14 +133,11 @@ class AppLabelsController extends Controller
             ]);
 
             return redirect()->back()->with('message', Lang::get("labels.LabelkeyAddedMessage"));
-
         }
-
     }
 
     //editTaxClass
-    public function editAppLabel(Request $request)
-    {
+    public function editAppLabel(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditLabel"));
 
         $result = array();
@@ -162,19 +151,18 @@ class AppLabelsController extends Controller
         $result['labels'] = $labels;
 
         $labels_value = DB::table('labels')
-            ->leftJoin('label_value', 'label_value.label_id', '=', 'labels.label_id')
-            ->where('labels.label_id', '=', $request->id)
-            ->orderBy('label_value.label_id', 'ASC')
-            ->get();
+                ->leftJoin('label_value', 'label_value.label_id', '=', 'labels.label_id')
+                ->where('labels.label_id', '=', $request->id)
+                ->orderBy('label_value.label_id', 'ASC')
+                ->get();
 
-        $result['labels_value'] = $labels_value;  
+        $result['labels_value'] = $labels_value;
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.settings.app.labels.editAppLabel", $title)->with('result', $result);
     }
 
     //updateAppLabel
-    public function updateAppLabel(Request $request)
-    {
+    public function updateAppLabel(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditLabel"));
         $last_modified = date('y-m-d h:i:s');
 
@@ -200,11 +188,11 @@ class AppLabelsController extends Controller
 
                 if (count($checkexist) > 0) {
                     DB::table('label_value')
-                        ->where('label_id', $label_id)
-                        ->where('language_id', $languages_data->languages_id)
-                        ->update([
-                            'label_value' => $request->$label_value,
-                        ]);
+                            ->where('label_id', $label_id)
+                            ->where('language_id', $languages_data->languages_id)
+                            ->update([
+                                'label_value' => $request->$label_value,
+                    ]);
                 } else {
                     DB::table('label_value')->insert([
                         'label_value' => $request->$label_value,
@@ -213,7 +201,6 @@ class AppLabelsController extends Controller
                     ]);
                 }
             }
-
         }
 
         return redirect()->back()->with('message', Lang::get("labels.LabelkeyUpdatedMessage"));

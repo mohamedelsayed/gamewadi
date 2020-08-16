@@ -11,36 +11,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 
-class NewsCategoriesController extends Controller
-{
+class NewsCategoriesController extends Controller {
 
-    public function __construct(NewsCategory $news_category, Setting $setting, Images $images)
-    {
+    public function __construct(NewsCategory $news_category, Setting $setting, Images $images) {
+        parent::__construct();
         $this->myVarsetting = new SiteSettingController($setting);
         $this->News_category = $news_category;
         $this->images = $images;
         $this->Setting = $setting;
-
     }
 
-    public function getNewsCategories($language_id)
-    {
+    public function getNewsCategories($language_id) {
         $getCategories = $this->News_category->getNewsCategory($language_id);
         return ($getCategories);
     }
 
-    public function display()
-    {
+    public function display() {
         $title = array('pageTitle' => Lang::get("labels.NewsCategories"));
         $listingCategories = $this->News_category->paginator();
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.newscategories.index", $title)->with('result', $result)->with('listingCategories', $listingCategories);
-
     }
 
     //add category
-    public function add(Request $request)
-    {
+    public function add(Request $request) {
         $allimage = $this->images->getimages();
         $title = array('pageTitle' => Lang::get("labels.AddNewsCategories"));
         $result = array();
@@ -48,33 +42,27 @@ class NewsCategoriesController extends Controller
         $result['languages'] = $this->myVarsetting->getLanguages();
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.newscategories.add", $title)->with('result', $result)->with('allimage', $allimage);
-
     }
 
     //addNewCategory
-    public function insert(Request $request)
-    {
+    public function insert(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddNewsCategories"));
         $this->News_category->insert($request);
         $message = Lang::get("labels.NewsCategoriesAddedMessage");
         return redirect()->back()->withErrors([$message]);
-
     }
 
-    public function edit(Request $request)
-    {
+    public function edit(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.EditNewsCategories"));
         $allimage = $this->images->getimages();
         $result = $this->News_category->edit($request);
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.newscategories.edit", $title)->with('result', $result)->with('allimage', $allimage);
-
     }
 
     //updateCategory
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.EditNewsCategories"));
         $last_modified = date('y-m-d h:i:s');
@@ -97,12 +85,11 @@ class NewsCategoriesController extends Controller
                 }
                 $slug = $currentSlug;
                 $checkSlug = DB::table('news_categories')
-                    ->where('news_categories_slug', $currentSlug)
-                    ->where('categories_id', '!=', $request->id)
-                    ->get();
+                        ->where('news_categories_slug', $currentSlug)
+                        ->where('categories_id', '!=', $request->id)
+                        ->get();
                 $slug_count++;
             } while (count($checkSlug) > 0);
-
         } else {
             $slug = $request->slug;
         }
@@ -110,7 +97,6 @@ class NewsCategoriesController extends Controller
         if ($request->image_id !== null) {
 
             $uploadImage = $request->image_id;
-
         } else {
             $uploadImage = $request->oldImage;
         }
@@ -144,27 +130,22 @@ class NewsCategoriesController extends Controller
 
         $message = Lang::get("labels.NewsCategoriesUpdatedMessage");
         return redirect()->back()->withErrors([$message]);
-
     }
 
     //deleteNewsCategory
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
 
         $this->News_category->destroyrecord($request);
         return redirect()->back()->withErrors([Lang::get("labels.NewsCategoriesDeletedMessage")]);
-
     }
 
-    public function filter(Request $request)
-    {
+    public function filter(Request $request) {
         $name = $request->FilterBy;
         $param = $request->parameter;
         $title = array('pageTitle' => Lang::get("labels.MainCategories"));
         $listingCategories = $this->News_category->filter($name, $param);
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.newscategories.index", $title)->with('result', $result)->with('listingCategories', $listingCategories)->with('name', $name)->with('param', $param);
-
     }
 
 }

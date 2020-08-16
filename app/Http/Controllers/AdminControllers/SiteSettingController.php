@@ -10,59 +10,51 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 
-class SiteSettingController extends Controller
-{
+class SiteSettingController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
+        parent::__construct();
         $setting = new Setting();
         $this->Setting = $setting;
-
     }
 
-    public function commonsetting()
-    {
+    public function commonsetting() {
         $result = array('pagination' => '20');
         return $result;
     }
 
-    public function getSetting()
-    {
+    public function getSetting() {
 
         $setting = $this->Setting->getSettings();
         return $setting;
     }
 
-    public function imageType()
-    {
+    public function imageType() {
         $extensions = array('gif', 'jpg', 'jpeg', 'png');
         return $extensions;
     }
 
-    public function getlanguages()
-    {
+    public function getlanguages() {
 
         $languages = $this->Setting->fetchLanguages();
         return $languages;
     }
 
     //units page
-    public function getUnits()
-    {
+    public function getUnits() {
 
         $units = $this->Setting->Units();
         return $units;
     }
+
 //alert Setting
-    public function getAlertSetting()
-    {
+    public function getAlertSetting() {
         $setting = $this->Setting->alterSetting();
         return $setting;
     }
 
 // slugify method
-    public function slugify($slug)
-    {
+    public function slugify($slug) {
 
         // replace non letter or digits by -
         $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
@@ -90,9 +82,9 @@ class SiteSettingController extends Controller
 
         return $slug;
     }
+
     //getsinglelanguages
-    public function getSingleLanguages($language_id)
-    {
+    public function getSingleLanguages($language_id) {
 
         $languagesClass = new Language();
 
@@ -101,8 +93,7 @@ class SiteSettingController extends Controller
     }
 
     //setting page
-    public function setting(Request $request)
-    {
+    public function setting(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.setting"));
 
@@ -117,62 +108,53 @@ class SiteSettingController extends Controller
     }
 
     //update setting
-    public function updateSetting(Request $request)
-    {
+    public function updateSetting(Request $request) {
 
         $languages = $this->getLanguages();
         $extensions = $this->imageType();
         foreach ($request->all() as $key => $value) {
 
             if ($key == 'newsletter_image') {
-                if( $request->newsletter_image !== null){
+                if ($request->newsletter_image !== null) {
                     $allimagesth = DB::table('images')
-                        ->leftJoin('image_categories', 'images.id', '=', 'image_categories.image_id')
-                        ->select('path', 'images.id', 'image_type')
-                        ->where('image_categories.image_type', 'ACTUAL')
-                        ->where('image_categories.image_id', $request->newsletter_image)
-                        ->first();
-                        $value = $allimagesth->path;
-                        $this->Setting->settingUpdate($key, $value);
-                }
-                
-            }
-            //website logo
-            elseif ($key == 'website_logo') {
-                if( $request->website_logo !== null){
-                    $allimagesth = DB::table('images')
-                        ->leftJoin('image_categories', 'images.id', '=', 'image_categories.image_id')
-                        ->select('path', 'images.id', 'image_type')
-                        ->where('image_categories.image_type', 'ACTUAL')
-                        ->where('image_categories.image_id', $request->website_logo)
-                        ->first();
-                        $value = $allimagesth->path;
-                        $this->Setting->settingUpdate($key, $value);
-                }
-                
-            }else{
-
-                if ($key == 'favicon') {
-                    if( $request->favicon !== null){
-                        $allimagesth = DB::table('images')
                             ->leftJoin('image_categories', 'images.id', '=', 'image_categories.image_id')
                             ->select('path', 'images.id', 'image_type')
                             ->where('image_categories.image_type', 'ACTUAL')
-                            ->where('image_categories.image_id', $request->favicon)
+                            ->where('image_categories.image_id', $request->newsletter_image)
                             ->first();
-                            $value = $allimagesth->path;
-                            $this->Setting->settingUpdate($key, $value);
-                    }
-                    
-                }else{
+                    $value = $allimagesth->path;
                     $this->Setting->settingUpdate($key, $value);
                 }
-
             }
+            //website logo
+            elseif ($key == 'website_logo') {
+                if ($request->website_logo !== null) {
+                    $allimagesth = DB::table('images')
+                            ->leftJoin('image_categories', 'images.id', '=', 'image_categories.image_id')
+                            ->select('path', 'images.id', 'image_type')
+                            ->where('image_categories.image_type', 'ACTUAL')
+                            ->where('image_categories.image_id', $request->website_logo)
+                            ->first();
+                    $value = $allimagesth->path;
+                    $this->Setting->settingUpdate($key, $value);
+                }
+            } else {
 
-           
-
-            
+                if ($key == 'favicon') {
+                    if ($request->favicon !== null) {
+                        $allimagesth = DB::table('images')
+                                ->leftJoin('image_categories', 'images.id', '=', 'image_categories.image_id')
+                                ->select('path', 'images.id', 'image_type')
+                                ->where('image_categories.image_type', 'ACTUAL')
+                                ->where('image_categories.image_id', $request->favicon)
+                                ->first();
+                        $value = $allimagesth->path;
+                        $this->Setting->settingUpdate($key, $value);
+                    }
+                } else {
+                    $this->Setting->settingUpdate($key, $value);
+                }
+            }
         }
 
         $message = Lang::get("labels.SettingUpdateMessage");
@@ -180,8 +162,7 @@ class SiteSettingController extends Controller
     }
 
     //webSettings
-    public function websettings(Request $request)
-    {
+    public function websettings(Request $request) {
 
         $images = new Images;
         $allimage = $images->getimages();
@@ -195,10 +176,9 @@ class SiteSettingController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.settings.general.websetting", $title)->with('result', $result)->with('allimage', $allimage);
-
     }
-    public function newsletter(Request $request)
-    {
+
+    public function newsletter(Request $request) {
 
         $images = new Images;
         $allimage = $images->getimages();
@@ -212,14 +192,10 @@ class SiteSettingController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.settings.general.newsletter", $title)->with('result', $result)->with('allimage', $allimage);
-
     }
 
-    
-
     //appSettings
-    public function appSettings(Request $request)
-    {
+    public function appSettings(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.application_settings"));
         $result = array();
         $settings = $this->Setting->getallsetting();
@@ -229,8 +205,7 @@ class SiteSettingController extends Controller
     }
 
     //admobSettings
-    public function admobSettings(Request $request)
-    {
+    public function admobSettings(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.admobSettings"));
         $result = array();
         $settings = $this->Setting->getallsetting();
@@ -240,8 +215,7 @@ class SiteSettingController extends Controller
     }
 
     //facebookSettings
-    public function facebookSettings(Request $request)
-    {
+    public function facebookSettings(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.facebook_settings"));
         $result = array();
         $settings = $this->Setting->getallsetting();
@@ -251,8 +225,7 @@ class SiteSettingController extends Controller
     }
 
     //googleSettings
-    public function googleSettings(Request $request)
-    {
+    public function googleSettings(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.google_settings"));
 
         $result = array();
@@ -266,8 +239,7 @@ class SiteSettingController extends Controller
     }
 
     //applicationApi
-    public function applicationApi(Request $request)
-    {
+    public function applicationApi(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.applicationApi"));
 
         $result = array();
@@ -281,8 +253,7 @@ class SiteSettingController extends Controller
     }
 
     //websiteThemes
-    public function webthemes(Request $request)
-    {
+    public function webthemes(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.themes setting"));
         $result = array();
@@ -293,8 +264,7 @@ class SiteSettingController extends Controller
     }
 
     //seo
-    public function seo(Request $request)
-    {
+    public function seo(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.SEO Content"));
 
@@ -309,20 +279,17 @@ class SiteSettingController extends Controller
     }
 
     //customstyle
-    public function customstyle(Request $request)
-    {
+    public function customstyle(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.custom_style/js"));
         $result = array();
         $settings = $this->Setting->getallsetting();
         $result['settings'] = $settings->unique('id')->keyBy('id');
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.settings.general.customstyle", $title)->with('result', $result);
-
     }
 
     //update Website Theme
-    public function updateWebTheme(Request $request)
-    {
+    public function updateWebTheme(Request $request) {
 
         $chkAlreadyApplied = $this->Setting->chkalreadyApplied($request);
 
@@ -335,8 +302,7 @@ class SiteSettingController extends Controller
     }
 
     //generateKey
-    public function generateKey(Request $request)
-    {
+    public function generateKey(Request $request) {
         $result = array();
         $result['consumerKey'] = $this->getKey();
         $result['consumerSecret'] = $this->getKey();
@@ -348,8 +314,7 @@ class SiteSettingController extends Controller
         return $result;
     }
 
-    public function getKey()
-    {
+    public function getKey() {
         $start = substr(md5(uniqid(mt_rand(), true)), 0, 8);
         $middle = time();
         $end = substr(md5(uniqid(mt_rand(), true)), 0, 8);
@@ -357,8 +322,7 @@ class SiteSettingController extends Controller
     }
 
     //Units
-    public function units(Request $request)
-    {
+    public function units(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.ListingUnits"));
 
@@ -373,8 +337,7 @@ class SiteSettingController extends Controller
     }
 
     //addunit
-    public function addunit(Request $request)
-    {
+    public function addunit(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddUnit"));
         $result = array();
         $languages = $this->Setting->fetchLanguages();
@@ -385,8 +348,7 @@ class SiteSettingController extends Controller
     }
 
     //addnewunit
-    public function addnewunit(Request $request)
-    {
+    public function addnewunit(Request $request) {
         $unitId = $this->Setting->fetchUnitid($request);
         $languages = $this->Setting->fetchLanguages();
 
@@ -396,7 +358,6 @@ class SiteSettingController extends Controller
             $req_OrdersStatus = $request->$OrdersStatus;
 
             $statusedec_id = $this->Setting->insetunit_desc($req_OrdersStatus, $unitId, $language_id);
-
         }
 
         $message = Lang::get("labels.UnitAddedMessage");
@@ -404,8 +365,7 @@ class SiteSettingController extends Controller
     }
 
     //editunit
-    public function editunit(Request $request)
-    {
+    public function editunit(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditUnit"));
         $result = array();
         $languages = $this->Setting->fetchLanguages();
@@ -415,8 +375,7 @@ class SiteSettingController extends Controller
     }
 
     //updateunit
-    public function updateunit(Request $request)
-    {
+    public function updateunit(Request $request) {
         $orders_status = $this->Setting->updateunit($request);
 
         $languages = $this->Setting->fetchLanguages();
@@ -430,7 +389,6 @@ class SiteSettingController extends Controller
             } else {
                 $this->Setting->insetunit_desc($req_OrdersStatus, $request->id, $language_id);
             }
-
         }
 
         $message = Lang::get("labels.UnitUpdatedMessage");
@@ -438,15 +396,13 @@ class SiteSettingController extends Controller
     }
 
     //deleteunit
-    public function deleteunit(Request $request)
-    {
+    public function deleteunit(Request $request) {
         $this->Setting->deleteunits($request);
         return redirect()->back()->withErrors([Lang::get("labels.UnitDeletedMessage")]);
     }
 
     //pushNotification
-    public function pushNotification(Request $request)
-    {
+    public function pushNotification(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.pushNotification"));
         $result = array();
         $settings = $this->Setting->getallsetting();
@@ -456,8 +412,7 @@ class SiteSettingController extends Controller
     }
 
     //setting page
-    public function alertSetting(Request $request)
-    {
+    public function alertSetting(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.alertSetting"));
         $result = array();
         $setting = $this->Setting->alterSetting();
@@ -467,15 +422,13 @@ class SiteSettingController extends Controller
     }
 
     //alertSetting
-    public function updateAlertSetting(Request $request)
-    {
+    public function updateAlertSetting(Request $request) {
         $orders_status = $this->Setting->orderstatus($request);
         $message = Lang::get("labels.alertSettingUpdateMessage");
         return redirect()->back()->withErrors([$message]);
     }
 
-    public function orderstatus(Request $request)
-    {
+    public function orderstatus(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingOrderStatus"));
         $result = array();
         $orders_status = $this->Setting->orderstatuses();
@@ -484,8 +437,7 @@ class SiteSettingController extends Controller
         return view("admin.Orders.orderstatus", $title)->with('result', $result);
     }
 
-    public function editorderstatus(Request $request)
-    {
+    public function editorderstatus(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditOrderStatus"));
         $result = array();
         $result = $this->Setting->editorderstatus($request);
@@ -493,8 +445,7 @@ class SiteSettingController extends Controller
         return view("admin.Orders.editorderstatus", $title)->with('result', $result);
     }
 
-    public function updateOrderStatus(Request $request)
-    {
+    public function updateOrderStatus(Request $request) {
         $languages = $this->getlanguages();
         if ($request->public_flag == 1) {
             $orders_status = $this->Setting->updateflagestatus($request);
@@ -523,15 +474,13 @@ class SiteSettingController extends Controller
         return redirect()->back()->withErrors([$message]);
     }
 
-    public function deleteOrderStatus(Request $request)
-    {
+    public function deleteOrderStatus(Request $request) {
         $this->Setting->deleteorderstatus($request);
         return redirect()->back()->withErrors([Lang::get("labels.OrderStatusDeletedMessage")]);
     }
 
     //addorderstatus
-    public function addorderstatus(Request $request)
-    {
+    public function addorderstatus(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.AddOrderStatus"));
         $result = array();
@@ -544,8 +493,7 @@ class SiteSettingController extends Controller
     }
 
     //addNewOrderStatus
-    public function addNewOrderStatus(Request $request)
-    {
+    public function addNewOrderStatus(Request $request) {
 
         $languagesdata = $this->getlanguages();
 
@@ -571,9 +519,7 @@ class SiteSettingController extends Controller
         return redirect()->back()->withErrors([$message]);
     }
 
-
-    public function instafeed(Request $request)
-    {
+    public function instafeed(Request $request) {
         $images = new Images;
         $title = array('pageTitle' => Lang::get("labels.instagramfeed"));
 
@@ -585,7 +531,6 @@ class SiteSettingController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.settings.general.instafeed", $title)->with('result', $result);
-
     }
 
 }

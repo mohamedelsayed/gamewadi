@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 
-class CountriesController extends Controller
-{
+class CountriesController extends Controller {
+
     //
 
-    public function __construct(Countries $countries, Zones $zone, Tax_class $tax_class, Tax_rate $tax_rate, Setting $setting)
-    {
+    public function __construct(Countries $countries, Zones $zone, Tax_class $tax_class, Tax_rate $tax_rate, Setting $setting) {
+        parent::__construct();
         $this->Countries = $countries;
         $this->Zone = $zone;
         $this->Tax_class = $tax_class;
@@ -26,8 +26,7 @@ class CountriesController extends Controller
         $this->Setting = $setting;
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingCountries"));
         $countryData = array();
         $message = array();
@@ -39,15 +38,13 @@ class CountriesController extends Controller
         return view("admin.countries.index", $title)->with('result', $result)->with('countryData', $countryData);
     }
 
-    public function add(Request $request)
-    {
+    public function add(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddCountry"));
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.countries.add", $title)->with('result', $result);
     }
 
-    public function insert(Request $request)
-    {
+    public function insert(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditCountry"));
         $countryData = array();
         $categories_id = $this->Countries->insert($request);
@@ -55,29 +52,25 @@ class CountriesController extends Controller
         return Redirect::back()->with('message', $message);
     }
 
-    public function edit($id)
-    {
+    public function edit($id) {
         $title = array('pageTitle' => Lang::get("labels.EditCountry"));
         $country = $this->Countries->edit($id);
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.countries.edit", $title)->with('result', $result)->with('country', $country);
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $this->Countries->updaterecord($request);
         $message = Lang::get("labels.CountryUpdatedMessage");
         return Redirect::back()->with('message', $message);
     }
 
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
         $this->Countries->deleterecord($request);
         return redirect()->back()->withErrors([Lang::get("labels.CountryDeletedMessage")]);
     }
 
-    public function filter(Request $request)
-    {
+    public function filter(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingCountries"));
         $name = $request->FilterBy;
         $param = $request->parameter;
@@ -92,8 +85,7 @@ class CountriesController extends Controller
         return view("admin.countries.index", $title)->with('result', $result)->with('countryData', $countryData)->with('name', $name)->with('param', $param);
     }
 
-    public function listingZones(Request $request)
-    {
+    public function listingZones(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingZones"));
 
         $result = array();
@@ -101,8 +93,8 @@ class CountriesController extends Controller
         $errorMessage = array();
 
         $zones = Zone::sortable()
-            ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
-            ->paginate(60);
+                ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
+                ->paginate(60);
 
         $result['message'] = $message;
         $result['zones'] = $zones;
@@ -112,8 +104,7 @@ class CountriesController extends Controller
     }
 
     //addcountry
-    public function addZone(Request $request)
-    {
+    public function addZone(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddZone"));
 
         $result = array();
@@ -128,8 +119,7 @@ class CountriesController extends Controller
     }
 
     //addNewZone
-    public function addNewZone(Request $request)
-    {
+    public function addNewZone(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.AddCountry"));
         $result = array();
@@ -145,8 +135,7 @@ class CountriesController extends Controller
     }
 
     //editZone
-    public function editZone(Request $request)
-    {
+    public function editZone(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditZone"));
         $result = array();
         $result['message'] = array();
@@ -161,8 +150,7 @@ class CountriesController extends Controller
     }
 
     //updateZone
-    public function updateZone(Request $request)
-    {
+    public function updateZone(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.EditCountry"));
 
@@ -178,14 +166,12 @@ class CountriesController extends Controller
     }
 
     //deleteZone
-    public function deleteZone(Request $request)
-    {
+    public function deleteZone(Request $request) {
         DB::table('zones')->where('zone_id', $request->id)->delete();
         return redirect()->back()->withErrors([Lang::get("labels.ZoneDeletedTax")]);
     }
 
-    public function filterzones(Request $request)
-    {
+    public function filterzones(Request $request) {
 
         $name = $request->FilterBy;
         $param = $request->parameter;
@@ -200,34 +186,33 @@ class CountriesController extends Controller
             case 'Zone':
 
                 $zones = Zone::sortable()->where('zone_name', 'LIKE', '%' . $param . '%')
-                    ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
-                    ->paginate(30);
+                        ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
+                        ->paginate(30);
 
                 break;
 
             case 'Code':
 
                 $zones = Zone::sortable()->where('zone_name', 'LIKE', '%' . $param . '%')
-                    ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
-                    ->paginate(30);
+                        ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
+                        ->paginate(30);
 
                 break;
             case 'Country':
 
                 $zones = Zone::sortable()->where('zone_name', 'LIKE', '%' . $param . '%')
-                    ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
-                    ->paginate(30);
+                        ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
+                        ->paginate(30);
 
                 break;
 
             default:
 
                 $zones = Zone::sortable()
-                    ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
-                    ->paginate(30);
+                        ->LeftJoin('countries', 'zones.zone_country_id', '=', 'countries.countries_id')
+                        ->paginate(30);
 
                 break;
-
         }
 
         $result['message'] = $message;
@@ -235,12 +220,10 @@ class CountriesController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.listingZones", $title)->with('result', $result)->with('name', $name)->with('param', $param);
-
     }
 
     //taxclass
-    public function taxclass(Request $request)
-    {
+    public function taxclass(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingTaxClasses"));
 
         $result = array();
@@ -256,8 +239,7 @@ class CountriesController extends Controller
     }
 
     //addtaxclass
-    public function addtaxclass(Request $request)
-    {
+    public function addtaxclass(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddTaxClass"));
 
         $result = array();
@@ -270,8 +252,7 @@ class CountriesController extends Controller
     }
 
     //addNewZone
-    public function addnewtaxclass(Request $request)
-    {
+    public function addnewtaxclass(Request $request) {
 
         $this->Tax_class->addTaxes($request);
 
@@ -280,8 +261,7 @@ class CountriesController extends Controller
     }
 
     //edittaxclass
-    public function edittaxclass(Request $request)
-    {
+    public function edittaxclass(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditCountry"));
         $result = array();
         $result['message'] = array();
@@ -294,8 +274,7 @@ class CountriesController extends Controller
     }
 
     //updatetaxclass
-    public function updatetaxclass(Request $request)
-    {
+    public function updatetaxclass(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.EditCountry"));
 
@@ -308,14 +287,12 @@ class CountriesController extends Controller
     }
 
     //deletetaxclass
-    public function deletetaxclass(Request $request)
-    {
+    public function deletetaxclass(Request $request) {
         $this->Tax_class->deletetaxclass($request);
         return redirect()->back()->withErrors([Lang::get("labels.TaxClassDeletedTax")]);
     }
 
-    public function taxclassfilter(Request $request)
-    {
+    public function taxclassfilter(Request $request) {
 
         $name = $request->FilterBy;
         $param = $request->parameter;
@@ -341,7 +318,6 @@ class CountriesController extends Controller
                 $tax_class = Tax_class::sortable()->paginate(40);
 
                 break;
-
         }
 
         $result['message'] = $message;
@@ -349,23 +325,21 @@ class CountriesController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.taxclass", $title)->with('result', $result)->with('name', $name)->with('param', $param);
-
     }
 
     //listingTaxRates
-    public function taxrates(Request $request)
-    {
+    public function taxrates(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingTaxRates"));
 
         $result = array();
         $message = array();
 
         $tax_rates = Tax_rate::sortable()
-            ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
-            ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
-            ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
-                'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
-            ->paginate(20);
+                ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
+                ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
+                ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
+                        'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
+                ->paginate(20);
 
         $result['tax_rates'] = $tax_rates;
         $result['commonContent'] = $this->Setting->commonContent();
@@ -373,8 +347,7 @@ class CountriesController extends Controller
     }
 
     //addTaxRate
-    public function addtaxrate(Request $request)
-    {
+    public function addtaxrate(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.AddTaxClass"));
 
         $result = array();
@@ -392,8 +365,7 @@ class CountriesController extends Controller
     }
 
     //addNewTaxRate
-    public function addnewtaxrate(Request $request)
-    {
+    public function addnewtaxrate(Request $request) {
 
         $this->Tax_rate->insettaxrate($request);
 
@@ -402,8 +374,7 @@ class CountriesController extends Controller
     }
 
     //editTaxRate
-    public function edittaxrate(Request $request)
-    {
+    public function edittaxrate(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditTaxRate"));
         $result = array();
         $result['message'] = array();
@@ -421,8 +392,7 @@ class CountriesController extends Controller
     }
 
     //updateTaxRate
-    public function updatetaxrate(Request $request)
-    {
+    public function updatetaxrate(Request $request) {
         $this->Tax_rate->updatetaxrates($request);
 
         $message = Lang::get("labels.TaxRateUpdatedTax");
@@ -430,14 +400,12 @@ class CountriesController extends Controller
     }
 
     //deleteTaxRate
-    public function deletetaxrate(Request $request)
-    {
+    public function deletetaxrate(Request $request) {
         $this->Tax_rate->deletetaxrate($request);
         return redirect()->back()->withErrors([Lang::get("labels.TaxRateDeletedTax")]);
     }
 
-    public function taxratesfilters(Request $request)
-    {
+    public function taxratesfilters(Request $request) {
 
         $name = $request->FilterBy;
         $param = $request->parameter;
@@ -451,56 +419,54 @@ class CountriesController extends Controller
             case 'Zone':
 
                 $tax_rates = Tax_rate::sortable()
-                    ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
-                    ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
-                    ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
-                        'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
-                    ->where('zones.zone_name', 'LIKE', '%' . $param . '%')
-                    ->paginate(20);
+                        ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
+                        ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
+                        ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
+                                'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
+                        ->where('zones.zone_name', 'LIKE', '%' . $param . '%')
+                        ->paginate(20);
 
                 break;
 
             case 'TaxRates':
 
                 $tax_rates = Tax_rate::sortable()
-                    ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
-                    ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
-                    ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
-                        'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
-                    ->where('tax_rates.tax_rate', 'LIKE', '%' . $param . '%')
-                    ->paginate(20);
+                        ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
+                        ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
+                        ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
+                                'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
+                        ->where('tax_rates.tax_rate', 'LIKE', '%' . $param . '%')
+                        ->paginate(20);
 
                 break;
             case 'TaxClass':
 
                 $tax_rates = Tax_rate::sortable()
-                    ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
-                    ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
-                    ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
-                        'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
-                    ->where('tax_class.tax_class_title', 'LIKE', '%' . $param . '%')
-                    ->paginate(20);
+                        ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
+                        ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
+                        ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
+                                'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
+                        ->where('tax_class.tax_class_title', 'LIKE', '%' . $param . '%')
+                        ->paginate(20);
 
                 break;
 
             default:
 
                 $tax_rates = Tax_rate::sortable()
-                    ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
-                    ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
-                    ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
-                        'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
-                    ->paginate(20);
+                        ->LeftJoin('zones', 'zones.zone_id', '=', 'tax_rates.tax_zone_id')
+                        ->LeftJoin('tax_class', 'tax_class.tax_class_id', '=', 'tax_rates.tax_class_id')
+                        ->select('tax_rates.tax_rates_id', 'tax_rates.tax_zone_id', 'tax_rates.tax_class_id', 'tax_rates.tax_priority', 'tax_rates.tax_rate', 'tax_description',
+                                'tax_rates.created_at', 'tax_rates.updated_at', 'zones.zone_id', 'zones.zone_country_id', 'zones.zone_code', 'zones.zone_name', 'tax_class.tax_class_title', 'tax_class.tax_class_description')
+                        ->paginate(20);
 
                 break;
-
         }
 
         $result['tax_rates'] = $tax_rates;
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.taxrates", $title)->with('result', $result)->with('name', $name)->with('param', $param);
-
     }
 
 }

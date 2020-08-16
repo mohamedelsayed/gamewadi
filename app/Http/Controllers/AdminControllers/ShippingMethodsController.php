@@ -9,18 +9,17 @@ use App\Models\Core\Shipping_method;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 
-class ShippingMethodsController extends Controller
-{
+class ShippingMethodsController extends Controller {
+
     //
-    public function __construct(Shipping_method $shipping_method, Setting $setting, Languages $languages)
-    {
+    public function __construct(Shipping_method $shipping_method, Setting $setting, Languages $languages) {
+        parent::__construct();
         $this->Shipping_method = $shipping_method;
         $this->Setting = $setting;
         $this->Languages = $languages;
     }
 
-    public function display(Request $request)
-    {
+    public function display(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ShippingMethods"));
 
         if (!empty($request->id)) {
@@ -47,12 +46,10 @@ class ShippingMethodsController extends Controller
         $result['flate_rate'] = $flate_rate;
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.shippingmethods.index", $title)->with('result', $result);
-
     }
 
     //upsShipping
-    public function upsShipping(Request $request)
-    {
+    public function upsShipping(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.UPSShipping"));
         $pickupType = '01';
@@ -110,8 +107,7 @@ class ShippingMethodsController extends Controller
         return view("admin.shippingmethods.upsshipping", $title)->with('result', $result);
     }
 
-    public function flaterate(Request $request)
-    {
+    public function flaterate(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.FlateRate"));
         $shipping_methods = $this->Shipping_method->shipingMethods();
         $result['flate_rate'] = $shipping_methods;
@@ -142,11 +138,9 @@ class ShippingMethodsController extends Controller
         $result['description'] = $description_data;
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.shippingmethods.flateRate", $title)->with('result', $result);
-
     }
 
-    public function updateflaterate(Request $request)
-    {
+    public function updateflaterate(Request $request) {
 
         $this->Shipping_method->updateflaterate($request);
         $this->Shipping_method->updateShipingMethodStatus($request);
@@ -173,11 +167,9 @@ class ShippingMethodsController extends Controller
         }
         $message = Lang::get("labels.InformationUpdatedMessage");
         return redirect()->back()->withErrors([$message]);
-
     }
 
-    public function updateUpsshipping(Request $request)
-    {
+    public function updateUpsshipping(Request $request) {
         $this->Shipping_method->insterUPS($request);
         $this->Shipping_method->updateUPSstatus($request);
         $table_name = $request->table_name;
@@ -217,12 +209,10 @@ class ShippingMethodsController extends Controller
         }
         $message = Lang::get("labels.InformationAddedMessage");
         return redirect()->back()->withErrors([$message]);
-
     }
 
     //addNewTaxRate
-    public function defaultShippingMethod(Request $request)
-    {
+    public function defaultShippingMethod(Request $request) {
         $this->Shipping_method->defualtshipingMethod();
         $this->Shipping_method->DefualtshipingMethod1($request);
         $message = 'changed';
@@ -230,8 +220,7 @@ class ShippingMethodsController extends Controller
     }
 
     //shipping_detail
-    public function detail(Request $request)
-    {
+    public function detail(Request $request) {
 
         $title = array('pageTitle' => Lang::get("labels.FlateRate"));
         $result = array();
@@ -268,11 +257,9 @@ class ShippingMethodsController extends Controller
         $result['commonContent'] = $this->Setting->commonContent();
 
         return view("admin.shippingmethods.detail", $title)->with('result', $result);
-
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.EditMainCategories"));
         $last_modified = date('y-m-d h:i:s');
         $table_name = $request->table_name;
@@ -298,7 +285,6 @@ class ShippingMethodsController extends Controller
 
         $message = Lang::get("labels.shippingUpdateMessage");
         return redirect()->back()->withErrors([$message]);
-
     }
 
 }

@@ -20,6 +20,7 @@ class ProductController extends Controller {
 
     public function __construct(Products $products, Languages $language, Images $images, Categories $category, Setting $setting,
             Manufacturers $manufacturer, Reviews $reviews) {
+        parent::__construct();
         $this->category = $category;
         $this->reviews = $reviews;
         $this->language = $language;

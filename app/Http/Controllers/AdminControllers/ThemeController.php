@@ -11,17 +11,16 @@ use Lang;
 use View;
 use App\Models\Core\Setting;
 
-class ThemeController extends Controller
-{
+class ThemeController extends Controller {
+
     //
 
-    public function __construct(Setting $setting)
-    {
+    public function __construct(Setting $setting) {
+        parent::__construct();
         $this->Setting = $setting;
     }
 
-    public function moveToBanners($banner_id)
-    {
+    public function moveToBanners($banner_id) {
         $result = array();
         $images = new Images();
         $theme = new Theme();
@@ -70,11 +69,10 @@ class ThemeController extends Controller
         } elseif ($banner_id == 20) {
             $banner = (string) View::make('admin.banners_views.carousal_banner1', ['result' => $result])->render();
         } elseif ($banner_id == 21) {
-            $banner = (string) View::make('admin.banners_views.ad_banner1', ['result' => $result])->render();        
+            $banner = (string) View::make('admin.banners_views.ad_banner1', ['result' => $result])->render();
         } elseif ($banner_id == 41) {
             $banner = (string) View::make('admin.banners_views.ad_banner3', ['result' => $result])->render();
-        }
-        else {
+        } else {
             $banner = (string) View::make('admin.banners_views.ad_banner2', ['result' => $result])->render();
         }
 
@@ -82,8 +80,7 @@ class ThemeController extends Controller
         return view('admin.theme.banner_images')->with('banner', $banner)->with('result', $result);
     }
 
-    public function moveToSliders($carousal_id)
-    {
+    public function moveToSliders($carousal_id) {
         $result = array();
         $images = new Images();
         $theme = new Theme();
@@ -106,23 +103,21 @@ class ThemeController extends Controller
         return view('admin.theme.slider_images')->with('slider', $slider)->with('result', $result);
     }
 
-    public function updatebanner(Request $request)
-    {
+    public function updatebanner(Request $request) {
         $theme = new Theme();
         $theme->updateBanners($request);
         $homeBanners = $theme->getBannersForUpdate($request->style);
         return $homeBanners;
     }
 
-    public function updateslider(Request $request)
-    {
+    public function updateslider(Request $request) {
         $theme = new Theme();
         $theme->updateSliders($request);
         $sliders = $theme->getSlidersForUpdate($request->carousel_id);
         return $sliders;
     }
-    public function index2($id)
-    {
+
+    public function index2($id) {
         $current_theme = DB::table('current_theme')->first();
         $data = DB::table('front_end_theme_content')->first();
         //dd($data);
@@ -166,8 +161,7 @@ class ThemeController extends Controller
         return view("admin.theme.index")->with(['data' => $data, 'result' => $result, 'current_theme' => $current_theme]);
     }
 
-    public function index()
-    {
+    public function index() {
         $current_theme = DB::table('current_theme')->first();
         $data = DB::table('front_end_theme_content')->first();
         $headers = json_decode($data->headers, true);
@@ -200,8 +194,7 @@ class ThemeController extends Controller
         return view("admin.theme.index")->with(['data' => $data, 'result' => $result, 'current_theme' => $current_theme]);
     }
 
-    public function set(Request $request)
-    {
+    public function set(Request $request) {
         $header_id = $request['request']['header_id'];
         $carousel_id = $request['request']['carousel_id'];
         $banner_id = $request['request']['banner_id'];
@@ -216,63 +209,62 @@ class ThemeController extends Controller
         $product_section_order = $product_section_order->product_section_order;
 
         $response = DB::table('current_theme')
-            ->where('id', 1)
-            ->update([
-                'header' => $header_id,
-                'carousel' => $carousel_id,
-                'banner' => $banner_id,
-                'footer' => $footer_id,
-                'cart' => $cart,
-                'news' => $news,
-                'detail' => $detail,
-                'shop' => $shop,
-                'contact' => $contact,
-                'product_section_order' => $product_section_order,
-            ]);
+                ->where('id', 1)
+                ->update([
+            'header' => $header_id,
+            'carousel' => $carousel_id,
+            'banner' => $banner_id,
+            'footer' => $footer_id,
+            'cart' => $cart,
+            'news' => $news,
+            'detail' => $detail,
+            'shop' => $shop,
+            'contact' => $contact,
+            'product_section_order' => $product_section_order,
+        ]);
 
         return $response;
     }
 
-    public function setPages(Request $request)
-    {
+    public function setPages(Request $request) {
         if ($request->page == 2) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'cart' => $request->cart_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'cart' => $request->cart_id,
+            ]);
             return redirect('viewcart');
         }
         if ($request->page == 3) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'news' => $request->news_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'news' => $request->news_id,
+            ]);
             return redirect('news');
         }
         if ($request->page == 4) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'detail' => $request->detail_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'detail' => $request->detail_id,
+            ]);
             return redirect('/');
         }
         if ($request->page == 5) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'shop' => $request->shop_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'shop' => $request->shop_id,
+            ]);
             return redirect('shop');
         }
         if ($request->page == 6) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'contact' => $request->contact_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'contact' => $request->contact_id,
+            ]);
             return redirect('contact');
         }
         if ($request->page == 7) {
@@ -285,29 +277,29 @@ class ThemeController extends Controller
 
         if ($request->page == 8) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'login' => $request->login_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'login' => $request->login_id,
+            ]);
             return redirect('login');
         }
 
         if ($request->page == 9) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'news' => $request->news_id,
-                ]);
+                    ->where('id', 1)
+                    ->update([
+                        'news' => $request->news_id,
+            ]);
             return redirect('news');
         }
-        
+
         if ($request->page == 10) {
             DB::table('current_theme')
-                ->where('id', 1)
-                ->update([
-                    'transitions' => $request->transitions_id,
-                ]);
-                return redirect('/');
+                    ->where('id', 1)
+                    ->update([
+                        'transitions' => $request->transitions_id,
+            ]);
+            return redirect('/');
         }
 
         if ($request->page == 11) {
@@ -317,21 +309,18 @@ class ThemeController extends Controller
             ]);
             return redirect()->back();
         }
-
     }
 
-    public function reorder(Request $request)
-    {
+    public function reorder(Request $request) {
         $product_section_orders = json_encode($request->product_section_orders, true);
         DB::table('front_end_theme_content')
-            ->where('id', 1)
-            ->update([
-                'product_section_order' => $product_section_orders,
-            ]);
+                ->where('id', 1)
+                ->update([
+                    'product_section_order' => $product_section_orders,
+        ]);
     }
 
-    public function changestatus(Request $request)
-    {
+    public function changestatus(Request $request) {
         $json = $request->product_section_orders;
         foreach ($json as $key => $var) {
             if ($var['id'] == $request->id) {
@@ -344,15 +333,14 @@ class ThemeController extends Controller
         }
         $json1 = json_encode($json, true);
         DB::table('front_end_theme_content')
-            ->where('id', 1)
-            ->update([
-                'product_section_order' => $json1,
-            ]);
+                ->where('id', 1)
+                ->update([
+                    'product_section_order' => $json1,
+        ]);
         return $json;
     }
 
-    public function topoffer(Request $request)
-    {
+    public function topoffer(Request $request) {
         $title = array('pageTitle' => Lang::get("labels.ListingTaxClasses"));
 
         $theme = new Theme();
@@ -361,13 +349,11 @@ class ThemeController extends Controller
         return view("admin.theme.topoffer", $title)->with('result', $result);
     }
 
-    public function updateTopOffer(Request $request)
-    {
+    public function updateTopOffer(Request $request) {
         $theme = new Theme();
         $result = $theme->updateTopOffer($request);
         $message = Lang::get("labels.Top offer has been updated successfully");
         return redirect()->back()->withErrors([$message]);
-
     }
 
 }

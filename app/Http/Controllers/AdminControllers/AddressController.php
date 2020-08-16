@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AddressController extends Controller
-{
+class AddressController extends Controller {
 
-    public function getzones(Request $request)
-    {
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function getzones(Request $request) {
         $getZones = array();
         $getZones = DB::table('zones')->where('zone_country_id', $request->country_zone_id)->get();
         if (count($getZones) > 0) {
@@ -23,8 +25,7 @@ class AddressController extends Controller
         print $zoneResponse;
     }
 
-    public function getAllCountries()
-    {
+    public function getAllCountries() {
         $allCountries = DB::table('countries')->get();
         return ($allCountries);
     }
