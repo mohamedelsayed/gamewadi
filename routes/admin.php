@@ -37,7 +37,7 @@ Route::group(['middleware' => ['installer']], function () {
 
         Route::get('/topoffer/display', 'ThemeController@topoffer');
         Route::post('/topoffer/update', 'ThemeController@updateTopOffer');
-        
+
 
         Route::get('/dashboard/{reportBase}', 'AdminController@dashboard');
         //add adddresses against customers
@@ -74,7 +74,6 @@ Route::group(['middleware' => ['installer']], function () {
         Route::post('/update', 'LanguageController@update')->middleware('edit_language');
         Route::post('/delete', 'LanguageController@delete')->middleware('delete_language');
         Route::get('/filter', 'LanguageController@filter')->middleware('view_language');
-
     });
 
     Route::group(['prefix' => 'admin/media', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -100,7 +99,6 @@ Route::group(['middleware' => ['installer']], function () {
         Route::post('/reorder', 'ThemeController@reorder');
         Route::post('/setting/changestatus', 'ThemeController@changestatus');
         Route::post('/setting/fetchlanguages', 'LanguageController@fetchlanguages')->middleware('view_language');
-
     });
 
     Route::group(['prefix' => 'admin/manufacturers', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -134,13 +132,20 @@ Route::group(['middleware' => ['installer']], function () {
     });
 
     Route::group(['prefix' => 'admin/categories', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
-        Route::get('/display', 'CategoriesController@display')->middleware('view_categories');;
-        Route::get('/add', 'CategoriesController@add')->middleware('add_categories');;
-        Route::post('/add', 'CategoriesController@insert')->middleware('add_categories');;
-        Route::get('/edit/{id}', 'CategoriesController@edit')->middleware('edit_categories');;
-        Route::post('/update', 'CategoriesController@update')->middleware('edit_categories');;
-        Route::post('/delete', 'CategoriesController@delete')->middleware('delete_categories');;
-        Route::get('/filter', 'CategoriesController@filter')->middleware('view_categories');;
+        Route::get('/display', 'CategoriesController@display')->middleware('view_categories');
+        ;
+        Route::get('/add', 'CategoriesController@add')->middleware('add_categories');
+        ;
+        Route::post('/add', 'CategoriesController@insert')->middleware('add_categories');
+        ;
+        Route::get('/edit/{id}', 'CategoriesController@edit')->middleware('edit_categories');
+        ;
+        Route::post('/update', 'CategoriesController@update')->middleware('edit_categories');
+        ;
+        Route::post('/delete', 'CategoriesController@delete')->middleware('delete_categories');
+        ;
+        Route::get('/filter', 'CategoriesController@filter')->middleware('view_categories');
+        ;
     });
 
     Route::group(['prefix' => 'admin/currencies', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -151,8 +156,6 @@ Route::group(['middleware' => ['installer']], function () {
         Route::get('/edit/warning/{id}', 'CurrencyController@warningedit')->middleware('edit_general_setting');
         Route::post('/update', 'CurrencyController@update')->middleware('edit_general_setting');
         Route::post('/delete', 'CurrencyController@delete')->middleware('edit_general_setting');
-
-        
     });
 
     Route::group(['prefix' => 'admin/products', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -197,13 +200,9 @@ Route::group(['middleware' => ['installer']], function () {
                     Route::post('/delete', 'ProductController@deleteoption')->middleware('edit_product');
                     Route::post('/getOptionsValue', 'ProductController@getOptionsValue')->middleware('edit_product');
                     Route::post('/currentstock', 'ProductController@currentstock')->middleware('view_product');
-
                 });
-
             });
-
         });
-
     });
 
     Route::group(['prefix' => 'admin/products/attributes', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -236,7 +235,6 @@ Route::group(['middleware' => ['installer']], function () {
     Route::group(['prefix' => 'admin/reviews', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
         Route::get('/display', 'ProductController@reviews')->middleware('view_reviews');
         Route::get('/edit/{id}/{status}', 'ProductController@editreviews')->middleware('edit_reviews');
-
     });
 //customers
     Route::group(['prefix' => 'admin/customers', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -296,7 +294,6 @@ Route::group(['middleware' => ['installer']], function () {
             Route::post('/update', 'TaxController@updatetaxrate')->middleware('edit_tax');
             Route::post('/delete', 'TaxController@deletetaxrate')->middleware('delete_tax');
         });
-
     });
 
     Route::group(['prefix' => 'admin/shippingmethods', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -312,7 +309,6 @@ Route::group(['middleware' => ['installer']], function () {
 
         Route::get('/shppingbyweight', 'ShippingByWeightController@shppingbyweight')->middleware('view_shipping');
         Route::post('/updateShppingWeightPrice', 'ShippingByWeightController@updateShppingWeightPrice')->middleware('edit_shipping');
-
     });
 
     Route::group(['prefix' => 'admin/paymentmethods', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -365,7 +361,6 @@ Route::group(['middleware' => ['installer']], function () {
         Route::get('/editorderstatus/{id}', 'SiteSettingController@editorderstatus')->middleware('edit_order');
         Route::post('/updateOrderStatus', 'SiteSettingController@updateOrderStatus')->middleware('edit_order');
         Route::post('/deleteOrderStatus', 'SiteSettingController@deleteOrderStatus')->middleware('edit_order');
-
     });
 
     Route::group(['prefix' => 'admin/banners', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -376,7 +371,6 @@ Route::group(['middleware' => ['installer']], function () {
         Route::post('/update', 'BannersController@updateBanner')->middleware('edit_app_setting');
         Route::post('/delete', 'BannersController@deleteBanner')->middleware('edit_app_setting');
         Route::get('/filter', 'BannersController@filterbanners')->middleware('edit_app_setting');
-
     });
 
     Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'AdminControllers'], function () {
@@ -386,6 +380,7 @@ Route::group(['middleware' => ['installer']], function () {
         Route::get('/statsproductsliked', 'ReportsController@statsProductsLiked')->middleware('report');
         Route::get('/outofstock', 'ReportsController@outofstock')->middleware('report');
         Route::get('/lowinstock', 'ReportsController@lowinstock')->middleware('report');
+        Route::get('/actionslog', 'LogsController@actionslog')->middleware('report');
         Route::get('/stockin', 'ReportsController@stockin')->middleware('report');
         Route::post('/productSaleReport', 'ReportsController@productSaleReport')->middleware('report');
 ////////////////////////////////////////////////////////////////////////////////////
@@ -414,11 +409,10 @@ Route::group(['middleware' => ['installer']], function () {
 ////////////////////////////////////////////////////////////////////////////////////
         //////////////     SITE ROUTES
         ////////////////////////////////////////////////////////////////////////////////////
-        
         // home page banners
         Route::get('/homebanners', 'HomeBannersController@display')->middleware('view_web_setting', 'website_routes');
         Route::post('/homebanners/insert', 'HomeBannersController@insert')->middleware('view_web_setting', 'website_routes');
-        
+
         Route::get('/menus', 'MenusController@menus')->middleware('view_web_setting', 'website_routes');
         Route::get('/addmenus', 'MenusController@addmenus')->middleware('edit_web_setting', 'website_routes');
         Route::post('/addnewmenu', 'MenusController@addnewmenu')->middleware('edit_web_setting', 'website_routes');
@@ -429,7 +423,7 @@ Route::group(['middleware' => ['installer']], function () {
         Route::post('/menuposition', 'MenusController@menuposition')->middleware('edit_web_setting', 'website_routes');
         Route::get('/catalogmenu', 'MenusController@catalogmenu')->middleware('edit_web_setting', 'website_routes');
 
-        
+
 
         //site pages controller
         Route::get('/webpages', 'PagesController@webpages')->middleware('view_web_setting', 'website_routes');
@@ -453,7 +447,6 @@ Route::group(['middleware' => ['installer']], function () {
         ////////////////////////////////////////////////////////////////////////////////////
         //////////////     GENERAL ROUTES
         ////////////////////////////////////////////////////////////////////////////////////
-
 //units
         Route::get('/units', 'SiteSettingController@units')->middleware('view_general_setting');
         Route::get('/addunit', 'SiteSettingController@addunit')->middleware('edit_general_setting');
@@ -511,5 +504,4 @@ Route::group(['middleware' => ['installer']], function () {
         Route::post('/checkpassword', 'ManagementsController@checkpassword')->middleware('edit_management');
         Route::post('/updatercontent', 'ManagementsController@updatercontent')->middleware('edit_management');
     });
-
 });

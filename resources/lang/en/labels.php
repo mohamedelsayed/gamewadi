@@ -2159,4 +2159,10 @@ return [
     'Style19' => 'Style 19',
     'Style20' => 'Style 20',
     'Style21' => 'Style 21',
+    'Actions Log' => 'Actions Log',
+    'User' => 'User',
+    'IP' => 'IP',
+    'Controller' => 'Controller',
+    'Action' => 'Action',
+    'item_id' => 'Item Id',
 ];

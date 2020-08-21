@@ -4,8 +4,8 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends HttpKernel
-{
+class Kernel extends HttpKernel {
+
     /**
      * The application's global HTTP middleware stack.
      *
@@ -36,13 +36,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
         'api' => [
             'throttle:60,1',
             'bindings',
         ],
-
-		'vendor' => [
+        'vendor' => [
             'throttle:60,1',
             'bindings',
         ],
@@ -56,10 +54,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-      'web_installed' => \App\Http\Middleware\web_installed::class,
-      'env' => \App\Http\Middleware\env::class,
-      'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-      'Customer' => \App\Http\Middleware\RedirectIfNotCustomer::class,
+        'web_installed' => \App\Http\Middleware\web_installed::class,
+        'env' => \App\Http\Middleware\env::class,
+        'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+        'Customer' => \App\Http\Middleware\RedirectIfNotCustomer::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -135,16 +133,12 @@ class Kernel extends HttpKernel
         'edit_management' => \App\Http\Middleware\management\edit_management::class,
         'application_routes' => \App\Http\Middleware\app_setting\application_routes::class,
         'website_routes' => \App\Http\Middleware\web_setting\website_routes::class,
-
         'view_categories' => \App\Http\Middleware\categories\view_categories::class,
         'edit_categories' => \App\Http\Middleware\categories\edit_categories::class,
         'delete_categories' => \App\Http\Middleware\categories\delete_categories::class,
         'add_categories' => \App\Http\Middleware\categories\add_categories::class,
         'view_reviews' => \App\Http\Middleware\reviews\view_reviews::class,
         'edit_reviews' => \App\Http\Middleware\reviews\edit_reviews::class,
-        
-
-
     ];
 
     /**
@@ -162,4 +156,5 @@ class Kernel extends HttpKernel
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
     ];
+
 }

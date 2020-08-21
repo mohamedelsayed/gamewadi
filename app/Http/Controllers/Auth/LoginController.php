@@ -7,20 +7,19 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
-{
+class LoginController extends Controller {
     /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+      |--------------------------------------------------------------------------
+      | Login Controller
+      |--------------------------------------------------------------------------
+      |
+      | This controller handles authenticating users for the application and
+      | redirecting them to your home screen. The controller uses a trait
+      | to conveniently provide its functionality to your applications.
+      |
+     */
 
-    use AuthenticatesUsers;
+use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -34,11 +33,9 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('guest')->except('logout');
     }
-
 
     /**
      * The user has been authenticated.
@@ -47,16 +44,14 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(Request $request, $user)
-    {
+    protected function authenticated(Request $request, $user) {
 
-            $this->redirectTo='/admin/dashboard/this_month';
-
+        $this->redirectTo = '/admin/dashboard/this_month';
     }
 
     public function logout(Request $request) {
         Auth::logout();
-
         return redirect('/admin/login');
     }
+
 }

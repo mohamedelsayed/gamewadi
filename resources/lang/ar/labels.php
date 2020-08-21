@@ -1449,4 +1449,5 @@ return [
     'Side Banner 11' => 'Side Banner 11',
     'Side Banner 12' => 'Side Banner 12',
     'Side Banner 13' => 'Side Banner 13',
+    'Actions Log' => 'Actions Log',
 ];

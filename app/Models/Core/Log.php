@@ -13,12 +13,19 @@ class Log extends Model {
         'user_id',
         'url',
         'method',
+        'ip',
+        'params',
+        'controller',
+        'action',
+        'item_id',
 //        'body',
 //        'header',
-        'ip',
 //        'status_code',
 //        'response_body',
-        'params'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
 }
