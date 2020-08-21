@@ -42,7 +42,9 @@
                                         @foreach ($result['logs'] as  $key=>$log)
                                         <tr>
                                             <td>
+                                                @if($log->user)
                                                 {{ $log->user->first_name }} {{ $log->user->last_name }}
+                                                @endif
                                             </td>
                                             <td>
                                                 {{ $log->ip }}
