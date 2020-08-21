@@ -32,7 +32,7 @@
                                             <th>{{ trans('labels.Controller') }}</th>
                                             <th>{{ trans('labels.Action') }}</th>
                                             <th>{{ trans('labels.item_id') }}</th>
-                                            <!--<th>{{ trans('labels.URL') }}</th>-->
+                                            <th>{{ trans('labels.URL') }}</th>
                                             <!--<th>{{ trans('labels.Method') }}</th>-->
                                             <!--<th>{{ trans('labels.View Log') }}</th>-->
                                         </tr>
@@ -56,9 +56,11 @@
                                             <td>
                                                 {{ $log->item_id }}
                                             </td>
-<!--                                            <td>
-                                                {{ $log->url }}
-                                            </td>-->
+                                            <td>
+                                                <a href="{{ $log->url }}" target="_blank">
+                                                    {{ 'view URL'}}
+                                                </a>
+                                            </td>
 <!--                                            <td>
                                                 {{ $log->method }}
                                             </td>-->

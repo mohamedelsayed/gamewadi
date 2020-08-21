@@ -22,7 +22,7 @@ class LogsController extends Controller {
         $result['logs'] = $logs;
         //get function from other controller
         $myVar = new SiteSettingController();
-        $result['currency'] = $myVar->getSetting();
+//        $result['currency'] = $myVar->getSetting();
         $result['commonContent'] = $myVar->Setting->commonContent();
         return view("admin.logs.actionslog", $title)->with('result', $result);
     }
