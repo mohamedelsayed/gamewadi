@@ -45,28 +45,28 @@
                                         <h4>{{ trans('labels.generalSetting') }}</h4>
                                         <hr>
                                         <div class="form-group">
-                                       		<label class="col-sm-2 col-md-3 control-label" style="">{{ trans('labels.Web/App Environment') }}</label>
+                                            <label class="col-sm-2 col-md-3 control-label" style="">{{ trans('labels.Web/App Environment') }}</label>
                                             <div class="col-sm-10 col-md-4">
                                                 <label class=" control-label">
-                                                      <input type="radio" name="{{$result['settings'][94]->name}}" value="Maintenance" class="flat-red" @if($result['settings'][94]->value=='Maintenance') checked @endif > &nbsp;{{ trans('labels.Maintenance') }}
+                                                    <input type="radio" name="{{$result['settings'][94]->name}}" value="Maintenance" class="flat-red" @if($result['settings'][94]->value=='Maintenance') checked @endif > &nbsp;{{ trans('labels.Maintenance') }}
                                                 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                                 <label class=" control-label">
-                                                      <input type="radio" name="{{$result['settings'][94]->name}}" value="production" class="flat-red" @if($result['settings'][94]->value=='production') checked @endif >  &nbsp;{{ trans('labels.production') }}
+                                                    <input type="radio" name="{{$result['settings'][94]->name}}" value="production" class="flat-red" @if($result['settings'][94]->value=='production') checked @endif >  &nbsp;{{ trans('labels.production') }}
                                                 </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                                                 <label class=" control-label">
-                                                      <input type="radio" name="{{$result['settings'][94]->name}}" value="local" class="flat-red" @if($result['settings'][94]->value=='local') checked @endif >  &nbsp;{{ trans('labels.local') }}
+                                                    <input type="radio" name="{{$result['settings'][94]->name}}" value="local" class="flat-red" @if($result['settings'][94]->value=='local') checked @endif >  &nbsp;{{ trans('labels.local') }}
                                                 </label>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Maintenance Text') }}</label>
-                                          <div class="col-sm-10 col-md-4">
-                                            {!! Form::text($result['settings'][95]->name,  stripslashes($result['settings'][95]->value), array('class'=>'form-control', 'id'=>$result['settings'][95]->name)) !!}
-                                            <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;margin-top: 0;">{{ trans('labels.Maintenance Text detail') }}</span>
-                                          </div>
+                                            <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Maintenance Text') }}</label>
+                                            <div class="col-sm-10 col-md-4">
+                                                {!! Form::text($result['settings'][95]->name,  stripslashes($result['settings'][95]->value), array('class'=>'form-control', 'id'=>$result['settings'][95]->name)) !!}
+                                                <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;margin-top: 0;">{{ trans('labels.Maintenance Text detail') }}</span>
+                                            </div>
                                         </div>
 
                                         <div class="form-group">
@@ -222,6 +222,14 @@
                                             <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Longitude') }}</label>
                                             <div class="col-sm-10 col-md-4">
                                                 {!! Form::text($result['settings'][11]->name, $result['settings'][11]->value, array('class'=>'form-control', 'id'=>$result['settings'][11]->name)) !!}<span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;margin-top: 0;">{{ trans('labels.LongitudeText') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.automaticCleanLog') }}</label>
+                                            <div class="col-sm-10 col-md-4">
+                                                {!! Form::checkbox($result['settings'][128]->name,1, $result['settings'][128]->value, ['class' => '', 'id'=>$result['settings'][128]->name]) !!}
+                                                <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;margin-top: 0;">{{ trans('labels.automaticCleanLogText') }}</span>
                                             </div>
                                         </div>
 

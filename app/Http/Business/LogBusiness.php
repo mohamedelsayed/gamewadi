@@ -3,9 +3,9 @@
 namespace App\Http\Business;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Models\Core\Log;
 use Auth;
+use App\Models\Core\Setting;
 
 class LogBusiness extends Controller {
 
@@ -36,6 +36,19 @@ class LogBusiness extends Controller {
 //            $log->status_code = $response->getStatusCode();
 //            $log->response_body = json_decode($response->getContent(), true);
             $log->save();
+        }
+    }
+
+    public function cleanLog() {
+        $setting = Setting::where("name", Setting::AUTOMATIC_CLEAN_LOG)->first();
+        if (!empty($setting)) {
+            $automatic_clean_log = $setting->value;
+        }
+        if ($automatic_clean_log == 1) {
+            $days = 7; //week
+            $formatted = date('Y-m-d H:i:s', strtotime('-' . $days . ' days'));
+//            pr($formatted);
+            Log::where('created_at', '<=', $formatted)->forceDelete();
         }
     }
 

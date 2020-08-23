@@ -2165,4 +2165,6 @@ return [
     'Controller' => 'Controller',
     'Action' => 'Action',
     'item_id' => 'Item Id',
+    'automaticCleanLog' => 'Automatic Clean Log',
+    'automaticCleanLogText' => 'This checkbox for automatic clean log every week.'
 ];

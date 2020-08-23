@@ -139,7 +139,6 @@ class SiteSettingController extends Controller {
                     $this->Setting->settingUpdate($key, $value);
                 }
             } else {
-
                 if ($key == 'favicon') {
                     if ($request->favicon !== null) {
                         $allimagesth = DB::table('images')
@@ -156,7 +155,12 @@ class SiteSettingController extends Controller {
                 }
             }
         }
-
+        if ($request->automatic_clean_log !== null) {
+            $automatic_clean_log = $request->automatic_clean_log;
+        } else {
+            $automatic_clean_log = '0';
+        }
+        $this->Setting->settingUpdate('automatic_clean_log', $automatic_clean_log);
         $message = Lang::get("labels.SettingUpdateMessage");
         return redirect()->back()->withErrors([$message]);
     }

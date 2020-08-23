@@ -21,12 +21,8 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        $schedule->command('currency:update')
-                ->timezone('Africa/Cairo')
-                ->twiceDaily(1, 13);
-//                ->everyFiveMinutes();
+        $schedule->command('currency:update')->timezone('Africa/Cairo')->twiceDaily(1, 13);
+        $schedule->command('log:clean')->timezone('Africa/Cairo')->weekly();
     }
 
     /**

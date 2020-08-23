@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class Setting extends Model {
 
+    const AUTOMATIC_CLEAN_LOG = 'automatic_clean_log';
+
     public static function imageType() {
         $extensions = array('gif', 'jpg', 'jpeg', 'png');
         return $extensions;
@@ -25,7 +27,6 @@ class Setting extends Model {
     }
 
     public function Units() {
-
         $units = DB::table('units')
                 ->leftJoin('units_descriptions', 'units_descriptions.unit_id', '=', 'units.unit_id')
                 ->where('is_active', '1')
