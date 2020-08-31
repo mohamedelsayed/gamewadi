@@ -14,19 +14,17 @@ use Lang;
 use Session;
 use Socialite;
 
-class Customer extends Model
-{
+class Customer extends Model {
 
-    public function addToCompare($request)
-    {
+    public function addToCompare($request) {
         if (!empty(auth()->guard('customer')->user()->id)) {
             $check = DB::table('compare')->where('product_ids', $request->product_id)->where('customer_id', auth()->guard('customer')->user()->id)->first();
             if (!$check) {
                 $id = DB::table('compare')
-                    ->insertGetId([
-                        'product_ids' => $request->product_id,
-                        'customer_id' => auth()->guard('customer')->user()->id,
-                    ]);
+                        ->insertGetId([
+                    'product_ids' => $request->product_id,
+                    'customer_id' => auth()->guard('customer')->user()->id,
+                ]);
             }
             $count = DB::table('compare')->where('customer_id', auth()->guard('customer')->user()->id)->count();
             return $count;
@@ -37,22 +35,20 @@ class Customer extends Model
         return $cartResponse;
     }
 
-    public function DeleteCompare($id)
-    {
+    public function DeleteCompare($id) {
         DB::table('compare')->where('product_ids', $id)->where('customer_id', auth()->guard('customer')->user()->id)->delete();
         $responseData = array('success' => '1', 'message' => Lang::get("website.Removed Successfully"));
         return $responseData;
     }
 
-    public function updateMyProfile($request)
-    {
-
+    public function updateMyProfile($request) {
         $customers_id = auth()->guard('customer')->user()->id;
         $customers_firstname = $request->customers_firstname;
         $customers_lastname = $request->customers_lastname;
         $customers_fax = $request->fax;
         $customers_newsletter = $request->newsletter;
         $customers_telephone = $request->customers_telephone;
+        $customers_country_code = $request->customers_country_code;
         $customers_gender = $request->gender;
         $customers_dob = $request->customers_dob;
         $customers_info_date_account_last_modified = date('y-m-d h:i:s');
@@ -71,6 +67,7 @@ class Customer extends Model
             'first_name' => $customers_firstname,
             'last_name' => $customers_lastname,
             'phone' => $customers_telephone,
+            'country_code' => $customers_country_code,
             'gender' => $customers_gender,
             'dob' => $customers_dob,
             'avatar' => $customers_picture,
@@ -84,11 +81,9 @@ class Customer extends Model
         $message = Lang::get("website.Profile has been updated successfully");
 
         return $message;
-
     }
 
-    public function updateMyPassword($request)
-    {
+    public function updateMyPassword($request) {
 
         $old_session = Session::getId();
         $customers_id = auth()->guard('customer')->user()->id;
@@ -110,17 +105,14 @@ class Customer extends Model
 
         $message = Lang::get("website.Password has been updated successfully");
         return $message;
-
     }
 
-    public function createRandomPassword()
-    {
+    public function createRandomPassword() {
         $pass = substr(md5(uniqid(mt_rand(), true)), 0, 8);
         return $pass;
     }
 
-    public function handleSocialLoginCallback($social)
-    {
+    public function handleSocialLoginCallback($social) {
         $old_session = Session::getId();
 
         $user = Socialite::driver($social)->stateless()->user();
@@ -151,9 +143,9 @@ class Customer extends Model
         if ($social == 'facebook') {
 
             $existUser = DB::table('customers')
-                ->leftJoin('users', 'customers.customers_id', '=', 'users.id')
-                ->where('customers.fb_id', '=', $social_id)
-                ->orWhere('users.email', '=', $email)->get();
+                            ->leftJoin('users', 'customers.customers_id', '=', 'users.id')
+                            ->where('customers.fb_id', '=', $social_id)
+                            ->orWhere('users.email', '=', $email)->get();
 
             if (count($existUser) > 0) {
 
@@ -192,9 +184,9 @@ class Customer extends Model
         if ($social == 'google') {
 
             $existUser = DB::table('customers')
-                ->leftJoin('users', 'customers.customers_id', '=', 'users.id')
-                ->where('customers.google_id', '=', $social_id)
-                ->orWhere('users.email', '=', $email)->get();
+                            ->leftJoin('users', 'customers.customers_id', '=', 'users.id')
+                            ->where('customers.google_id', '=', $social_id)
+                            ->orWhere('users.email', '=', $email)->get();
 
             if (count($existUser) > 0) {
 
@@ -246,7 +238,6 @@ class Customer extends Model
                 'global_product_notifications' => $global_product_notifications,
                 'customers_info_number_of_logons' => DB::raw('customers_info_number_of_logons + 1'),
             ]);
-
         } else {
 
             //insert customers_info table
@@ -257,25 +248,24 @@ class Customer extends Model
                 'customers_info_date_account_created' => $customers_info_date_account_created,
                 'global_product_notifications' => $global_product_notifications,
             ]);
-
         }
 
         //check if already login or not
         $already_login = DB::table('whos_online')->where('customer_id', '=', $customers_id)->get();
         if (count($already_login) > 0) {
             DB::table('whos_online')
-                ->where('customer_id', $customers_id)
-                ->update([
-                    'full_name' => $userData[0]->first_name . ' ' . $userData[0]->last_name,
-                    'time_entry' => date('Y-m-d H:i:s'),
-                ]);
+                    ->where('customer_id', $customers_id)
+                    ->update([
+                        'full_name' => $userData[0]->first_name . ' ' . $userData[0]->last_name,
+                        'time_entry' => date('Y-m-d H:i:s'),
+            ]);
         } else {
             DB::table('whos_online')
-                ->insert([
-                    'full_name' => $userData[0]->first_name . ' ' . $userData[0]->last_name,
-                    'time_entry' => date('Y-m-d H:i:s'),
-                    'customer_id' => $customers_id,
-                ]);
+                    ->insert([
+                        'full_name' => $userData[0]->first_name . ' ' . $userData[0]->last_name,
+                        'time_entry' => date('Y-m-d H:i:s'),
+                        'customer_id' => $customers_id,
+            ]);
         }
 
         $customerInfo = array("email" => $email, "password" => $password);
@@ -290,16 +280,16 @@ class Customer extends Model
 
             //cart
             $cart = DB::table('customers_basket')->where([
-                ['session_id', '=', $old_session],
-            ])->get();
+                        ['session_id', '=', $old_session],
+                    ])->get();
 
             if (count($cart) > 0) {
                 foreach ($cart as $cart_data) {
                     $exist = DB::table('customers_basket')->where([
-                        ['customers_id', '=', $customer->id],
-                        ['products_id', '=', $cart_data->products_id],
-                        ['is_order', '=', '0'],
-                    ])->delete();
+                                ['customers_id', '=', $customer->id],
+                                ['products_id', '=', $cart_data->products_id],
+                                ['is_order', '=', '0'],
+                            ])->delete();
                 }
             }
 
@@ -321,11 +311,9 @@ class Customer extends Model
         }
         $result = "";
         return $result;
-
     }
 
-    public function likeMyProduct($request)
-    {
+    public function likeMyProduct($request) {
 
         if (!empty(auth()->guard('customer')->user()->id)) {
             $liked_products_id = $request->products_id;
@@ -335,9 +323,9 @@ class Customer extends Model
 
             //to avoide duplicate record
             $record = DB::table('liked_products')->where([
-                'liked_products_id' => $liked_products_id,
-                'liked_customers_id' => $liked_customers_id,
-            ])->get();
+                        'liked_products_id' => $liked_products_id,
+                        'liked_customers_id' => $liked_customers_id,
+                    ])->get();
 
             if (count($record) > 0) {
 
@@ -349,9 +337,9 @@ class Customer extends Model
                 $total_wishlist = 0;
                 if (!empty(session('customers_id'))) {
                     $total_wishlist = DB::table('liked_products')
-                        ->leftjoin('products', 'products.products_id', '=', 'liked_products.liked_products_id')
-                        ->where('products_status', '1')
-                        ->where('liked_customers_id', '=', session('customers_id'))->count();
+                                    ->leftjoin('products', 'products.products_id', '=', 'liked_products.liked_products_id')
+                                    ->where('products_status', '1')
+                                    ->where('liked_customers_id', '=', session('customers_id'))->count();
                 }
 
                 DB::table('products')->where('products_id', '=', $liked_products_id)->decrement('products_liked');
@@ -370,16 +358,14 @@ class Customer extends Model
                 $total_wishlist = 0;
                 if (!empty(session('customers_id'))) {
                     $total_wishlist = DB::table('liked_products')
-                        ->leftjoin('products', 'products.products_id', '=', 'liked_products.liked_products_id')
-                        ->where('products_status', '1')
-                        ->where('liked_customers_id', '=', session('customers_id'))->count();
+                                    ->leftjoin('products', 'products.products_id', '=', 'liked_products.liked_products_id')
+                                    ->where('products_status', '1')
+                                    ->where('liked_customers_id', '=', session('customers_id'))->count();
                 }
                 $products = DB::table('products')->where('products_id', '=', $liked_products_id)->get();
 
                 $responseData = array('success' => '2', 'message' => Lang::get("website.Product is liked"), 'total_likes' => $products[0]->products_liked, 'id' => 'like_count_' . $liked_products_id, 'total_wishlist' => $total_wishlist);
-
             }
-
         } else {
             $responseData = array('success' => '0', 'message' => Lang::get("website.Please login first to like this product"));
         }
@@ -387,8 +373,7 @@ class Customer extends Model
         return $cartResponse;
     }
 
-    public function unlikeMyProduct($id)
-    {
+    public function unlikeMyProduct($id) {
 
         $liked_products_id = $id;
 
@@ -400,11 +385,9 @@ class Customer extends Model
         ])->delete();
 
         DB::table('products')->where('products_id', '=', $liked_products_id)->decrement('products_liked');
-
     }
 
-    public function wishlist($request)
-    {
+    public function wishlist($request) {
         $index = new Index();
         $productss = new Products();
         $result = array();
@@ -434,8 +417,7 @@ class Customer extends Model
         return $result;
     }
 
-    public function processLogin($request, $old_session)
-    {
+    public function processLogin($request, $old_session) {
         $result = array();
         $customer = auth()->guard('customer')->user();
         session(['guest_checkout' => 0]);
@@ -445,16 +427,16 @@ class Customer extends Model
 
         //cart
         $cart = DB::table('customers_basket')->where([
-            ['session_id', '=', $old_session],
-        ])->get();
+                    ['session_id', '=', $old_session],
+                ])->get();
 
         if (count($cart) > 0) {
             foreach ($cart as $cart_data) {
                 $exist = DB::table('customers_basket')->where([
-                    ['customers_id', '=', $customer->id],
-                    ['products_id', '=', $cart_data->products_id],
-                    ['is_order', '=', '0'],
-                ])->delete();
+                            ['customers_id', '=', $customer->id],
+                            ['products_id', '=', $cart_data->products_id],
+                            ['is_order', '=', '0'],
+                        ])->delete();
             }
         }
 
@@ -473,30 +455,25 @@ class Customer extends Model
 
         $result['customers'] = DB::table('users')->where('id', $customer->id)->get();
         return $result;
-
     }
 
-    public function Compare()
-    {
+    public function Compare() {
         $compare = DB::table('compare')->where('customer_id', auth()->guard('customer')->user()->id)->get();
         return $compare;
     }
 
-    public function ExistUser($email)
-    {
+    public function ExistUser($email) {
         $existUser = DB::table('users')->where('role_id', 2)->where('email', $email)->get();
         return $existUser;
     }
 
-    public function UpdateExistUser($email, $password)
-    {
+    public function UpdateExistUser($email, $password) {
         DB::table('users')->where('email', $email)->update([
             'password' => Hash::make($password),
         ]);
     }
 
-    public function updateDevice($request, $device_data)
-    {
+    public function updateDevice($request, $device_data) {
 
         //check device exist
         $device_id = DB::table('devices')->where('device_id', '=', $request->device_id)->get();
@@ -506,8 +483,8 @@ class Customer extends Model
             $dataexist = DB::table('devices')->where('device_id', '=', $request->device_id)->where('user_id', '==', '0')->get();
 
             DB::table('devices')
-                ->where('device_id', $request->device_id)
-                ->update($device_data);
+                    ->where('device_id', $request->device_id)
+                    ->update($device_data);
 
             if (auth()->guard('customer')->check()) {
                 $userData = DB::table('users')->where('id', '=', auth()->guard('customers')->user()->id)->get();
@@ -516,15 +493,13 @@ class Customer extends Model
                 $alertSetting = $myVar->createUserAlert($userData);
             }
         } else {
-             DB::table('devices')->insertGetId($device_data);
+            DB::table('devices')->insertGetId($device_data);
         }
 
         return 'success';
-
     }
 
-    public function signupProcess($request)
-    {
+    public function signupProcess($request) {
         $res = array();
         $old_session = Session::getId();
         $firstName = $request->firstName;
@@ -556,15 +531,15 @@ class Customer extends Model
         } else {
             $res['email'] = "false";
             if (DB::table('users')->insert([
-                'first_name' => $request->firstName,
-                'last_name' => $request->lastName,
-                'gender' => $request->gender,
-                'role_id' => 2,
-                'email' => $request->email,
-                'password' => Hash::make($password),
-                'created_at' => $date,
-                'updated_at' => $date,
-            ])
+                        'first_name' => $request->firstName,
+                        'last_name' => $request->lastName,
+                        'gender' => $request->gender,
+                        'role_id' => 2,
+                        'email' => $request->email,
+                        'password' => Hash::make($password),
+                        'created_at' => $date,
+                        'updated_at' => $date,
+                    ])
             ) {
                 $res['insert'] = "true";
 
@@ -577,16 +552,16 @@ class Customer extends Model
 
                     //cart
                     $cart = DB::table('customers_basket')->where([
-                        ['session_id', '=', $old_session],
-                    ])->get();
+                                ['session_id', '=', $old_session],
+                            ])->get();
 
                     if (count($cart) > 0) {
                         foreach ($cart as $cart_data) {
                             $exist = DB::table('customers_basket')->where([
-                                ['customers_id', '=', $customer->id],
-                                ['products_id', '=', $cart_data->products_id],
-                                ['is_order', '=', '0'],
-                            ])->delete();
+                                        ['customers_id', '=', $customer->id],
+                                        ['products_id', '=', $cart_data->products_id],
+                                        ['is_order', '=', '0'],
+                                    ])->delete();
                         }
                     }
 
@@ -614,13 +589,11 @@ class Customer extends Model
                     $res['auth'] = "true";
                     return $res;
                 }
-
             } else {
                 $res['insert'] = "false";
                 return $res;
             }
         }
-
     }
 
 }

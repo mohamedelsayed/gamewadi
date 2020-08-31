@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Web\AlertController;
@@ -20,16 +21,15 @@ use Socialite;
 use Validator;
 use Hash;
 
-class CustomersController extends Controller
-{
+class CustomersController extends Controller {
 
     public function __construct(
-        Index $index,
-        Languages $languages,
-        Products $products,
-        Currency $currency,
-        Customer $customer,
-        Cart $cart
+            Index $index,
+            Languages $languages,
+            Products $products,
+            Currency $currency,
+            Customer $customer,
+            Cart $cart
     ) {
         $this->index = $index;
         $this->languages = $languages;
@@ -40,8 +40,7 @@ class CustomersController extends Controller
         $this->theme = new ThemeController();
     }
 
-    public function signup(Request $request)
-    {
+    public function signup(Request $request) {
         $final_theme = $this->theme->theme();
         if (auth()->guard('customer')->check()) {
             return redirect('/');
@@ -53,8 +52,7 @@ class CustomersController extends Controller
         }
     }
 
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $result = array();
         if (auth()->guard('customer')->check()) {
             return redirect('/');
@@ -65,7 +63,6 @@ class CustomersController extends Controller
                 $result['checkout_button'] = 1;
             } else {
                 $result['checkout_button'] = 0;
-
             }
             $previous_url = Session::get('_previous.url');
 
@@ -80,11 +77,9 @@ class CustomersController extends Controller
             $result['commonContent'] = $this->index->commonContent();
             return view("auth.login", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
         }
-
     }
 
-    public function processLogin(Request $request)
-    {
+    public function processLogin(Request $request) {
         $old_session = Session::getId();
 
         $result = array();
@@ -107,7 +102,7 @@ class CustomersController extends Controller
             if (!empty(session('previous'))) {
                 return Redirect::to(session('previous'));
             } else {
-                
+
                 Session::forget('guest_checkout');
                 return redirect()->intended('/')->with('result', $result);
             }
@@ -117,20 +112,17 @@ class CustomersController extends Controller
         //}
     }
 
-    public function addToCompare(Request $request)
-    {
+    public function addToCompare(Request $request) {
         $cartResponse = $this->customer->addToCompare($request);
         return $cartResponse;
     }
 
-    public function DeleteCompare($id)
-    {
+    public function DeleteCompare($id) {
         $Response = $this->customer->DeleteCompare($id);
         return redirect()->back()->with($Response);
     }
 
-    public function Compare()
-    {
+    public function Compare() {
         $result = array();
         $final_theme = $this->theme->theme();
         $result['commonContent'] = $this->index->commonContent();
@@ -145,42 +137,37 @@ class CustomersController extends Controller
         return view('web.compare', ['result' => $result, 'final_theme' => $final_theme]);
     }
 
-    public function profile()
-    {
+    public function profile() {
         $title = array('pageTitle' => Lang::get("website.Profile"));
         $result['commonContent'] = $this->index->commonContent();
         $final_theme = $this->theme->theme();
-        return view('web.profile', ['result' => $result, 'title' => $title, 'final_theme' => $final_theme]);
+        $phoneCodes = getCountriesPhoneCodes();
+        return view('web.profile', ['result' => $result, 'title' => $title, 'final_theme' => $final_theme, 'phoneCodes' => $phoneCodes]);
     }
 
-    public function updateMyProfile(Request $request)
-    {
+    public function updateMyProfile(Request $request) {
         $message = $this->customer->updateMyProfile($request);
         return redirect()->back()->with('success', $message);
-
     }
 
-    public function changePassword()
-    {
+    public function changePassword() {
         $title = array('pageTitle' => Lang::get("website.Change Password"));
         $result['commonContent'] = $this->index->commonContent();
         $final_theme = $this->theme->theme();
         return view('web.changepassword', ['result' => $result, 'title' => $title, 'final_theme' => $final_theme]);
     }
 
-    public function updateMyPassword(Request $request)
-    {
+    public function updateMyPassword(Request $request) {
         $password = Auth::guard('customer')->user()->password;
         if (Hash::check($request->current_password, $password)) {
             $message = $this->customer->updateMyPassword($request);
             return redirect()->back()->with('success', $message);
-        }else{
+        } else {
             return redirect()->back()->with('error', lang::get("website.Current password is invalid"));
         }
     }
 
-    public function logout(REQUEST $request)
-    {
+    public function logout(REQUEST $request) {
         Auth::guard('customer')->logout();
         session()->flush();
         $request->session()->forget('customers_id');
@@ -188,33 +175,28 @@ class CustomersController extends Controller
         return redirect()->intended('/');
     }
 
-    public function socialLogin($social)
-    {
+    public function socialLogin($social) {
         return Socialite::driver($social)->redirect();
     }
 
-    public function handleSocialLoginCallback($social)
-    {
+    public function handleSocialLoginCallback($social) {
         $result = $this->customer->handleSocialLoginCallback($social);
         if (!empty($result)) {
             return redirect()->intended('/')->with('result', $result);
         }
     }
 
-    public function createRandomPassword()
-    {
+    public function createRandomPassword() {
         $pass = substr(md5(uniqid(mt_rand(), true)), 0, 8);
         return $pass;
     }
 
-    public function likeMyProduct(Request $request)
-    {
+    public function likeMyProduct(Request $request) {
         $cartResponse = $this->customer->likeMyProduct($request);
         return $cartResponse;
     }
 
-    public function unlikeMyProduct(Request $request, $id)
-    {
+    public function unlikeMyProduct(Request $request, $id) {
 
         if (!empty(auth()->guard('customer')->user()->id)) {
             $this->customer->unlikeMyProduct($id);
@@ -223,19 +205,16 @@ class CustomersController extends Controller
         } else {
             return redirect('login')->with('loginError', 'Please login to like product!');
         }
-
     }
 
-    public function wishlist(Request $request)
-    {
+    public function wishlist(Request $request) {
         $title = array('pageTitle' => Lang::get("website.Wishlist"));
         $final_theme = $this->theme->theme();
         $result = $this->customer->wishlist($request);
         return view("web.wishlist", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
     }
 
-    public function loadMoreWishlist(Request $request)
-    {
+    public function loadMoreWishlist(Request $request) {
 
         $limit = $request->limit;
 
@@ -248,11 +227,9 @@ class CustomersController extends Controller
         $result['cartArray'] = $this->products->cartIdArray($cart);
         $result['limit'] = $limit;
         return view("web.wishlistproducts")->with('result', $result);
-
     }
 
-    public function forgotPassword()
-    {
+    public function forgotPassword() {
         if (auth()->guard('customer')->check()) {
             return redirect('/');
         } else {
@@ -265,8 +242,7 @@ class CustomersController extends Controller
         }
     }
 
-    public function processPassword(Request $request)
-    {
+    public function processPassword(Request $request) {
         $title = array('pageTitle' => Lang::get("website.Forgot Password"));
 
         $password = $this->createRandomPassword();
@@ -287,18 +263,15 @@ class CustomersController extends Controller
         } else {
             return redirect('forgotPassword')->with('error', Lang::get("website.Email address does not exist"));
         }
-
     }
 
-    public function recoverPassword()
-    {
+    public function recoverPassword() {
         $title = array('pageTitle' => Lang::get("website.Forgot Password"));
         $final_theme = $this->theme->theme();
         return view("web.recoverPassword", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
     }
 
-    public function subscribeNotification(Request $request)
-    {
+    public function subscribeNotification(Request $request) {
 
         $setting = $this->index->commonContent();
 
@@ -323,7 +296,6 @@ class CustomersController extends Controller
                 'user_id' => auth()->guard('customers')->user()->id,
                 'manufacturer' => '',
             );
-
         } else {
 
             $device_data = array(
@@ -339,14 +311,12 @@ class CustomersController extends Controller
                 'device_model' => '',
                 'manufacturer' => '',
             );
-
         }
         $this->customer->updateDevice($request, $device_data);
         print 'success';
     }
 
-    public function signupProcess(Request $request)
-    {
+    public function signupProcess(Request $request) {
         $old_session = Session::getId();
 
         $firstName = $request->firstName;
@@ -357,22 +327,21 @@ class CustomersController extends Controller
         $date = date('y-md h:i:s');
         //        //validation start
         $validator = Validator::make(
-            array(
-                'firstName' => $request->firstName,
-                'lastName' => $request->lastName,
-                'customers_gender' => $request->gender,
-                'email' => $request->email,
-                'password' => $request->password,
-                're_password' => $request->re_password,
-
-            ), array(
-                'firstName' => 'required ',
-                'lastName' => 'required',
-                'customers_gender' => 'required',
-                'email' => 'required | email',
-                'password' => 'required',
-                're_password' => 'required | same:password',
-            )
+                        array(
+                            'firstName' => $request->firstName,
+                            'lastName' => $request->lastName,
+                            'customers_gender' => $request->gender,
+                            'email' => $request->email,
+                            'password' => $request->password,
+                            're_password' => $request->re_password,
+                        ), array(
+                    'firstName' => 'required ',
+                    'lastName' => 'required',
+                    'customers_gender' => 'required',
+                    'email' => 'required | email',
+                    'password' => 'required',
+                    're_password' => 'required | same:password',
+                        )
         );
         if ($validator->fails()) {
             return redirect('login')->withErrors($validator)->withInput();
@@ -395,7 +364,6 @@ class CustomersController extends Controller
                     return redirect('/login')->with('error', Lang::get("website.something is wrong"));
                 }
             }
-
         }
     }
 
