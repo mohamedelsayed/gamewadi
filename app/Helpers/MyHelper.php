@@ -114,3 +114,58 @@ if (!function_exists('slugify')) {
     }
 
 }
+if (!function_exists('convertErrorsToString')) {
+
+    /**
+     *
+     *
+     * @param $ip,$array
+     * @return flag
+     */
+    function convertErrorsToString($obj) {
+        $error = null;
+        $errors = $obj->errors()->messages();
+        foreach ($errors as $msgs) {
+            foreach ($msgs as $msg) {
+                $error .= ' ' . $msg;
+            }
+        }
+        return $error;
+    }
+
+}
+
+if (!function_exists('startsWith')) {
+
+// Function to check string starting
+// with given substring
+    function startsWith($string, $startString) {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
+    }
+
+}
+if (!function_exists('checkCountryCodeForPhone')) {
+
+// Function to check string not int
+    function checkCountryCodeForPhone($string) {
+        if (substr($string, 1, 1) === '+') {
+            return false;
+        }
+        return true;
+    }
+
+}
+if (!function_exists('endsWith')) {
+
+// Function to check the string is ends
+// with given substring or not
+    function endsWith($string, $endString) {
+        $len = strlen($endString);
+        if ($len == 0) {
+            return true;
+        }
+        return (substr($string, -$len) === $endString);
+    }
+
+}

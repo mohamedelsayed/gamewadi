@@ -9,7 +9,7 @@ use App\Models\Web\Customer;
 use App\Models\Web\Index;
 use App\Models\Web\Languages;
 use App\Models\Web\Products;
-use App\User;
+//use App\User;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -20,6 +20,8 @@ use Session;
 use Socialite;
 use Validator;
 use Hash;
+
+//use Illuminate\Support\Facades\Validator;
 
 class CustomersController extends Controller {
 
@@ -38,6 +40,20 @@ class CustomersController extends Controller {
         $this->customer = $customer;
         $this->cart = $cart;
         $this->theme = new ThemeController();
+    }
+
+    function getValidator(Request $request, $flag, $id = null) {
+        $this->request = $request;
+        $this->flag = $flag;
+        $rules = [];
+        if ($flag == 'updateMyProfile') {
+            $rules = [
+                'customers_telephone' => 'required|mobile:' . $request->customers_country_code,
+                'customers_country_code' => 'required',
+            ];
+        }
+        $validator = Validator::make($request->all(), $rules);
+        return $validator;
     }
 
     public function signup(Request $request) {
@@ -146,8 +162,13 @@ class CustomersController extends Controller {
     }
 
     public function updateMyProfile(Request $request) {
-        $message = $this->customer->updateMyProfile($request);
-        return redirect()->back()->with('success', $message);
+        $validator = $this->getValidator($request, 'updateMyProfile', null);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $message = $this->customer->updateMyProfile($request);
+            return redirect()->back()->with('success', $message);
+        }
     }
 
     public function changePassword() {
