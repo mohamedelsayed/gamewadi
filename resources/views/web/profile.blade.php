@@ -17,15 +17,18 @@
     <section class="profile-content">
         <div class="container">
             <div class="row">
-
                 <div class="col-12 media-main">
                     <div class="media">
-                        <img src="web/images/miscellaneous/avatar.jpg" alt="avatar">
+                        <?php if (auth()->guard('customer')->user()->avatar == null) { ?>
+                            <img src="web/images/miscellaneous/avatar.jpg" alt="avatar">
+                        <?php } else { ?>
+                            <img alt="avatar" src="{{auth()->guard('customer')->user()->avatar}}">
+                        <?php } ?>
                         <div class="media-body">
                             <div class="row">
                                 <div class="col-12 col-sm-4 col-md-6">
                                     <h4>{{auth()->guard('customer')->user()->first_name}} {{auth()->guard('customer')->user()->last_name}}<br>
-                                        <small>@lang('website.Phone'): {{ auth()->guard('customer')->user()->phone }} </small></h4>
+                                        <small>@lang('website.Phone'): {{ auth()->guard('customer')->user()->country_code.auth()->guard('customer')->user()->phone }} </small></h4>
                                 </div>
                                 <div class="col-12 col-sm-8 col-md-6 detail">
                                     <p class="mb-0">@lang('website.E-mail'):<span>{{auth()->guard('customer')->user()->email}}</span></p>
@@ -201,9 +204,22 @@
                                 <input name="customers_telephone" type="tel"  placeholder="@lang('website.Phone Number')" value="{{ auth()->guard('customer')->user()->phone }}" class="form-control">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <?php if (auth()->guard('customer')->user()->avatar) { ?>
+                                <label  class="col-sm-2 col-form-label">&nbsp;</label>
+                                <div class="col-sm-10 col-md-4">
+                                    <img style="max-width:88px;" class="img-fluid" src="{{auth()->guard('customer')->user()->avatar}}">
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="form-group row">
+                            <label for="lastName" class="col-sm-2 col-form-label">@lang('website.Avatar')</label>
+                            <div class="col-sm-10">
+                                <input  accept=".jpg,.png,.jpeg" type="file" required name="picture" class="form-control field-validate" id="picture">
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-secondary swipe-to-top">@lang('website.Update')</button>
                     </form>
-
                     <!-- ............the end..... -->
                 </div>
             </div>

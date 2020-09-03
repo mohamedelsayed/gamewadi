@@ -50,6 +50,7 @@ class CustomersController extends Controller {
             $rules = [
                 'customers_telephone' => 'required|mobile:' . $request->customers_country_code,
                 'customers_country_code' => 'required',
+                'picture' => 'image|mimes:jpg,png,jpeg',
             ];
         } else if ($flag == 'signupProcess') {
             $rules = [

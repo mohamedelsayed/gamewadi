@@ -52,15 +52,15 @@ class Customer extends Model {
         $customers_gender = $request->gender;
         $customers_dob = $request->customers_dob;
         $customers_info_date_account_last_modified = date('y-m-d h:i:s');
-
-        $extensions = array('gif', 'jpg', 'jpeg', 'png');
+        $customers_picture = auth()->guard('customer')->user()->avatar;
+        $extensions = array('jpg', 'jpeg', 'png');
         if ($request->hasFile('picture') and in_array($request->picture->extension(), $extensions)) {
             $image = $request->picture;
             $fileName = time() . '.' . $image->getClientOriginalName();
             $image->move('resources/assets/images/user_profile/', $fileName);
             $customers_picture = 'resources/assets/images/user_profile/' . $fileName;
         } else {
-            $customers_picture = $request->customers_old_picture;
+//            $customers_picture = $request->customers_old_picture;
         }
 
         $customer_data = array(

@@ -589,4 +589,5 @@ return [
     'Country Code' => 'رمز البلد',
     'Mobile' => 'موبايل',
     'Mobile already exist' => 'الموبايل موجود بالفعل.',
+    'Avatar' => 'الصورة',
 ];

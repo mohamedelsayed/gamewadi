@@ -564,4 +564,5 @@ return [
     'Country Code' => 'Country Code',
     'Mobile' => 'Mobile',
     'Mobile already exist' => 'The Mobile has already been taken.',
+    'Avatar' => 'Avatar',
 ];

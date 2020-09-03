@@ -1,15 +1,17 @@
-sudo mkdir -p storage/framework
-sudo mkdir -p storage/framework/sessions
-sudo mkdir -p storage/framework/views
-sudo mkdir -p storage/framework/cache
-sudo mkdir -p storage/logs
-sudo mkdir -p bootstrap/cache
-sudo mkdir -p public/zip
+mkdir -p storage/framework
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+mkdir -p storage/framework/cache
+mkdir -p storage/logs
+mkdir -p bootstrap/cache
+mkdir -p public/zip
+mkdir -p public/resources/assets/images/user_profile
 mkdir -p tmp
-sudo chmod 777 -R storage/framework
-sudo chmod 777 -R storage/logs
-sudo chmod 777 -R bootstrap/cache
-sudo chmod 777 -R public/zip
-sudo chmod 777 -R public/error-output.txt
-sudo chmod 777 -R public/images/media
+chmod 777 -R storage/framework
+chmod 777 -R storage/logs
+chmod 777 -R bootstrap/cache
+chmod 777 -R public/zip
+chmod 777 -R public/error-output.txt
+chmod 777 -R public/images/media
+chmod 777 -R public/resources/assets/images/user_profile
 chmod 777 -R tmp
