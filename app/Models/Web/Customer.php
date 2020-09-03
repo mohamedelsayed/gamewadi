@@ -507,10 +507,11 @@ class Customer extends Model {
         $gender = $request->gender;
         $email = $request->email;
         $password = $request->password;
+        $customers_telephone = $request->customers_telephone;
+        $customers_country_code = $request->customers_country_code;
         //$token = $request->token;
         $date = date('y-m-d h:i:s');
         $profile_photo = 'images/user.png';
-
         //echo "Value is completed";
         $data = array(
             'first_name' => $request->firstName,
@@ -521,8 +522,9 @@ class Customer extends Model {
             'password' => Hash::make($password),
             'created_at' => $date,
             'updated_at' => $date,
+            'phone' => $customers_telephone,
+            'country_code' => $customers_country_code,
         );
-
         //eheck email already exit
         $user_email = DB::table('users')->select('email')->where('role_id', 2)->where('email', $email)->get();
         if (count($user_email) > 0) {
@@ -539,22 +541,21 @@ class Customer extends Model {
                         'password' => Hash::make($password),
                         'created_at' => $date,
                         'updated_at' => $date,
+                        'phone' => $customers_telephone,
+                        'country_code' => $customers_country_code,
                     ])
             ) {
                 $res['insert'] = "true";
-
                 //check authentication of email and password
                 if (auth()->guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
                     $res['auth'] = "true";
                     $customer = auth()->guard('customer')->user();
                     //set session
                     session(['customers_id' => $customer->id]);
-
                     //cart
                     $cart = DB::table('customers_basket')->where([
                                 ['session_id', '=', $old_session],
                             ])->get();
-
                     if (count($cart) > 0) {
                         foreach ($cart as $cart_data) {
                             $exist = DB::table('customers_basket')->where([
@@ -564,20 +565,16 @@ class Customer extends Model {
                                     ])->delete();
                         }
                     }
-
                     DB::table('customers_basket')->where('session_id', '=', $old_session)->update([
                         'customers_id' => $customer->id,
                     ]);
-
                     DB::table('customers_basket_attributes')->where('session_id', '=', $old_session)->update([
                         'customers_id' => $customer->id,
                     ]);
-
                     //insert device id
                     if (!empty(session('device_id'))) {
                         DB::table('devices')->where('device_id', session('device_id'))->update(['user_id' => $customer->id]);
                     }
-
                     $customers = DB::table('users')->where('id', $customer->id)->get();
                     $result['customers'] = $customers;
                     //email and notification

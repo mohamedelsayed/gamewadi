@@ -73,6 +73,9 @@ class AppServiceProvider extends ServiceProvider {
             view()->share('newCustomers', $newCustomers);
             view()->share('lowInQunatity', $lowInQunatity);
         }
+        Validator::extend('email_format', function($attribute, $value, $parameters) {
+            return filter_var($value, FILTER_VALIDATE_EMAIL);
+        });
         Validator::extend('mobile', function($attribute, $value, $parameters) {
             $mobileBusiness = new MobileBusiness();
             if ($parameters[0] == '+20') {

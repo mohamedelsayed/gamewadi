@@ -195,9 +195,8 @@
                                     <option value="{{$code}}" @if($country_code == $code) selected @endif>{{$country}} ({{$code}})</option>
                                     @endforeach
                                 </select>
-
                             </div>
-                            <label for="inputPassword" class="col-sm-2 col-form-label">@lang('website.Phone')</label>
+                            <label for="inputPassword" class="col-sm-2 col-form-label">@lang('website.Mobile')</label>
                             <div class="from-group   col-sm-4 ">
                                 <input name="customers_telephone" type="tel"  placeholder="@lang('website.Phone Number')" value="{{ auth()->guard('customer')->user()->phone }}" class="form-control">
                             </div>

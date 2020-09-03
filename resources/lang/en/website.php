@@ -562,4 +562,6 @@ return [
     'TAGS' => 'TAGS',
     'write your message here' => 'write your message here',
     'Country Code' => 'Country Code',
+    'Mobile' => 'Mobile',
+    'Mobile already exist' => 'The Mobile has already been taken.',
 ];

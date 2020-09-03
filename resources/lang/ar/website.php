@@ -587,4 +587,6 @@ return [
     'Compare' => 'قارن',
     'write your message here' => 'اكتب رسالتك هنا',
     'Country Code' => 'رمز البلد',
+    'Mobile' => 'موبايل',
+    'Mobile already exist' => 'الموبايل موجود بالفعل.',
 ];

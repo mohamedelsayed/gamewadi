@@ -9,7 +9,7 @@ use App\Models\Web\Customer;
 use App\Models\Web\Index;
 use App\Models\Web\Languages;
 use App\Models\Web\Products;
-//use App\User;
+use App\User;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -51,8 +51,36 @@ class CustomersController extends Controller {
                 'customers_telephone' => 'required|mobile:' . $request->customers_country_code,
                 'customers_country_code' => 'required',
             ];
+        } else if ($flag == 'signupProcess') {
+            $rules = [
+                'firstName' => 'required ',
+                'lastName' => 'required',
+                'gender' => 'required',
+                'password' => 'required',
+                're_password' => 'required | same:password',
+                'customers_telephone' => 'required|mobile:' . $request->customers_country_code,
+                'customers_country_code' => 'required',
+                'email' => 'required|email|unique:users',
+            ];
         }
         $validator = Validator::make($request->all(), $rules);
+        $this->flag = $flag;
+        $this->id = $id;
+        if ($flag == "updateMyProfile" || $flag == 'signupProcess') {
+//            wordaound for mobile that have leading left 0 & remove this zero
+            if ($this->request->customers_country_code == '+20') {
+                $mobile = ltrim($this->request->customers_telephone, '0');
+                $this->request->merge(['customers_telephone' => $mobile]);
+            }
+            $validator->after(function($validator) {
+                if (!is_null($this->request->customers_telephone)) {
+                    $result = $this->checkIsMobileExist($this->request->customers_telephone, $this->request->customers_country_code, $this->id);
+                    if ($result) {
+                        $validator->errors()->add('customers_telephone', Lang::get("website.Mobile already exist"));
+                    }
+                }
+            });
+        }
         return $validator;
     }
 
@@ -91,7 +119,8 @@ class CustomersController extends Controller {
             $final_theme = $this->theme->theme();
 
             $result['commonContent'] = $this->index->commonContent();
-            return view("auth.login", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
+            $phoneCodes = getCountriesPhoneCodes();
+            return view("auth.login", ['title' => $title, 'final_theme' => $final_theme, 'phoneCodes' => $phoneCodes])->with('result', $result);
         }
     }
 
@@ -162,7 +191,8 @@ class CustomersController extends Controller {
     }
 
     public function updateMyProfile(Request $request) {
-        $validator = $this->getValidator($request, 'updateMyProfile', null);
+        $customers_id = auth()->guard('customer')->user()->id;
+        $validator = $this->getValidator($request, 'updateMyProfile', $customers_id);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
@@ -338,36 +368,38 @@ class CustomersController extends Controller {
     }
 
     public function signupProcess(Request $request) {
-        $old_session = Session::getId();
-
-        $firstName = $request->firstName;
-        $lastName = $request->lastName;
-        $gender = $request->gender;
-        $email = $request->email;
-        $password = $request->password;
-        $date = date('y-md h:i:s');
+//        $old_session = Session::getId();
+//        $firstName = $request->firstName;
+//        $lastName = $request->lastName;
+//        $gender = $request->gender;
+//        $email = $request->email;
+//        $password = $request->password;
+//        $date = date('y-md h:i:s');
         //        //validation start
-        $validator = Validator::make(
-                        array(
-                            'firstName' => $request->firstName,
-                            'lastName' => $request->lastName,
-                            'customers_gender' => $request->gender,
-                            'email' => $request->email,
-                            'password' => $request->password,
-                            're_password' => $request->re_password,
-                        ), array(
-                    'firstName' => 'required ',
-                    'lastName' => 'required',
-                    'customers_gender' => 'required',
-                    'email' => 'required | email',
-                    'password' => 'required',
-                    're_password' => 'required | same:password',
-                        )
-        );
+//        $validator = Validator::make(
+//                        array(
+//                            'firstName' => $request->firstName,
+//                            'lastName' => $request->lastName,
+//                            'customers_gender' => $request->gender,
+//                            'email' => $request->email,
+//                            'password' => $request->password,
+//                            're_password' => $request->re_password,
+//                        ), array(
+//                    'firstName' => 'required ',
+//                    'lastName' => 'required',
+//                    'customers_gender' => 'required',
+//                    'email' => 'required | email',
+//                    'password' => 'required',
+//                    're_password' => 'required | same:password',
+//                        )
+//        );
+//        if ($validator->fails()) {
+//            return redirect('login')->withErrors($validator)->withInput();
+//        } else {
+        $validator = $this->getValidator($request, 'signupProcess', null);
         if ($validator->fails()) {
             return redirect('login')->withErrors($validator)->withInput();
         } else {
-
             $res = $this->customer->signupProcess($request);
             //eheck email already exit
             if ($res['email'] == "true") {
@@ -385,6 +417,20 @@ class CustomersController extends Controller {
                     return redirect('/login')->with('error', Lang::get("website.something is wrong"));
                 }
             }
+        }
+    }
+
+    protected function checkIsMobileExist($mobile = null, $countryCode = null, $id = null) {
+        $query = User::where('phone', $mobile)
+                ->where('country_code', $countryCode);
+        if (!is_null($id)) {
+            $query->where('id', '!=', $id);
+        }
+        $user = $query->first();
+        if ($user) {
+            return $user;
+        } else {
+            return false;
         }
     }
 
