@@ -1450,4 +1450,12 @@ return [
     'Side Banner 12' => 'Side Banner 12',
     'Side Banner 13' => 'Side Banner 13',
     'Actions Log' => 'Actions Log',
+    'User' => 'User',
+    'IP' => 'IP',
+    'Controller' => 'Controller',
+    'Action' => 'Action',
+    'item_id' => 'Item Id',
+    'automaticCleanLog' => 'Automatic Clean Log',
+    'automaticCleanLogText' => 'This checkbox for automatic clean log every week.',
+    'Visit Site' => 'Visit Site',
 ];

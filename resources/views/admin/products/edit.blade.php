@@ -1,5 +1,7 @@
 @extends('admin.layout')
 @section('content')
+@php $product = $result['product'][0];
+@endphp
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -10,9 +12,12 @@
             <li class="active">{{ trans('labels.EditProduct') }}</li>
         </ol>
     </section>
-    <section class="content-header">
-        <a class="btn btn-warning" style="width: 20%;  margin-bottom: 5px;" href="{{url('admin/products/images/display/'. $result['product'][0]->products_id) }}">{{ trans('labels.ProductImages') }}</a>
-        <a class="btn btn-danger" style="width: 20%;  margin-bottom: 5px;" id="deleteProductId" products_id="{{ $result['product'][0]->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
+    <section class="content-header" style="margin-bottom: 5px;">
+        @if($product->products_type==1)
+        <a class="btn btn-info" style="width: 20%;" href="{{url('admin/products/attach/attribute/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductAttributes') }}</a>
+        @endif
+        <a class="btn btn-warning" style="width: 20%;" href="{{url('admin/products/images/display/'. $result['product'][0]->products_id) }}">{{ trans('labels.ProductImages') }}</a>
+        <a class="btn btn-danger" style="width: 20%;" id="deleteProductId" products_id="{{ $result['product'][0]->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
     </section>
     <!-- Main content -->
     <section class="content">

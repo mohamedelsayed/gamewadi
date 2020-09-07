@@ -2166,5 +2166,6 @@ return [
     'Action' => 'Action',
     'item_id' => 'Item Id',
     'automaticCleanLog' => 'Automatic Clean Log',
-    'automaticCleanLogText' => 'This checkbox for automatic clean log every week.'
+    'automaticCleanLogText' => 'This checkbox for automatic clean log every week.',
+    'Visit Site' => 'Visit Site',
 ];
