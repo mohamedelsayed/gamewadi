@@ -2168,4 +2168,5 @@ return [
     'automaticCleanLog' => 'Automatic Clean Log',
     'automaticCleanLogText' => 'This checkbox for automatic clean log every week.',
     'Visit Site' => 'Visit Site',
+    'Back to product' => 'Back to product',
 ];

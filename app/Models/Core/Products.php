@@ -1410,7 +1410,7 @@ class Products extends Model {
                 ->orderBy('products_attributes_id', 'DESC')
                 ->get();
         $result['products_attributes'] = $products_attributes;
-
+        $result['products_id'] = $products_id;
         return $result;
     }
 
