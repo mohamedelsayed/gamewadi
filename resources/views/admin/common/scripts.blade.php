@@ -626,22 +626,24 @@
             type: "POST",
             data: formData,
             success: function (res) {
+            console.log(res);
             $("#loader").hide();
-            if (res.length != ''){
+            if (res.status == 'success'){
+//            if (res.length != ''){
             $('.addError').hide();
             $('#adddefaultattributesmodal').modal('hide');
             var i;
             var showData = [];
-            for (i = 0; i < res.length; ++i) {
+            for (i = 0; i < res.products_attributes.length; ++i) {
             var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' language_id ='" + res[i].language_id + "' options_id ='" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+            let item = res.products_attributes[i];
+            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
             }
             $(".contentDefaultAttribute").html(showData);
             } else{
             $('.addDefaultError').show();
+            $('.addDefaultError').html(res.msg);
             }
-
-
             },
     });
     });
@@ -854,21 +856,22 @@
             data: formData,
             success: function (res) {
             $("#loader").hide();
-            if (res.length != ''){
+            if (res.status == 'success'){
+//            if (res.length != ''){
             $('.addError').hide();
             $('#editdefaultattributemodal').modal('hide');
             var i;
             var showData = [];
-            for (i = 0; i < res.length; ++i) {
+            for (i = 0; i < res.products_attributes.length; ++i) {
             var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' language_id ='" + res[i].language_id + "' options_id ='" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+            let item = res.products_attributes[i];
+            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
             }
             $(".contentDefaultAttribute").html(showData);
             } else{
             $('.addError').show();
+            $('.addError').html(res.msg);
             }
-
-
             },
     });
     });
