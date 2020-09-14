@@ -1552,12 +1552,17 @@ class Products extends Model {
         $setting = new Setting();
         $myVarsetting = new SiteSettingController($setting);
         $myVaralter = new AlertController($setting);
-
         $language_id = '1';
-        $checkRecord = DB::table('products_attributes')->where([
-                    'products_attributes_id' => $request->products_attributes_id,
-                    'products_id' => $request->products_id
-                ])->delete();
+        $query = DB::table('products_attributes')->where([
+            'products_attributes_id' => $request->products_attributes_id,
+            'products_id' => $request->products_id
+        ]);
+        $record = $query->get();
+        $is_default = 0;
+        if ($record && $record[0]) {
+            $is_default = $record[0]->is_default;
+            $query->delete();
+        }
         $products_attributes = DB::table('products_attributes')
                 ->join('products_options', 'products_options.products_options_id', '=', 'products_attributes.options_id')
                 ->leftJoin('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'products_options.products_options_id')
@@ -1567,17 +1572,20 @@ class Products extends Model {
                 ->where('products_options_descriptions.language_id', '=', $language_id)
                 ->where('products_options_values_descriptions.language_id', '=', $language_id)
                 ->where('products_attributes.products_id', '=', $request->products_id)
-                ->where('products_attributes.is_default', '=', '1')
+                ->where('products_attributes.is_default', '=', $is_default)
                 ->orderBy('products_attributes_id', 'DESC')
                 ->get();
         return $products_attributes;
     }
 
-    public function showoptions($request) {
+    public function addoption($request) {
+        $products_attributes = [];
+        $data = [];
+        $data['status'] = 'fail';
+        $data['msg'] = '';
         $setting = new Setting();
         $myVarsetting = new SiteSettingController($setting);
         $myVaralter = new AlertController($setting);
-
         if (!empty($request->products_options_id) and ! empty($request->products_id) and ! empty($request->products_options_values_id) and isset($request->options_values_price)) {
             $checkRecord = DB::table('products_attributes')->where([
                         'options_id' => $request->products_options_id,
@@ -1585,7 +1593,8 @@ class Products extends Model {
                         'products_id' => $request->products_id
                     ])->get();
             if (count($checkRecord) > 0) {
-                $products_attributes = '';
+                //already
+                $data['msg'] = 'Already exist before.';
             } else {
                 $language_id = 1;
                 $products_attributes_id = DB::table('products_attributes')->insertGetId([
@@ -1610,10 +1619,14 @@ class Products extends Model {
                         ->get();
             }
         } else {
-            $products_attributes = 'empty';
+            //empty
+            $data['msg'] = 'empty.';
         }
-
-        return $products_attributes;
+        if (!empty($products_attributes)) {
+            $data['status'] = 'success';
+        }
+        $data['products_attributes'] = $products_attributes;
+        return $data;
     }
 
     public function editoptionform($request) {
@@ -1665,30 +1678,47 @@ class Products extends Model {
         $myVarsetting = new SiteSettingController($setting);
         $myVaralter = new AlertController($setting);
         $language_id = 1;
-        $checkRecord = DB::table('products_attributes')->where([
+        $products_attributes = [];
+        $data = [];
+        $data['status'] = 'fail';
+        $data['msg'] = '';
+        if (!empty($request->products_options_id) and ! empty($request->products_id) and ! empty($request->products_options_values_id)) {
+            $checkRecord = DB::table('products_attributes')->where([
+                        'options_id' => $request->products_options_id,
+                        'options_values_id' => $request->products_options_values_id,
+                        'products_id' => $request->products_id,
+                    ])->where('products_attributes_id', '!=', $request->products_attributes_id)->get();
+            if (count($checkRecord) > 0) {
+                //already
+                $data['msg'] = 'Already exist before.';
+            } else {
+                DB::table('products_attributes')->where('products_attributes_id', '=', $request->products_attributes_id)->update([
                     'options_id' => $request->products_options_id,
                     'options_values_id' => $request->products_options_values_id,
-                    'products_id' => $request->products_id
-                ])->get();
-        DB::table('products_attributes')->where('products_attributes_id', '=', $request->products_attributes_id)->update([
-            'options_id' => $request->products_options_id,
-            'options_values_id' => $request->products_options_values_id,
-            'options_values_price' => $request->options_values_price,
-            'price_prefix' => $request->price_prefix,
-        ]);
-        $products_attributes = DB::table('products_attributes')
-                ->join('products_options', 'products_options.products_options_id', '=', 'products_attributes.options_id')
-                ->leftJoin('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'products_options.products_options_id')
-                ->join('products_options_values', 'products_options_values.products_options_values_id', '=', 'products_attributes.options_values_id')
-                ->leftJoin('products_options_values_descriptions', 'products_options_values_descriptions.products_options_values_id', '=', 'products_options_values.products_options_values_id')
-                ->select('products_attributes.*', 'products_options_descriptions.options_name as products_options_name', 'products_options_descriptions.language_id', 'products_options_values_descriptions.options_values_name as products_options_values_name')
-                ->where('products_options_descriptions.language_id', '=', $language_id)
-                ->where('products_options_values_descriptions.language_id', '=', $language_id)
-                ->where('products_attributes.products_id', '=', $request->products_id)
-                ->where('products_attributes.is_default', '=', '0')
-                ->orderBy('products_attributes_id', 'DESC')
-                ->get();
-        return $products_attributes;
+                    'options_values_price' => $request->options_values_price,
+                    'price_prefix' => $request->price_prefix,
+                ]);
+                $products_attributes = DB::table('products_attributes')
+                        ->join('products_options', 'products_options.products_options_id', '=', 'products_attributes.options_id')
+                        ->leftJoin('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'products_options.products_options_id')
+                        ->join('products_options_values', 'products_options_values.products_options_values_id', '=', 'products_attributes.options_values_id')
+                        ->leftJoin('products_options_values_descriptions', 'products_options_values_descriptions.products_options_values_id', '=', 'products_options_values.products_options_values_id')
+                        ->select('products_attributes.*', 'products_options_descriptions.options_name as products_options_name', 'products_options_descriptions.language_id', 'products_options_values_descriptions.options_values_name as products_options_values_name')
+                        ->where('products_options_descriptions.language_id', '=', $language_id)
+                        ->where('products_options_values_descriptions.language_id', '=', $language_id)
+                        ->where('products_attributes.products_id', '=', $request->products_id)
+                        ->where('products_attributes.is_default', '=', '0')
+                        ->orderBy('products_attributes_id', 'DESC')
+                        ->get();
+            }
+        } else {
+            $data['msg'] = 'empty.';
+        }
+        if (!empty($products_attributes)) {
+            $data['status'] = 'success';
+        }
+        $data['products_attributes'] = $products_attributes;
+        return $data;
     }
 
     public function deleteoption($request) {

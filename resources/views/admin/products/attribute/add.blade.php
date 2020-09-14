@@ -25,7 +25,7 @@
                     <div class="box-header">
                         <h3 class="box-title">{{ trans('labels.ListingDefaultOptions') }} </h3>
                         <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#adddefaultattributesmodal">
+                            <button onclick="$('.addDefaultError').hide();" type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#adddefaultattributesmodal">
                                 {{ trans('labels.AddDefaultOption') }}
                             </button>
                         </div>
@@ -167,7 +167,7 @@
                     <div class="box-header">
                         <h3 class="box-title">{{ trans('labels.ListingAdditionalProductsOptions') }} </h3>
                         <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#addAttributeModal">
+                            <button onclick="$('.addError').hide();" type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#addAttributeModal">
                                 {{ trans('labels.AddAdditionalOption') }}</button>
                         </div>
                     </div>

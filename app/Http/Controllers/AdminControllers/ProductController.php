@@ -340,7 +340,6 @@ class ProductController extends Controller {
     }
 
     public function deletedefaultattributemodal(Request $request) {
-
         $products_id = $request->products_id;
         $products_attributes_id = $request->products_attributes_id;
         $result['data'] = array('products_id' => $products_id, 'products_attributes_id' => $products_attributes_id);
@@ -353,8 +352,8 @@ class ProductController extends Controller {
         return ($products_attributes);
     }
 
-    public function showoptions(Request $request) {
-        $products_attributes = $this->products->showoptions($request);
+    public function addoption(Request $request) {
+        $products_attributes = $this->products->addoption($request);
         return ($products_attributes);
     }
 
