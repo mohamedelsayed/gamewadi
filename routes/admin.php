@@ -193,7 +193,7 @@ Route::group(['middleware' => ['installer']], function () {
                 Route::post('/deletedefaultattributemodal', 'ProductController@deletedefaultattributemodal')->middleware('edit_product');
                 Route::post('/delete', 'ProductController@deletedefaultattribute')->middleware('edit_product');
                 Route::group(['prefix' => '/options'], function () {
-                    Route::post('/add', 'ProductController@showoptions')->middleware('view_product');
+                    Route::post('/add', 'ProductController@addoption')->middleware('view_product');
                     Route::post('/edit', 'ProductController@editoptionform')->middleware('edit_product');
                     Route::post('/update', 'ProductController@updateoption')->middleware('edit_product');
                     Route::post('/showdeletemodal', 'ProductController@showdeletemodal')->middleware('edit_product');
