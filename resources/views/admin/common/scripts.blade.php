@@ -1,4 +1,3 @@
-
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script src="{!! asset('admin/bootstrap/js/bootstrap.min.js') !!}"></script>
 <script src="{!! asset('admin/plugins/select2/select2.full.min.js') !!}"></script>
@@ -52,9 +51,6 @@
 <script src="{!! asset('admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') !!}"></script>
 
 <script type="text/javascript">
-
-
-
     $(function() {
     $("img").click(function() {
     $(this).toggleClass("hover");
@@ -78,13 +74,13 @@
     if (imgs > 0){
     $.ajax({
     url: '{{ URL::to("admin/media/delete")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            if (res == 'success'){
-            location.reload();
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    if (res == 'success'){
+    location.reload();
+    }
+    },
     });
     } else{
     alert('Please choose image first.');
@@ -132,12 +128,12 @@
     $(".footer_options").slideDown("fast");
     });
     $.each(new Array(12),
-            function(n){
-            $("#banner_img_" + n).hover(function(){
-            $(".hover_option").css("display", "none");
-            $(".banner_options_" + n).slideDown("fast");
-            });
-            }
+    function(n){
+    $("#banner_img_" + n).hover(function(){
+    $(".hover_option").css("display", "none");
+    $(".banner_options_" + n).slideDown("fast");
+    });
+    }
     );
     });
     jQuery(document).ready(function() {
@@ -297,17 +293,17 @@
     //iCheck for checkbox and radio inputs
     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
     checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
+    radioClass: 'iradio_minimal-blue'
     });
     //Red color scheme for iCheck
     $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
     checkboxClass: 'icheckbox_minimal-red',
-            radioClass: 'iradio_minimal-red'
+    radioClass: 'iradio_minimal-red'
     });
     //Flat red color scheme for iCheck
     $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
     checkboxClass: 'icheckbox_flat-green',
-            radioClass: 'iradio_flat-green'
+    radioClass: 'iradio_flat-green'
     });
     //Colorpicker
     $(".my-colorpicker1").colorpicker();
@@ -337,7 +333,7 @@
     });
     }
 
-// check sub categories
+    // check sub categories
     $(document).on('click', '.sub_categories', function(){
 
     if ($(this).is(':checked')){
@@ -356,18 +352,18 @@
     });
     $('#dob').datepicker({
     autoclose: true,
-            format: 'dd/mm/yyyy',
-            endDate: "today"
+    format: 'dd/mm/yyyy',
+    endDate: "today"
     });
-// check parents categories
-// $(document).on('click', '.categories', function(){
-// 	if($(this).is(':checked')){
-// 	}else{
-// 		var parents_id = $(this).val();
-// 		//$('.sub_categories_'+parents_id).prop('checked', false);
-// 	}
+    // check parents categories
+    // $(document).on('click', '.categories', function(){
+    // 	if($(this).is(':checked')){
+    // 	}else{
+    // 		var parents_id = $(this).val();
+    // 		//$('.sub_categories_'+parents_id).prop('checked', false);
+    // 	}
 
-// });
+    // });
 
 
 
@@ -478,7 +474,7 @@
 
     });
     });
-//ajax call for add option value
+    //ajax call for add option value
     $(document).on('click', '.currentstock', function(e){
     $("#loader").show();
     var options_id = $(this).attr('attributeid');
@@ -488,52 +484,52 @@
     var formData = $('#addewinventoryfrom').serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/currentstock")}}',
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function (res) {
-            $("#loader").hide();
-            console.log(res);
-            $('#current_stocks').html(res.remainingStock);
-            //console.log(res.remainingStock);
-            var min_level = 0;
-            var max_level = 0;
-            var inventory_ref_id = res.inventory_ref_id;
-            var purchasePrice = res.purchasePrice;
-            var products_id = res.products_id;
-            if (res.minMax != ''){
-            min_level = res.minMax[0].min_level;
-            max_level = res.minMax[0].max_level;
-            var products_id = res.minMax[0].products_id;
-            $('.products_id').val(products_id);
-            $('#inventory_pro_id').val(products_id);
-            }
+    type: "POST",
+    data: formData,
+    dataType: "json",
+    success: function (res) {
+    $("#loader").hide();
+    console.log(res);
+    $('#current_stocks').html(res.remainingStock);
+    //console.log(res.remainingStock);
+    var min_level = 0;
+    var max_level = 0;
+    var inventory_ref_id = res.inventory_ref_id;
+    var purchasePrice = res.purchasePrice;
+    var products_id = res.products_id;
+    if (res.minMax != ''){
+    min_level = res.minMax[0].min_level;
+    max_level = res.minMax[0].max_level;
+    var products_id = res.minMax[0].products_id;
+    $('.products_id').val(products_id);
+    $('#inventory_pro_id').val(products_id);
+    }
 
-            $('#min_level').val(min_level);
-            $('#products_id').val(products_id);
-            $('#max_level').val(max_level);
-            $('#inventory_ref_id').val(inventory_ref_id);
-            $('#inventory_pro_id').val(products_id);
-            $('#total_purchases').html(purchasePrice);
-            },
+    $('#min_level').val(min_level);
+    $('#products_id').val(products_id);
+    $('#max_level').val(max_level);
+    $('#inventory_ref_id').val(inventory_ref_id);
+    $('#inventory_pro_id').val(products_id);
+    $('#total_purchases').html(purchasePrice);
+    },
     });
     });
-//add-inventory
+    //add-inventory
     $(document).on('click', '#add-inventory', function(e){
     var formData = $('#addewinventoryfrom').serialize();
     $.ajax({
     url: '{{ URL::to("admin/addnewstock")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $('#addewinventoryfrom').reset();
-            $('#addinventoryModal').modal('hide');
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $('#addewinventoryfrom').reset();
+    $('#addinventoryModal').modal('hide');
+    },
     });
     })
 
-//ajax call for add option value
-            $(document).on('click', '.add-value', function(e){
+    //ajax call for add option value
+    $(document).on('click', '.add-value', function(e){
     $("#loader").show();
     var parentFrom = $(this).parent('.addvalue-form');
     var language_id = parentFrom.children('#language_id').val();
@@ -541,17 +537,17 @@
     var formData = parentFrom.serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attributes/options/values/addattributevalue")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            $('.addError').hide();
-            $('#addAttributeModal').modal('hide');
-            $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    $('.addError').hide();
+    $('#addAttributeModal').modal('hide');
+    $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
+    },
     });
     });
-//ajax call for add option value
+    //ajax call for add option value
     $(document).on('click', '.update-value', function(e){
     $("#loader").show();
     var parentFrom = $(this).parent('.editvalue-form');
@@ -562,16 +558,16 @@
     console.log('products_options_id: ' + products_options_id);
     $.ajax({
     url: '{{ URL::to("admin/products/attributes/options/values/updateattributevalue")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            $('.addError').hide();
-            $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    $('.addError').hide();
+    $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
+    },
     });
     });
-//deleteattribute
+    //deleteattribute
     $(document).on('click', '#deleteAttribute', function(e){
     $("#loader").show();
     var parentFrom = $('#deleteValue');
@@ -580,119 +576,119 @@
     var formData = parentFrom.serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attributes/options/values/delete")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $('.addError').hide();
-            $("#loader").hide();
-            $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
-            $('#deleteValueModal').modal('hide');
-            location.reload();
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $('.addError').hide();
+    $("#loader").hide();
+    $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
+    $('#deleteValueModal').modal('hide');
+    location.reload();
+    },
     });
     });
-//ajax call for submit value
+    //ajax call for submit value
     $(document).on('click', '#addAttribute', function(e){
     $("#loader").show();
     var formData = $('#addattributefrom').serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/add")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            $('.addError').html('');
-            if (res.status == 'success'){
-//            if (res.length != ''){
-            $('.addError').hide();
-            $('#addAttributeModal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.products_attributes.length; ++i) {
-            var j = i + 1;
-            let item = res.products_attributes[i];
-            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td>" + item.price_prefix + " " + item.options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "'  language_id = '" + item.language_id + "' options_id= '" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentAttribute").html(showData);
-            } else{
-            $('.addError').show();
-            $('.addError').html(res.msg);
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    $('.addError').html('');
+    if (res.status == 'success'){
+    //            if (res.length != ''){
+    $('.addError').hide();
+    $('#addAttributeModal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.products_attributes.length; ++i) {
+    var j = i + 1;
+    let item = res.products_attributes[i];
+    showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td>" + item.price_prefix + " " + item.options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "'  language_id = '" + item.language_id + "' options_id= '" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentAttribute").html(showData);
+    } else{
+    $('.addError').show();
+    $('.addError').html(res.msg);
+    }
+    },
     });
     });
-//ajax call for submit value
+    //ajax call for submit value
     $(document).on('click', '#addDefaultAttribute', function(e){
     $("#loader").show();
     var formData = $('#adddefaultattributefrom').serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            console.log(res);
-            $("#loader").hide();
-            $('.addDefaultError').html('');
-            if (res.status == 'success'){
-//            if (res.length != ''){
-            $('.addError').hide();
-            $('#adddefaultattributesmodal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.products_attributes.length; ++i) {
-            var j = i + 1;
-            let item = res.products_attributes[i];
-            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentDefaultAttribute").html(showData);
-            } else{
-            $('.addDefaultError').show();
-            $('.addDefaultError').html(res.msg);
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    console.log(res);
+    $("#loader").hide();
+    $('.addDefaultError').html('');
+    if (res.status == 'success'){
+    //            if (res.length != ''){
+    $('.addError').hide();
+    $('#adddefaultattributesmodal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.products_attributes.length; ++i) {
+    var j = i + 1;
+    let item = res.products_attributes[i];
+    showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentDefaultAttribute").html(showData);
+    } else{
+    $('.addDefaultError').show();
+    $('.addDefaultError').html(res.msg);
+    }
+    },
     });
     });
-//onchange get zones agains country
+    //onchange get zones agains country
     $(document).on('change', '#entry_country_id', function(e){
     $("#loader").show();
     var zone_country_id = $(this).val();
     $.ajax({
     url: "{{ URL::to('admin/getZones')}}",
-            dataType: 'json',
-            type: "post",
-            // data: '&zone_country_id='+zone_country_id,
-            data: {
-            "_token": "{{ csrf_token() }}",
-                    "country_zone_id" : zone_country_id,
-            },
-            success: function(data){
-            $("#loader").hide();
-            if (data.data.length > 0){
-            var i;
-            var showData = [];
-            for (i = 0; i < data.data.length; ++i) {
-            showData[i] = "<option value='" + data.data[i].zone_id + "'>" + data.data[i].zone_name + "</option>";
-            }
-            $('.selectstate').show();
-            } else{
-            showData = "<option value=''></option>"
-                    $('.selectstate').hide();
-            $('.otherstate').show();
-            }
-            $(".zoneContent").html(showData);
-            }
+    dataType: 'json',
+    type: "post",
+    // data: '&zone_country_id='+zone_country_id,
+    data: {
+    "_token": "{{ csrf_token() }}",
+    "country_zone_id" : zone_country_id,
+    },
+    success: function(data){
+    $("#loader").hide();
+    if (data.data.length > 0){
+    var i;
+    var showData = [];
+    for (i = 0; i < data.data.length; ++i) {
+    showData[i] = "<option value='" + data.data[i].zone_id + "'>" + data.data[i].zone_name + "</option>";
+    }
+    $('.selectstate').show();
+    } else{
+    showData = "<option value=''></option>"
+    $('.selectstate').hide();
+    $('.otherstate').show();
+    }
+    $(".zoneContent").html(showData);
+    }
     });
     });
-// $(document).on('click','#entry_zone_id',function () {
-//
-//
-//     alert('farhan');
-//     $('.otherstate').show();
-//
-//
-// });
+    // $(document).on('click','#entry_zone_id',function () {
+    //
+    //
+    //     alert('farhan');
+    //     $('.otherstate').show();
+    //
+    //
+    // });
 
-//ajax call for submit value
+    //ajax call for submit value
     $(document).on('click', '#addAddress', function(e){
     $("#loader").show();
     var formData = $('#addAddressFrom').serialize();
@@ -714,44 +710,44 @@
     if (error == ""){
     $.ajax({
     url: "{{url('admin/customers/addcustomeraddress')}}",
-            type: "POST",
-            data: formData,
-            async: false,
-            success: function (res) {
-            $("#loader").hide();
-            if (res.length != ''){
-            $('#addAdressModal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td><strong>Company:</strong> " + res[i].entry_company + "<br><strong>First Name:</strong> " + res[i].entry_firstname + "<br><strong>Last Name:</strong> " + res[i].entry_lastname + "</td><td><strong>Street:</strong> " + res[i].entry_street_address + "<br><strong>Suburb:</strong> " + res[i].entry_suburb + "<br><strong>Postcode:</strong> " + res[i].entry_postcode + "<br><strong>City:</strong> " + res[i].entry_city + "<br><strong>State:</strong> " + res[i].entry_state + "<br><strong>Zone:</strong> " + res[i].zone_name + "<br><strong>Country:</strong> " + res[i].countries_name + "</td><td><a class='badge bg-light-blue editAddressModal' customers_id = '" + res[i].customers_id + "' address_book_id = '" + res[i].address_book_id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a><a customers_id = '" + res[i].customers_id + "' address_book_id = '" + res[i].address_book_id + "' class='badge bg-red deleteAddressModal'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentAttribute").html(showData);
-            } else{
-            }
-            location.reload();
-            },
+    type: "POST",
+    data: formData,
+    async: false,
+    success: function (res) {
+    $("#loader").hide();
+    if (res.length != ''){
+    $('#addAdressModal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td><strong>Company:</strong> " + res[i].entry_company + "<br><strong>First Name:</strong> " + res[i].entry_firstname + "<br><strong>Last Name:</strong> " + res[i].entry_lastname + "</td><td><strong>Street:</strong> " + res[i].entry_street_address + "<br><strong>Suburb:</strong> " + res[i].entry_suburb + "<br><strong>Postcode:</strong> " + res[i].entry_postcode + "<br><strong>City:</strong> " + res[i].entry_city + "<br><strong>State:</strong> " + res[i].entry_state + "<br><strong>Zone:</strong> " + res[i].zone_name + "<br><strong>Country:</strong> " + res[i].countries_name + "</td><td><a class='badge bg-light-blue editAddressModal' customers_id = '" + res[i].customers_id + "' address_book_id = '" + res[i].address_book_id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a><a customers_id = '" + res[i].customers_id + "' address_book_id = '" + res[i].address_book_id + "' class='badge bg-red deleteAddressModal'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentAttribute").html(showData);
+    } else{
+    }
+    location.reload();
+    },
     });
     }
     $("#loader").hide();
     });
-//editAddressModal
+    //editAddressModal
     $(document).on('click', '.editAddressModal', function(){
     var user_id = $(this).attr('user_id');
     var address_book_id = $(this).attr('address_book_id');
     $.ajax({
     url: "{{url('admin/customers/editaddress')}}",
-            type: "POST",
-            data: '&user_id=' + user_id + '&address_book_id=' + address_book_id,
-            success: function (data) {
-            $('.editContent').html(data);
-            $('#editAddressModal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&user_id=' + user_id + '&address_book_id=' + address_book_id,
+    success: function (data) {
+    $('.editContent').html(data);
+    $('#editAddressModal').modal('show');
+    },
+    dataType: 'html'
     });
     });
-//editproductattributemodal
+    //editproductattributemodal
     $(document).on('click', '.editproductattributemodal', function(){
     var products_id = $(this).attr('products_id');
     var products_attributes_id = $(this).attr('products_attributes_id');
@@ -759,16 +755,16 @@
     var options_id = $(this).attr('options_id');
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/edit")}}',
-            type: "POST",
-            data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id + '&language_id=' + language_id + '&options_id=' + options_id,
-            success: function (data) {
-            $('.editContent').html(data);
-            $('#editproductattributemodal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id + '&language_id=' + language_id + '&options_id=' + options_id,
+    success: function (data) {
+    $('.editContent').html(data);
+    $('#editproductattributemodal').modal('show');
+    },
+    dataType: 'html'
     });
     });
-//editdefaultattributemodal
+    //editdefaultattributemodal
     $(document).on('click', '.editdefaultattributemodal', function(){
     var products_id = $(this).attr('products_id');
     var products_attributes_id = $(this).attr('products_attributes_id');
@@ -776,16 +772,16 @@
     var options_id = $(this).attr('options_id');
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/edit')}}",
-            type: "POST",
-            data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id + '&language_id=' + language_id + '&options_id=' + options_id,
-            success: function (data) {
-            $('.editDefaultContent').html(data);
-            $('#editdefaultattributemodal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id + '&language_id=' + language_id + '&options_id=' + options_id,
+    success: function (data) {
+    $('.editDefaultContent').html(data);
+    $('#editdefaultattributemodal').modal('show');
+    },
+    dataType: 'html'
     });
     });
-//udpate address
+    //udpate address
     $(document).on('click', '#updateAddress', function(e){
 
     $("#loader").show();
@@ -807,20 +803,20 @@
 
     $.ajax({
     url: "{{url('admin/customers/updateaddress')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            console.log(res);
-            if (res.length != '') {
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    console.log(res);
+    if (res.length != '') {
 
-            location.reload();
-            } else {
-            $('.addError').show();
-            }
+    location.reload();
+    } else {
+    $('.addError').show();
+    }
 
 
-            },
+    },
     });
     }
     $("#loader").hide();
@@ -830,28 +826,28 @@
     var formData = $('#editAttributeFrom').serialize();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/update")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            $('.addError').html('');
-//            if (res.length != ''){
-            if (res.status == 'success'){
-            $('.addError').hide();
-            $('#editproductattributemodal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.products_attributes.length; ++i) {
-            var j = i + 1;
-            let item = res.products_attributes[i];
-            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td>" + item.price_prefix + " " + item.options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "'  language_id = '" + item.language_id + "'  options_id = '" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id = '" + item.language_id + "'  options_id = '" + item.options_id + "'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentAttribute").html(showData);
-            } else{
-            $('.addError').show();
-            $('.addError').html(res.msg);
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    $('.addError').html('');
+    //            if (res.length != ''){
+    if (res.status == 'success'){
+    $('.addError').hide();
+    $('#editproductattributemodal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.products_attributes.length; ++i) {
+    var j = i + 1;
+    let item = res.products_attributes[i];
+    showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td>" + item.price_prefix + " " + item.options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "'  language_id = '" + item.language_id + "'  options_id = '" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id = '" + item.language_id + "'  options_id = '" + item.options_id + "'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentAttribute").html(showData);
+    } else{
+    $('.addError').show();
+    $('.addError').html(res.msg);
+    }
+    },
     });
     });
     $(document).on('click', '#updateDefaultAttribute', function(e){
@@ -859,28 +855,28 @@
     var formData = $('#editDefaultAttributeFrom').serialize();
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/update')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            $('.addError').html('');
-            if (res.status == 'success'){
-//            if (res.length != ''){
-            $('.addError').hide();
-            $('#editdefaultattributemodal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.products_attributes.length; ++i) {
-            var j = i + 1;
-            let item = res.products_attributes[i];
-            showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentDefaultAttribute").html(showData);
-            } else{
-            $('.addError').show();
-            $('.addError').html(res.msg);
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    $('.addError').html('');
+    if (res.status == 'success'){
+    //            if (res.length != ''){
+    $('.addError').hide();
+    $('#editdefaultattributemodal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.products_attributes.length; ++i) {
+    var j = i + 1;
+    let item = res.products_attributes[i];
+    showData[i] = "<tr><td>" + j + "</td><td>" + item.products_options_name + "</td><td>" + item.products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' language_id ='" + item.language_id + "' options_id ='" + item.options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + item.products_attributes_id + "' products_id = '" + item.products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentDefaultAttribute").html(showData);
+    } else{
+    $('.addError').show();
+    $('.addError').html(res.msg);
+    }
+    },
     });
     });
     //deleteAddressModal
@@ -899,8 +895,8 @@
     });
     $('#customers_dob').datepicker({
     autoclose: true,
-            format: 'dd/mm/yyyy',
-            endDate: "today"
+    format: 'dd/mm/yyyy',
+    endDate: "today"
     });
     //deleteAddress
     // $(document).on('click', '#deleteAddressBtn', function(){
@@ -936,28 +932,28 @@
 
     //device id
     /*$(document).on('click', '#deletedeviceId', function(){
-     var devices_id = $(this).attr('devices_id');
-     $('#devices_id').val(devices_id);
-     $('#deletedeviceModal').modal('show');
-     })
+    var devices_id = $(this).attr('devices_id');
+    $('#devices_id').val(devices_id);
+    $('#deletedeviceModal').modal('show');
+    })
 
-     //DeviceDeletedMessage
-     $(document).on('click', '.deleteproductattributemodal', function(){
-     var products_id = $(this).attr('products_id');
-     var products_attributes_id = $(this).attr('products_attributes_id');
-     $.ajax({
-     url: ""
-     {{--{{ URL::to('admin/deleteproductattributemodal')}}--}}
-     ",
-     type: "POST",
-     data: '&products_id='+products_id+'&products_attributes_id='+products_attributes_id,
-     success: function (data) {
-     $('.deleteEmbed').html(data);
-     $('#deleteproductattributemodal').modal('show');
-     },
-     dataType: 'html'
-     });
-     });*/
+    //DeviceDeletedMessage
+    $(document).on('click', '.deleteproductattributemodal', function(){
+    var products_id = $(this).attr('products_id');
+    var products_attributes_id = $(this).attr('products_attributes_id');
+    $.ajax({
+    url: ""
+    {{--{{ URL::to('admin/deleteproductattributemodal')}}--}}
+    ",
+    type: "POST",
+    data: '&products_id='+products_id+'&products_attributes_id='+products_attributes_id,
+    success: function (data) {
+    $('.deleteEmbed').html(data);
+    $('#deleteproductattributemodal').modal('show');
+    },
+    dataType: 'html'
+    });
+    });*/
 
 
     //deleteproductattributemodal
@@ -966,13 +962,13 @@
     var products_attributes_id = $(this).attr('products_attributes_id');
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/options/showdeletemodal')}}",
-            type: "POST",
-            data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id,
-            success: function (data) {
-            $('.deleteEmbed').html(data);
-            $('#deleteproductattributemodal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id,
+    success: function (data) {
+    $('.deleteEmbed').html(data);
+    $('#deleteproductattributemodal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     //deletedefaultattributemodal
@@ -981,13 +977,13 @@
     var products_attributes_id = $(this).attr('products_attributes_id');
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/deletedefaultattributemodal')}}",
-            type: "POST",
-            data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id,
-            success: function (data) {
-            $('.deleteDefaultEmbed').html(data);
-            $('#deletedefaultattributemodal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&products_attributes_id=' + products_attributes_id,
+    success: function (data) {
+    $('.deleteDefaultEmbed').html(data);
+    $('#deletedefaultattributemodal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     //deleteOption
@@ -996,21 +992,21 @@
     var option_id = $(this).attr('option_id');
     $.ajax({
     url: "{{ URL::to('admin/products/attributes/options/values/checkattributeassociate')}}",
-            type: "POST",
-            data: '&option_id=' + option_id,
-            success: function (res) {
-            $("#loader").hide();
-            if (res.length != ''){
-            $('.addError').hide();
-            $("#assciate-products").html(res);
-            $('#productListModal').modal('show');
-            } else{
-            $('#option_id').val(option_id);
-            $('#productListModal').modal('hide');
-            $('#deleteattributeModal').modal('show');
-            $(".contentAttribute").html(res);
-            }
-            },
+    type: "POST",
+    data: '&option_id=' + option_id,
+    success: function (res) {
+    $("#loader").hide();
+    if (res.length != ''){
+    $('.addError').hide();
+    $("#assciate-products").html(res);
+    $('#productListModal').modal('show');
+    } else{
+    $('#option_id').val(option_id);
+    $('#productListModal').modal('hide');
+    $('#deleteattributeModal').modal('show');
+    $(".contentAttribute").html(res);
+    }
+    },
     });
     });
     // delete-value
@@ -1022,28 +1018,28 @@
     //alert(delete_language_id);
     $.ajax({
     url: "{{ URL::to('admin/products/attributes/options/values/checkvalueassociate')}}",
-            type: "POST",
-            data: '&value_id=' + value_id,
-            success: function (res) {
-            $("#loader").hide();
-            //$('.deleteEmbed').html(res);
-            //alert(res);
-            if (res.length != ''){
-            $('.addError').hide();
-            $("#assciate-products-value").html(res);
-            $('#productListModalValue').modal('show');
-            } else{
-            $('#value_id').val(value_id);
-            $('#delete_products_options_id').val(delete_products_options_id);
-            $('#delete_language_id').val(delete_language_id);
-            $('#productListModalValue').modal('hide');
-            $('#deleteValueModal').modal('show');
-            $(".contentAttribute").html(res);
-            }
+    type: "POST",
+    data: '&value_id=' + value_id,
+    success: function (res) {
+    $("#loader").hide();
+    //$('.deleteEmbed').html(res);
+    //alert(res);
+    if (res.length != ''){
+    $('.addError').hide();
+    $("#assciate-products-value").html(res);
+    $('#productListModalValue').modal('show');
+    } else{
+    $('#value_id').val(value_id);
+    $('#delete_products_options_id').val(delete_products_options_id);
+    $('#delete_language_id').val(delete_language_id);
+    $('#productListModalValue').modal('hide');
+    $('#deleteValueModal').modal('show');
+    $(".contentAttribute").html(res);
+    }
 
 
 
-            },
+    },
     });
     });
     //deleteProductAttribute
@@ -1053,30 +1049,30 @@
     console.log(formData);
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/delete')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            //$('.deleteEmbed').html(res);
-            //alert(res);
-            if (res.length != ''){
-            $('.addError').hide();
-            $('#deleteproductattributemodal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td>" + res[i].price_prefix + " " + res[i].options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "'  language_id = '" + res[i].language_id + "'  options_id = '" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' language_id = '" + res[i].language_id + "'  options_id = '" + res[i].options_id + "'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    //$('.deleteEmbed').html(res);
+    //alert(res);
+    if (res.length != ''){
+    $('.addError').hide();
+    $('#deleteproductattributemodal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td>" + res[i].price_prefix + " " + res[i].options_values_price + "</td><td>    <a class='badge bg-light-blue editproductattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "'  language_id = '" + res[i].language_id + "'  options_id = '" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteproductattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' language_id = '" + res[i].language_id + "'  options_id = '" + res[i].options_id + "'><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
 
-            $(".contentAttribute").html(showData);
-            } else{
+    $(".contentAttribute").html(showData);
+    } else{
 
-            $('#deleteproductattributemodal').modal('hide');
-            $('.addError').show();
-            $(".contentAttribute").html(res);
-            }
-            },
+    $('#deleteproductattributemodal').modal('hide');
+    $('.addError').show();
+    $(".contentAttribute").html(res);
+    }
+    },
     });
     });
     //deletedefaultattributemodal
@@ -1086,30 +1082,30 @@
     console.log(formData);
     $.ajax({
     url: "{{ URL::to('admin/products/attach/attribute/default/delete')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            //$('.deleteEmbed').html(res);
-            //alert(res);
-            if (res.length != ''){
-            $('.addError').hide();
-            $('#deletedefaultattributemodal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "'  products_id = '" + res[i].products_id + "' language_id ='" + res[i].language_id + "' options_id ='" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    //$('.deleteEmbed').html(res);
+    //alert(res);
+    if (res.length != ''){
+    $('.addError').hide();
+    $('#deletedefaultattributemodal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td>" + res[i].products_options_name + "</td><td>" + res[i].products_options_values_name + "</td><td><a class='badge bg-light-blue editdefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "'  products_id = '" + res[i].products_id + "' language_id ='" + res[i].language_id + "' options_id ='" + res[i].options_id + "'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deletedefaultattributemodal' products_attributes_id = '" + res[i].products_attributes_id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
 
-            $(".contentDefaultAttribute").html(showData);
-            } else{
+    $(".contentDefaultAttribute").html(showData);
+    } else{
 
-            $('#deletedefaultattributemodal').modal('hide');
-            $('.addDefaultError').show();
-            $(".contentDefaultAttribute").html(res);
-            }
-            },
+    $('#deletedefaultattributemodal').modal('hide');
+    $('.addDefaultError').show();
+    $(".contentDefaultAttribute").html(res);
+    }
+    },
     });
     });
     //ajax call for submit value
@@ -1118,29 +1114,29 @@
     var formData = new FormData($('#addImageFrom')[0]);
     $.ajax({
     url: '{{ URL::to("admin/addnewproductimage")}}',
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            if (res.length != ''){
-            $("#loader").hide();
-            $('.addError').hide();
-            $('#addImagesModal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentImages").html(showData);
-            } else{
-            $('.addError').show();
-            }
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    if (res.length != ''){
+    $("#loader").hide();
+    $('.addError').hide();
+    $('#addImagesModal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentImages").html(showData);
+    } else{
+    $('.addError').show();
+    }
 
 
-            },
-            cache: false,
-            contentType: false,
-            processData: false
+    },
+    cache: false,
+    contentType: false,
+    processData: false
     });
     });
     //website_themes
@@ -1149,14 +1145,14 @@
     var theme_id = $(this).val();
     $.ajax({
     url: '{{ URL::to("admin/updateWebTheme")}}',
-            type: "POST",
-            data: '&theme_id=' + theme_id,
-            success: function (data) {
-            if (data == 'success'){
-            $('.applied_message').removeAttr('hidden');
-            }
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&theme_id=' + theme_id,
+    success: function (data) {
+    if (data == 'success'){
+    $('.applied_message').removeAttr('hidden');
+    }
+    },
+    dataType: 'html'
     });
     });
     //editproductimagesmodal
@@ -1165,13 +1161,13 @@
     var products_id = $(this).attr('products_id');
     $.ajax({
     url: '{{ URL::to("admin/editproductimage")}}',
-            type: "POST",
-            data: '&products_id=' + products_id + '&id=' + id,
-            success: function (data) {
-            $('.editImageContent').html(data);
-            $('#editProductImagesModal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&id=' + id,
+    success: function (data) {
+    $('.editImageContent').html(data);
+    $('#editProductImagesModal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     $(document).on('click', '#updateProductImage', function(e){
@@ -1179,29 +1175,29 @@
     var formData = new FormData($('#editImageFrom')[0]);
     $.ajax({
     url: "{{ URL::to('admin/updateproductimage')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            if (res.length != ''){
-            $('.addError').hide();
-            $('#editProductImagesModal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentImages").html(showData);
-            } else{
-            $('.addError').show();
-            }
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    if (res.length != ''){
+    $('.addError').hide();
+    $('#editProductImagesModal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentImages").html(showData);
+    } else{
+    $('.addError').show();
+    }
 
 
-            },
-            cache: false,
-            contentType: false,
-            processData: false
+    },
+    cache: false,
+    contentType: false,
+    processData: false
     });
     });
     $("#sendNotificaionForm").submit(function(){
@@ -1210,20 +1206,20 @@
     var formData = new FormData($(this)[0]);
     $.ajax({
     url: "{{ URL::to('admin/devices/notifyUser')}}",
-            type: "POST",
-            data: formData,
-            contentType: false, // The content type used when sending data to the server.
-            cache: false, // To unable request pages to be cached
-            processData:false,
-            success: function (res) {
-            $('.sent-push').addClass('hide');
-            $('.not-sent').addClass('hide');
-            if ($.trim(res) == '1'){
-            $('.sent-push').removeClass('hide');
-            } else{
-            $('.not-sent').removeClass('hide');
-            }
-            },
+    type: "POST",
+    data: formData,
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData:false,
+    success: function (res) {
+    $('.sent-push').addClass('hide');
+    $('.not-sent').addClass('hide');
+    if ($.trim(res) == '1'){
+    $('.sent-push').removeClass('hide');
+    } else{
+    $('.not-sent').removeClass('hide');
+    }
+    },
     });
     return false;
     });
@@ -1234,20 +1230,20 @@
     var formData = new FormData($('#sendNotificaionForm')[0]);
     $.ajax({
     url: "{{ URL::to('admin/devices/notifyUser')}}",
-            type: "POST",
-            data: formData,
-            contentType: false, // The content type used when sending data to the server.
-            cache: false, // To unable request pages to be cached
-            processData:false,
-            success: function (res) {
-            $('.sent-push').addClass('hide');
-            $('.not-sent').addClass('hide');
-            if ($.trim(res) == '1'){
-            $('.sent-push').removeClass('hide');
-            } else{
-            $('.not-sent').removeClass('hide');
-            }
-            },
+    type: "POST",
+    data: formData,
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData:false,
+    success: function (res) {
+    $('.sent-push').addClass('hide');
+    $('.not-sent').addClass('hide');
+    if ($.trim(res) == '1'){
+    $('.sent-push').removeClass('hide');
+    } else{
+    $('.not-sent').removeClass('hide');
+    }
+    },
     });
     return false;
     });
@@ -1261,20 +1257,20 @@
     var formData = new FormData($(this)[0]);
     $.ajax({
     url: "{{ URL::to('admin/devices/notifyUser')}}",
-            type: "POST",
-            data: formData,
-            //contentType: true,       // The content type used when sending data to the server.
-            cache: false, // To unable request pages to be cached
-            processData:false,
-            success: function (res) {
-            $('.sent-push').addClass('hide');
-            $('.not-sent').addClass('hide');
-            if ($.trim(res) == '1'){
-            $('.sent-push').removeClass('hide');
-            } else{
-            $('.not-sent').removeClass('hide');
-            }
-            },
+    type: "POST",
+    data: formData,
+    //contentType: true,       // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData:false,
+    success: function (res) {
+    $('.sent-push').addClass('hide');
+    $('.not-sent').addClass('hide');
+    if ($.trim(res) == '1'){
+    $('.sent-push').removeClass('hide');
+    } else{
+    $('.not-sent').removeClass('hide');
+    }
+    },
     });
     });
     //deleteProductImagesModal
@@ -1283,13 +1279,13 @@
     var products_id = $(this).attr('products_id');
     $.ajax({
     url: '{{ URL::to("admin/products/images/deleteproductimagemodal")}}',
-            type: "POST",
-            data: '&products_id=' + products_id + '&id=' + id,
-            success: function (data) {
-            $('.deleteImageEmbed').html(data);
-            $('#deleteProductImageModal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&products_id=' + products_id + '&id=' + id,
+    success: function (data) {
+    $('.deleteImageEmbed').html(data);
+    $('#deleteProductImageModal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     //deleteproductimage
@@ -1298,26 +1294,26 @@
     var formData = $('#deleteImageForm').serialize();
     $.ajax({
     url: "{{ URL::to('admin/products/images/deleteproductimage')}}",
-            type: "POST",
-            data: formData,
-            success: function (res) {
-            $("#loader").hide();
-            if (res.length != ''){
-            $('.addError').hide();
-            $('#deleteProductImageModal').modal('hide');
-            var i;
-            var showData = [];
-            for (i = 0; i < res.length; ++i) {
-            var j = i + 1;
-            showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
-            }
-            $(".contentImages").html(showData);
-            } else{
-            var showData = '<tr><td colspan="4"><strong>No record found!</strong> Please click on "<strong>Add Product Images</strong>" to add images.</td></tr>';
-            $('#deleteProductImageModal').modal('hide');
-            $(".contentImages").html(showData);
-            }
-            },
+    type: "POST",
+    data: formData,
+    success: function (res) {
+    $("#loader").hide();
+    if (res.length != ''){
+    $('.addError').hide();
+    $('#deleteProductImageModal').modal('hide');
+    var i;
+    var showData = [];
+    for (i = 0; i < res.length; ++i) {
+    var j = i + 1;
+    showData[i] = "<tr><td>" + j + "</td><td><img src={{asset('').'/'}}" + res[i].image + " alt='' width=' 100px'></td><td>" + res[i].htmlcontent + "</td> <td><a products_id = '" + res[i].products_id + "' class='badge bg-light-blue editProductImagesModal' id = '" + res[i].id + "' ><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a> <a class='badge bg-red deleteProductImagesModal' id = '" + res[i].id + "' products_id = '" + res[i].products_id + "' ><i class='fa fa-trash' aria-hidden='true'></i></a></td></tr>";
+    }
+    $(".contentImages").html(showData);
+    } else{
+    var showData = '<tr><td colspan="4"><strong>No record found!</strong> Please click on "<strong>Add Product Images</strong>" to add images.</td></tr>';
+    $('#deleteProductImageModal').modal('hide');
+    $(".contentImages").html(showData);
+    }
+    },
     });
     });
     //ajax call for notification pop
@@ -1325,13 +1321,13 @@
     var customers_id = $(this).attr('customers_id');
     $.ajax({
     url: '{{ URL::to("admin/devices/customerNotification")}}',
-            type: "POST",
-            data: '&customers_id=' + customers_id,
-            success: function (data) {
-            $('.notificationContent').html(data);
-            $('#notificationModal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&customers_id=' + customers_id,
+    success: function (data) {
+    $('.notificationContent').html(data);
+    $('#notificationModal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     //ajax call for manage role
@@ -1339,13 +1335,13 @@
     var user_types_id = $(this).attr('user_types_id');
     $.ajax({
     url: '{{ URL::to("admin/managerolepopup")}}',
-            type: "POST",
-            data: '&customers_id=' + customers_id,
-            success: function (data) {
-            $('#manage-role-content').html(data);
-            $('#manageRoleModal').modal('show');
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '&customers_id=' + customers_id,
+    success: function (data) {
+    $('#manage-role-content').html(data);
+    $('#manageRoleModal').modal('show');
+    },
+    dataType: 'html'
     });
     });
     //get products for coupon
@@ -1353,19 +1349,19 @@
     var products = $(this).attr('products_id');
     $.ajax({
     url: "{{URL::to('admin/couponProducts')}}",
-            type: "POST",
-            data: '',
-            success: function (data) {
-            },
-            dataType: 'html'
+    type: "POST",
+    data: '',
+    success: function (data) {
+    },
+    dataType: 'html'
     });
     });
     //call function on window load
     @if (Request::path() == 'admin/editproduct/*')
-            getSubCategory();
+    getSubCategory();
     @endif
-            //special product
-            showSpecial();
+    //special product
+    showSpecial();
     showFlash();
     prodcust_type();
     //deleteproductmodal
@@ -1511,11 +1507,11 @@
     var shipping_id = $(this).attr('shipping_id');
     $.ajax({
     url: '{{ URL::to("admin/shippingmethods/defaultShippingMethod")}}',
-            type: "POST",
-            data: '&shipping_id=' + shipping_id,
-            success: function (data) {
-            $('.default-div').removeClass('hidden');
-            },
+    type: "POST",
+    data: '&shipping_id=' + shipping_id,
+    success: function (data) {
+    $('.default-div').removeClass('hidden');
+    },
     });
     });
     //product options language
@@ -1563,59 +1559,59 @@
     var languages_id = $(this).val();
     $.ajax({
     url: '{{ URL::to("admin/languages/default")}}',
-            type: "POST",
-            data: '&languages_id=' + languages_id,
-            success: function (data) {
-            location.reload();
-            },
+    type: "POST",
+    data: '&languages_id=' + languages_id,
+    success: function (data) {
+    location.reload();
+    },
     });
     });
     $(document).on('click', '.default_pay_method', function(){
     var method_id = $(this).val();
     $.ajax({
     url: '{{ URL::to("admin/paymentmethods/active")}}',
-            type: "POST",
-            data: '&method_id=' + method_id,
-            success: function (data) {
-            location.reload();
-            },
+    type: "POST",
+    data: '&method_id=' + method_id,
+    success: function (data) {
+    location.reload();
+    },
     });
     });
     });
-// function getOptions(languages_id) {
-// 	$.ajax({
-// 		url: '{{ URL::to("admin/getOptions")}}',
-// 		type: "POST",
-// 		data: '&languages_id='+languages_id,
-// 		success: function (data) {
-// 			$('.default-option-id').html(data);
-// 		},
-// 	});
-// }
+    // function getOptions(languages_id) {
+    // 	$.ajax({
+    // 		url: '{{ URL::to("admin/getOptions")}}',
+    // 		type: "POST",
+    // 		data: '&languages_id='+languages_id,
+    // 		success: function (data) {
+    // 			$('.default-option-id').html(data);
+    // 		},
+    // 	});
+    // }
 
 
     function getOptionsValue(option_id) {
     var language_id = $('.language_id').val();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValue")}}',
-            type: "POST",
-            data: '&option_id=' + option_id + '&language_id=' + language_id,
-            success: function (data) {
-            $('.products_options_values_id').html(data);
-            },
+    type: "POST",
+    data: '&option_id=' + option_id + '&language_id=' + language_id,
+    success: function (data) {
+    $('.products_options_values_id').html(data);
+    },
     });
     }
 
-// function getEditOptions(languages_id) {
-// 	$.ajax({
-// 		url: '{{ URL::to("admin/getOptions")}}',
-// 		type: "POST",
-// 		data: '&languages_id='+languages_id,
-// 		success: function (data) {
-// 			$('.edit-default-option-id').html(data);
-// 		},
-// 	});
-// }
+    // function getEditOptions(languages_id) {
+    // 	$.ajax({
+    // 		url: '{{ URL::to("admin/getOptions")}}',
+    // 		type: "POST",
+    // 		data: '&languages_id='+languages_id,
+    // 		success: function (data) {
+    // 			$('.edit-default-option-id').html(data);
+    // 		},
+    // 	});
+    // }
 
 
     function getEditOptionsValue(option_id) {
@@ -1623,24 +1619,24 @@
     var language_id = $('.edit_language_id').val();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValue")}}',
-            type: "POST",
-            data: '&option_id=' + option_id + '&language_id=' + language_id,
-            success: function (data) {
-            $('.edit-products_options_values_id').html(data);
-            },
+    type: "POST",
+    data: '&option_id=' + option_id + '&language_id=' + language_id,
+    success: function (data) {
+    $('.edit-products_options_values_id').html(data);
+    },
     });
     }
 
-// function getAdditionalOptions(languages_id) {
-// 	$.ajax({
-// 		url: '{{ URL::to("admin/getOptions")}}',
-// 		type: "POST",
-// 		data: '&languages_id='+languages_id,
-// 		success: function (data) {
-// 			$('.additional-option-id').html(data);
-// 		},
-// 	});
-// }
+    // function getAdditionalOptions(languages_id) {
+    // 	$.ajax({
+    // 		url: '{{ URL::to("admin/getOptions")}}',
+    // 		type: "POST",
+    // 		data: '&languages_id='+languages_id,
+    // 		success: function (data) {
+    // 			$('.additional-option-id').html(data);
+    // 		},
+    // 	});
+    // }
 
 
     function getAdditionalOptionsValue(option_id) {
@@ -1648,24 +1644,24 @@
     var language_id = $('.additional_language_id').val();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValue")}}',
-            type: "POST",
-            data: '&option_id=' + option_id + '&language_id=' + language_id,
-            success: function (data) {
-            $('.additional_products_options_values_id').html(data);
-            },
+    type: "POST",
+    data: '&option_id=' + option_id + '&language_id=' + language_id,
+    success: function (data) {
+    $('.additional_products_options_values_id').html(data);
+    },
     });
     }
 
-// function getEditAdditionalOptions(languages_id) {
-// 	$.ajax({
-// 		url: '{{ URL::to("admin/getOptions")}}',
-// 		type: "POST",
-// 		data: '&languages_id='+languages_id,
-// 		success: function (data) {
-// 			$('.edit-additional-option-id').html(data);
-// 		},
-// 	});
-// }
+    // function getEditAdditionalOptions(languages_id) {
+    // 	$.ajax({
+    // 		url: '{{ URL::to("admin/getOptions")}}',
+    // 		type: "POST",
+    // 		data: '&languages_id='+languages_id,
+    // 		success: function (data) {
+    // 			$('.edit-additional-option-id').html(data);
+    // 		},
+    // 	});
+    // }
 
 
     function getEditAdditionalOptionsValue(option_id) {
@@ -1673,42 +1669,42 @@
     var language_id = $('.edit_additional_language_id').val();
     $.ajax({
     url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValue")}}',
-            type: "POST",
-            data: '&option_id=' + option_id + '&language_id=' + language_id,
-            success: function (data) {
-            $('.edit-additional-products_options_values_id').html(data);
-            },
+    type: "POST",
+    data: '&option_id=' + option_id + '&language_id=' + language_id,
+    success: function (data) {
+    $('.edit-additional-products_options_values_id').html(data);
+    },
     });
     }
 
-//getSubCategory
+    //getSubCategory
     function getSubCategory() {
 
     @if (Request::path() == 'admin/addProduct')
-            var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
+    var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
     @ else
 
-            var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
+    var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
     @endif
 
-            var category_id = $('#category_id').val();
+    var category_id = $('#category_id').val();
     if (category_id != ''){
     $.ajax({
     url: getCategories,
-            type: "POST",
-            data: '&category_id=' + category_id,
-            success: function (data) {
-            if (data.length != ''){
-            var i;
-            var showData = [];
-            for (i = 0; i < data.length; ++i) {
-            showData[i] = "<option value='" + data[i].id + "'>" + data[i].name + "</option>";
-            }
-            $("#sub_category_id").html(showData);
-            } else{
-            $("#sub_category_id").html("<option value=''>Please Select</option>");
-            }
-            },
+    type: "POST",
+    data: '&category_id=' + category_id,
+    success: function (data) {
+    if (data.length != ''){
+    var i;
+    var showData = [];
+    for (i = 0; i < data.length; ++i) {
+    showData[i] = "<option value='" + data[i].id + "'>" + data[i].name + "</option>";
+    }
+    $("#sub_category_id").html(showData);
+    } else{
+    $("#sub_category_id").html("<option value=''>Please Select</option>");
+    }
+    },
     });
     }
     }
@@ -1723,7 +1719,7 @@
     }
     }
 
-//showSpecial
+    //showSpecial
     function showSpecial() {
     if ($('#isSpecial').val() == 'yes'){
     $(".special-container").show();
@@ -1737,7 +1733,7 @@
     }
 
 
-//showFlash
+    //showFlash
     function showFlash() {
     if ($('#isFlash').val() == 'yes'){
     $(".flash-container").show();
@@ -1762,7 +1758,7 @@
     $(function () {
     $('.datepicker').datepicker({
     autoclose: true,
-            format: 'dd/mm/yyyy'
+    format: 'dd/mm/yyyy'
     });
     });
     function banner_type(){
@@ -1849,7 +1845,7 @@
     return false;
     }
     });
-//focus form field
+    //focus form field
     $(document).on('keyup', '.number-validate-level', function(e){
 
     if (this.value == '' || isNaN(this.value)) {
@@ -1861,7 +1857,7 @@
     }
 
     });
-//validate form
+    //validate form
     $(document).on('submit', '.form-validate', function(e){
     var error = "";
     //to validate text field
@@ -1927,7 +1923,7 @@
     }
 
     });
-//focus form field
+    //focus form field
     $(document).on('keyup change', '.field-validate', function(e){
 
     if (this.value == '') {
@@ -1949,7 +1945,7 @@
     }
 
     });
-//focus form field
+    //focus form field
     $(document).on('keyup', '.number-validate', function(e){
 
     if (this.value == '' || isNaN(this.value)) {
@@ -1973,7 +1969,7 @@
     error = "has error";
     }
     });
-//change default notifcation
+    //change default notifcation
     $(document).on('change', '#default_notification', function(e){
     var value = $(this).val();
     if (value == 'fcm'){
@@ -1984,23 +1980,23 @@
     $('.onesignal_content').show();
     }
     });
-//ajax call for submit value
+    //ajax call for submit value
     $(document).on('click', '#generate-key', function(e){
     $("#loader").show();
     $('#generateSuccessfully').attr('hidden', 'hidden')
-            $.ajax({
-            url: '{{ URL::to("admin/generateKey")}}',
-                    type: "GET",
-                    async: false,
-                    success: function (res) {
-                    $("#loader").hide();
-                    $('#generateSuccessfully').removeAttr('hidden');
-                    $('#consumer_key').val(res.consumerKey);
-                    $("#consumer_secret").val(res.consumerSecret);
-                    },
-            });
+    $.ajax({
+    url: '{{ URL::to("admin/generateKey")}}',
+    type: "GET",
+    async: false,
+    success: function (res) {
+    $("#loader").hide();
+    $('#generateSuccessfully').removeAttr('hidden');
+    $('#consumer_key').val(res.consumerKey);
+    $("#consumer_secret").val(res.consumerSecret);
+    },
     });
-//show password div
+    });
+    //show password div
     function validatePasswordForm(){
     var email = document.forms["updateAdminPassword"]["email"].value;
     var password = document.forms["updateAdminPassword"]["password"].value;
@@ -2025,7 +2021,7 @@
     if (re_password != password) {
     err = "Both passwords must be matched! \n";
     document.getElementById("re_password").focus()
-            $('#re_password').parent('.col-sm-10').addClass('has-error');
+    $('#re_password').parent('.col-sm-10').addClass('has-error');
     $('#re_password').next('.error-content').html(err).show();
     return false;
     } else{
@@ -2053,7 +2049,7 @@
     $('#password').removeClass('field-validate');
     }
     });
-//prodcust_type
+    //prodcust_type
     function prodcust_type(){
     var prodcust_type = $('.prodcust-type').val();
     if (prodcust_type == 2){
@@ -2100,41 +2096,41 @@
     var product_id = $(this).val();
     $.ajax({
     url: '{{ URL::to("admin/products/inventory/ajax_min_max")}}' + '/' + product_id,
-            type: "GET",
-            success: function (res) {
-            //console.log(res.products[0].products_type);
-            if (res.products[0].products_type == '0'){
-            $('#inventory_ref_id').val('0');
-            } else{
-            $('#inventory_ref_id').val('');
-            }
+    type: "GET",
+    success: function (res) {
+    //console.log(res.products[0].products_type);
+    if (res.products[0].products_type == '0'){
+    $('#inventory_ref_id').val('0');
+    } else{
+    $('#inventory_ref_id').val('');
+    }
 
-            $('#current_stocks').html(res.stocks);
-            $('#total_purchases').html(res.purchase_price);
-            if (res.length != ''){
-            $('#min_level').val(res.min_level);
-            $('#max_level').val(res.max_level);
-            $('#purchase_price').val(res.purchase_price);
-            $('#stocks').val(res.stocks);
-            } else{
-            $('.addError').show();
-            }
-            },
+    $('#current_stocks').html(res.stocks);
+    $('#total_purchases').html(res.purchase_price);
+    if (res.length != ''){
+    $('#min_level').val(res.min_level);
+    $('#max_level').val(res.max_level);
+    $('#purchase_price').val(res.purchase_price);
+    $('#stocks').val(res.stocks);
+    } else{
+    $('.addError').show();
+    }
+    },
     });
     $.ajax({
     url: '{{ URL::to("admin/products/inventory/ajax_attr")}}' + '/' + product_id,
-            type: "GET",
-            success: function (res) {
-            //console.log(res);
-            $('#attribute').html(res);
-            $('#attribute').show();
-            var has_val = $('#has-attribute').val();
-            if (has_val == 0){
-            $('#attribute-btn').hide();
-            } else{
-            $('#attribute-btn').show();
-            }
-            },
+    type: "GET",
+    success: function (res) {
+    //console.log(res);
+    $('#attribute').html(res);
+    $('#attribute').show();
+    var has_val = $('#has-attribute').val();
+    if (has_val == 0){
+    $('#attribute-btn').hide();
+    } else{
+    $('#attribute-btn').show();
+    }
+    },
     });
     });
     function cancelOrder() {
@@ -2168,32 +2164,32 @@
     });
     Dropzone.options.myDropzone = {
     paramName: 'file',
-            maxFilesize: 5, // MB
-            maxFiles: 20,
-            acceptedFiles: ".jpeg,.jpg,.png,.gif",
-            init: function() {
-            this.on("success", function(file, response) {
-            var a = document.createElement('span');
-            // a.className = "thumb-url btn btn-primary";
-            a.setAttribute('data-clipboard-text', '{{url('admin / media / uploadimage')}}' + '/' + response);
-            // a.innerHTML = "copy url";
-            file.previewTemplate.appendChild(a);
-            });
-            this.on("success", function(){
-            $("#compelete").removeAttr("disabled");
-            $("#compelete").click(function(){
+    maxFilesize: 5, // MB
+    maxFiles: 20,
+    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+    init: function() {
+    this.on("success", function(file, response) {
+    var a = document.createElement('span');
+    // a.className = "thumb-url btn btn-primary";
+    a.setAttribute('data-clipboard-text', '{{url('admin / media / uploadimage')}}' + '/' + response);
+    // a.innerHTML = "copy url";
+    file.previewTemplate.appendChild(a);
+    });
+    this.on("success", function(){
+    $("#compelete").removeAttr("disabled");
+    $("#compelete").click(function(){
 
-            location.reload()})});
-            }
+    location.reload()})});
+    }
     };
     $('.thumb-url').tooltip({
     trigger: 'click',
-            placement: 'bottom'
+    placement: 'bottom'
     });
     function setTooltip(btn, message) {
     $(btn).tooltip('hide')
-            .attr('data-original-title', message)
-            .tooltip('show');
+    .attr('data-original-title', message)
+    .tooltip('show');
     }
 
     function hideTooltip(btn) {
@@ -2225,9 +2221,9 @@
     {
     var Delete = confirm("Are you sure you want to delete?");
     if (Delete)
-            return true;
+    return true;
     else
-            return false;
+    return false;
     }
 
     $("select.show-html").imagepicker();
@@ -2268,12 +2264,12 @@
     $('#imageIcone').removeClass('has-error');
     $('#newIcon').removeClass('field-validate');
     });
-//show modal
+    //show modal
     $(document).on('click', '.add-image', function(){
     var parent_id = $(this).parents('.image-content').attr('id');
     $('#' + parent_id + ' #imagemodel').modal('show');
     });
-//select image from modal
+    //select image from modal
     $(document).on('click', '.selected-image', function(){
     var parent_id = $(this).parents('.image-content').attr('id');
     var image_src = $('#' + parent_id + ' .thumbnail.selected').children('img').attr('src');
@@ -2312,7 +2308,7 @@
     var imageright = '#newImageleft' + idCount;
     // alert(selectid);
     var imageclose = '#image-close' + idCount
-            $(document).on('click', selectid, function(){
+    $(document).on('click', selectid, function(){
     var image_src = $('.thumbnail.selected').children('img').attr('src');
     $(selectedthumbnail).html('<img src="' + image_src + '" class = "thumbnail" style="max-height: 100px; margin-top: 20px;">');
     $(selectedthumbnail).show();
@@ -2349,8 +2345,8 @@
     var selectedthumbnail = '#selectedthumbnail_right_banner' + idCount;
     // alert(selectid);
     var imageclose = '#image-close_right_banner' + idCount
-            var imageright = '#newImageright' + idCount
-            $(document).on('click', selectid, function(){
+    var imageright = '#newImageright' + idCount
+    $(document).on('click', selectid, function(){
     var image_src = $('.thumbnail.selected').children('img').attr('src');
     $(selectedthumbnail).html('<img src="' + image_src + '" class = "thumbnail" style="max-height: 100px; margin-top: 20px;">');
     $(selectedthumbnail).show();
@@ -2380,21 +2376,21 @@
     });
     idCount++;
     });
-//ajax call for submit value
+    //ajax call for submit value
     $(document).on('click', '.refresh-image', function(e){
     $("#loader").show();
     $.ajax({
     url: '{{ URL::to("admin/media/refresh")}}',
-            type: "GET",
-            success: function (res) {
-            $("#loader").hide();
-            if (res.length != ''){
-            $('.show-html').html(res);
-            } else{
-            $('.addError').show();
-            }
-            $("select.show-html").imagepicker();
-            },
+    type: "GET",
+    success: function (res) {
+    $("#loader").hide();
+    if (res.length != ''){
+    $('.show-html').html(res);
+    } else{
+    $('.addError').show();
+    }
+    $("select.show-html").imagepicker();
+    },
     });
     });
     $(document).on('click', '.price_included_tax', function(e){
@@ -2405,7 +2401,7 @@
     $('.form-group-tax').hide();
     }
     });
-//ajax call for confirm passowrd match
+    //ajax call for confirm passowrd match
     $(document).on('click', '#password-confirm-btn', function(e){
     $("#checkpassword").modal('show');
     });
@@ -2414,27 +2410,27 @@
     if (password != ''){
     $.ajax({
     url: '{{ URL::to("admin/managements/checkpassword")}}',
-            type: "post",
-            data: '&password=' + password,
-            success: function (res) {
+    type: "post",
+    data: '&password=' + password,
+    success: function (res) {
 
-            if (res == 1){
-            //submit form of updater
-            $("#checkpassword").modal('hide');
-            $("#updater-form").submit();
-            } else{
-            //$("#passowrd-error").show();
-            //setTimeout(function(){ $("#passowrd-error").hide(); }, 3000);
-            }
+    if (res == 1){
+    //submit form of updater
+    $("#checkpassword").modal('hide');
+    $("#updater-form").submit();
+    } else{
+    //$("#passowrd-error").show();
+    //setTimeout(function(){ $("#passowrd-error").hide(); }, 3000);
+    }
 
-            },
+    },
     });
     } else{
     $("#passowrd-error").show();
     setTimeout(function(){ $("#passowrd-error").hide(); }, 3000);
     }
     });
-//cartstyle
+    //cartstyle
     $(document).on('change', '#cardstyle', function(e){
     var card = $(this).val();
     if (card == 1){
@@ -2444,7 +2440,7 @@
     }
     })
 
-            $(document).on('click', '#regenrate', function(e){
+    $(document).on('click', '#regenrate', function(e){
     $('#loader').show();
     })
 

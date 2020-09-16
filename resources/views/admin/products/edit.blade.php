@@ -62,6 +62,7 @@
                                                             <option value="0" @if($result['product'][0]->products_type==0) selected @endif>{{ trans('labels.Simple') }}</option>
                                                             <option value="1" @if($result['product'][0]->products_type==1) selected @endif>{{ trans('labels.Variable') }}</option>
                                                             <option value="2" @if($result['product'][0]->products_type==2) selected @endif>{{ trans('labels.External') }}</option>
+                                                            <option value="3" @if($result['product'][0]->products_type==3) selected @endif>{{ trans('labels.Digital') }}</option>
                                                         </select><span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                             {{ trans('labels.Product Type Text') }}.</span>
                                                     </div>
@@ -578,17 +579,17 @@
 </div>
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script type="text/javascript">
-                                                            $(function () {
+    $(function () {
 
-                                                                //for multiple languages
-                                                                @foreach($result['languages'] as $languages)
-                                                                // Replace the <textarea id="editor1"> with a CKEditor
-                                                                // instance, using default configuration.
-                                                                CKEDITOR.replace('editor{{$languages->languages_id}}');
-                                                                @endforeach
-                                                                        //bootstrap WYSIHTML5 - text editor
-                                                                        $(".textarea").wysihtml5();
+    //for multiple languages
+    @foreach($result['languages'] as $languages)
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor{{$languages->languages_id}}');
+    @endforeach
+    //bootstrap WYSIHTML5 - text editor
+    $(".textarea").wysihtml5();
 
-                                                            });
+    });
 </script>
 @endsection

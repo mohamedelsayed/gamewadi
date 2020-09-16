@@ -49,6 +49,7 @@
                                                             <option value="0">{{ trans('labels.Simple') }}</option>
                                                             <option value="1">{{ trans('labels.Variable') }}</option>
                                                             <option value="2">{{ trans('labels.External') }}</option>
+                                                            <option value="3">{{ trans('labels.Digital') }}</option>
                                                         </select><span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                             {{ trans('labels.Product Type Text') }}.</span>
                                                     </div>
@@ -241,15 +242,15 @@
 
 
                                                         <div id="imageselected">
-                                                          {!! Form::button( trans('labels.Add Image'), array('id'=>'newImage','class'=>"btn btn-primary field-validate", 'data-toggle'=>"modal", 'data-target'=>"#Modalmanufactured" )) !!}
-                                                          <br>
-                                                          <div id="selectedthumbnail" class="selectedthumbnail col-md-5"> </div>
-                                                          <div class="closimage">
-                                                              <button type="button" class="close pull-left image-close " id="image-close"
-                                                                style="display: none; position: absolute;left: 105px; top: 54px; background-color: black; color: white; opacity: 2.2; " aria-label="Close">
-                                                                  <span aria-hidden="true">&times;</span>
-                                                              </button>
-                                                          </div>
+                                                            {!! Form::button( trans('labels.Add Image'), array('id'=>'newImage','class'=>"btn btn-primary field-validate", 'data-toggle'=>"modal", 'data-target'=>"#Modalmanufactured" )) !!}
+                                                            <br>
+                                                            <div id="selectedthumbnail" class="selectedthumbnail col-md-5"> </div>
+                                                            <div class="closimage">
+                                                                <button type="button" class="close pull-left image-close " id="image-close"
+                                                                        style="display: none; position: absolute;left: 105px; top: 54px; background-color: black; color: white; opacity: 2.2; " aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">{{ trans('labels.UploadProductImageText') }}</span>
 
@@ -398,18 +399,18 @@
                                                 <div class="tabbable tabs-left">
                                                     <ul class="nav nav-tabs">
                                                         @foreach($result['languages'] as $key=>$languages)
-                                                        <li class="@if($key==0) active @endif"><a href="#product_<?=$languages->languages_id?>" data-toggle="tab"><?=$languages->name?><span style="color:red;">*</span></a></li>
+                                                        <li class="@if($key==0) active @endif"><a href="#product_<?= $languages->languages_id ?>" data-toggle="tab"><?= $languages->name ?><span style="color:red;">*</span></a></li>
                                                         @endforeach
                                                     </ul>
                                                     <div class="tab-content">
                                                         @foreach($result['languages'] as $key=>$languages)
 
-                                                        <div style="margin-top: 15px;" class="tab-pane @if($key==0) active @endif" id="product_<?=$languages->languages_id?>">
+                                                        <div style="margin-top: 15px;" class="tab-pane @if($key==0) active @endif" id="product_<?= $languages->languages_id ?>">
                                                             <div class="">
                                                                 <div class="form-group">
                                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductName') }}<span style="color:red;">*</span> ({{ $languages->name }})</label>
                                                                     <div class="col-sm-10 col-md-8">
-                                                                        <input type="text" name="products_name_<?=$languages->languages_id?>" class="form-control field-validate">
+                                                                        <input type="text" name="products_name_<?= $languages->languages_id ?>" class="form-control field-validate">
                                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                             {{ trans('labels.EnterProductNameIn') }} {{ $languages->name }} </span>
                                                                         <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
@@ -419,7 +420,7 @@
                                                                 <div class="form-group external_link" style="display: none">
                                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.External URL') }} ({{ $languages->name }})</label>
                                                                     <div class="col-sm-10 col-md-8">
-                                                                        <input type="text" name="products_url_<?=$languages->languages_id?>" class="form-control products_url">
+                                                                        <input type="text" name="products_url_<?= $languages->languages_id ?>" class="form-control products_url">
                                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                             {{ trans('labels.External URL Text') }} {{ $languages->name }} </span>
                                                                         <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
@@ -429,7 +430,7 @@
                                                                 <div class="form-group">
                                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.Description') }}<span style="color:red;">*</span> ({{ $languages->name }})</label>
                                                                     <div class="col-sm-10 col-md-8">
-                                                                        <textarea id="editor<?=$languages->languages_id?>" name="products_description_<?=$languages->languages_id?>" class="form-control" rows="5"></textarea>
+                                                                        <textarea id="editor<?= $languages->languages_id ?>" name="products_description_<?= $languages->languages_id ?>" class="form-control" rows="5"></textarea>
                                                                         <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                             {{ trans('labels.EnterProductDetailIn') }} {{ $languages->name }}</span>
                                                                     </div>
@@ -477,16 +478,16 @@
 <script type="text/javascript">
     $(function() {
 
-        //for multiple languages
-        @foreach($result['languages'] as $languages)
-        // Replace the <textarea id="editor1"> with a CKEditor
-        // instance, using default configuration.
-        CKEDITOR.replace('editor{{$languages->languages_id}}');
+    //for multiple languages
+    @foreach($result['languages'] as $languages)
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace('editor{{$languages->languages_id}}');
 
-        @endforeach
+    @endforeach
 
-        //bootstrap WYSIHTML5 - text editor
-        $(".textarea").wysihtml5();
+    //bootstrap WYSIHTML5 - text editor
+    $(".textarea").wysihtml5();
 
     });
 </script>

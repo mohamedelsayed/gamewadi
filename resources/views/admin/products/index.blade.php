@@ -104,6 +104,8 @@
                                                 {{ trans('labels.Variable') }}
                                                 @elseif($product->products_type==2)
                                                 {{ trans('labels.External') }}
+                                                @elseif($product->products_type==3)
+                                                {{ trans('labels.Digital') }}
                                                 @endif
                                                 <br>
                                                 @if(!empty($product->manufacturers_name))
