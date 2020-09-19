@@ -173,7 +173,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
+                                            <div class="col-xs-12 col-md-6" id="products_weight_div">
                                                 <div class="form-group">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductsWeight') }}<span style="color:red;">*</span></label>
                                                     <div class="col-sm-10 col-md-4">

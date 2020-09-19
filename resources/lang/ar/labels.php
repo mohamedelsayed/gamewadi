@@ -280,7 +280,7 @@ return [
     'SelectTaxClass' => 'Select Tax Class',
     'ChooseTaxClassForProductText' => 'Choose tax class in which this product belongs. You can add them from Tax / Location link.',
     'SelectProductTaxClass' => 'Please select product tax class.',
-    'ProductsPrice' => 'Products Price',
+    'ProductsPrice' => 'Product Price',
     'ProductPriceText' => 'Please enter only numreic value.',
     'ProductsWeight' => 'Products Weight',
     'RequiredTextForWeight' => 'Please enter only numreic value.',

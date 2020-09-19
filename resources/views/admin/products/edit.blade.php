@@ -193,7 +193,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
+                                            <div class="col-xs-12 col-md-6" id="products_weight_div">
                                                 <div class="form-group">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductsWeight') }}</label>
                                                     <div class="col-sm-10 col-md-4">
@@ -205,7 +205,7 @@
                                                     </div>
                                                     <div class="col-sm-10 col-md-4" style="padding-left: 0;">
                                                         <select class="form-control" name="products_weight_unit">
-                                                            @if($result['units']) !== null)
+                                                            @if($result['units'] !== null)
                                                             @foreach($result['units'] as $unit)
                                                             <option value="{{$unit->units_name}}" @if($result['product'][0]->products_weight_unit==$unit->units_name) selected @endif>{{$unit->units_name}}</option>
                                                             @endforeach
@@ -517,7 +517,7 @@
                                                             <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductName') }} ({{ $description_data['language_name'] }})</label>
                                                             <div class="col-sm-10 col-md-4">
                                                                 <input type="text" name="products_name_<?= $description_data['languages_id'] ?>" class="form-control field-validate" value='{{$description_data['products_name']}}'>
-                                                                       <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                                <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                     {{ trans('labels.EnterProductNameIn') }} {{ $description_data['language_name'] }} </span>
                                                                 <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
 
@@ -528,7 +528,7 @@
                                                             <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.External URL') }} ({{ $description_data['language_name'] }})</label>
                                                             <div class="col-sm-10 col-md-4">
                                                                 <input type="text" name="products_url_<?= $description_data['languages_id'] ?>" class="form-control products_url" value='{{$description_data['products_url']}}'>
-                                                                       <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
+                                                                <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">
                                                                     {{ trans('labels.External URL Text') }} ({{ $description_data['language_name'] }}) </span>
                                                                 <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
                                                             </div>
@@ -579,17 +579,17 @@
 </div>
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script type="text/javascript">
-    $(function () {
+                                                            $(function () {
 
-    //for multiple languages
-    @foreach($result['languages'] as $languages)
-    // Replace the <textarea id="editor1"> with a CKEditor
-    // instance, using default configuration.
-    CKEDITOR.replace('editor{{$languages->languages_id}}');
-    @endforeach
-    //bootstrap WYSIHTML5 - text editor
-    $(".textarea").wysihtml5();
+                                                                //for multiple languages
+                                                                @foreach($result['languages'] as $languages)
+                                                                // Replace the <textarea id="editor1"> with a CKEditor
+                                                                // instance, using default configuration.
+                                                                CKEDITOR.replace('editor{{$languages->languages_id}}');
+                                                                @endforeach
+                                                                        //bootstrap WYSIHTML5 - text editor
+                                                                        $(".textarea").wysihtml5();
 
-    });
+                                                            });
 </script>
 @endsection

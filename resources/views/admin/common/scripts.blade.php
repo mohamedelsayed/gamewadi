@@ -1,7 +1,6 @@
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script src="{!! asset('admin/bootstrap/js/bootstrap.min.js') !!}"></script>
 <script src="{!! asset('admin/plugins/select2/select2.full.min.js') !!}"></script>
-
 <!-- InputMask -->
 <script src="{!! asset('admin/plugins/input-mask/jquery.inputmask.js') !!}"></script>
 <script src="{!! asset('admin/plugins/input-mask/jquery.inputmask.date.extensions.js') !!}"></script>
@@ -15,10 +14,8 @@
 <script src="{!! asset('admin/js/image-picker.min.js') !!}"></script>
 {{--fancy box--}}
 <script src="{!! asset('admin/js/jquery.fancybox.min.js') !!}"></script>
-
 <!-- bootstrap datepicker -->
 <script src="{!! asset('admin/plugins/datepicker/bootstrap-datepicker.js') !!}"></script>
-
 <!-- bootstrap color picker -->
 <script src="{!! asset('admin/plugins/colorpicker/bootstrap-colorpicker.min.js') !!}"></script>
 <!-- bootstrap time picker -->
@@ -37,19 +34,16 @@
 @endif
 <!-- AdminLTE for demo purposes -->
 <script src="{!! asset('admin/js/demo.js') !!}"></script>
-
 <script src="{!! asset('admin/plugins/chartjs/Chart.min.js') !!}"></script>
 <script src="{!! asset('admin/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') !!}"></script>
 <script src="{!! asset('admin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') !!}"></script>
 <script src="{!! asset('admin/plugins/sparkline/jquery.sparkline.min.js') !!}"></script>
-
 <script src="{!! asset('admin/plugins/sparkline/jquery.sparkline.min.js') !!}"></script>
-
 <!-- CK Editor -->
 <script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{!! asset('admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') !!}"></script>
-
+<script src="{!! asset('admin/js/scripts.js') !!}"></script>
 <script type="text/javascript">
     $(function() {
     $("img").click(function() {
@@ -90,8 +84,6 @@
     // Do nothing!
 
     }
-
-
 
     });
     jQuery("#btn11").click(function() {
@@ -1679,14 +1671,11 @@
 
     //getSubCategory
     function getSubCategory() {
-
     @if (Request::path() == 'admin/addProduct')
     var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
-    @ else
-
+    @else
     var getCategories = '{{ URL::to("admin/getajaxcategories")}}';
     @endif
-
     var category_id = $('#category_id').val();
     if (category_id != ''){
     $.ajax({
@@ -1708,53 +1697,6 @@
     });
     }
     }
-
-    function showAvailtime() {
-    if ($('#showAvailTime').val() == 'yes'){
-    $(".available-container").show();
-    $(".available-container .availtime").addClass("field-validate");
-    } else{
-    $(".available-container").hide();
-    $(".available-container .availtime").removeClass("field-validate");
-    }
-    }
-
-    //showSpecial
-    function showSpecial() {
-    if ($('#isSpecial').val() == 'yes'){
-    $(".special-container").show();
-    $(".special-container input#expiry-date").addClass("field-validate");
-    $(".special-container input#special-price").addClass("number-validate");
-    } else{
-    $(".special-container").hide();
-    $(".special-container input#expiry-date").removeClass("field-validate");
-    $(".special-container input#special-price").removeClass("number-validate");
-    }
-    }
-
-
-    //showFlash
-    function showFlash() {
-    if ($('#isFlash').val() == 'yes'){
-    $(".flash-container").show();
-    $(".flash-container #flash_sale_products_price").addClass("field-validate");
-    $(".flash-container #flash_start_date").addClass("field-validate");
-    //$(".flash-container #flash_start_time").addClass("field-validate");
-    $(".flash-container #flash_expires_date").addClass("field-validate");
-    //$(".flash-container #flash_end_time").addClass("field-validate");
-
-    } else{
-    $(".flash-container").hide();
-    $(".flash-container #flash_sale_products_price").removeClass("field-validate");
-    $(".flash-container #flash_start_date").removeClass("field-validate");
-    //$(".flash-container #flash_start_time").removeClass("field-validate");
-    $(".flash-container #flash_expires_date").removeClass("field-validate");
-    //$(".flash-container #flash_end_time").removeClass("field-validate");
-    }
-    }
-
-
-
     $(function () {
     $('.datepicker').datepicker({
     autoclose: true,
@@ -2033,12 +1975,10 @@
     $(".form-group-email").addClass('has-error');
     return false;
     }
-
     }
     }
     }
     }
-
     $(document).on('click', '#change-passowrd', function(){
     if ($(this).is(':checked')){
     $('#password').addClass('field-validate');
@@ -2049,49 +1989,6 @@
     $('#password').removeClass('field-validate');
     }
     });
-    //prodcust_type
-    function prodcust_type(){
-    var prodcust_type = $('.prodcust-type').val();
-    if (prodcust_type == 2){
-
-    $('.external_link').show();
-    $('.products_url').addClass('field-validate');
-    $('.external_link_special').val('no');
-    $('.special-link').hide();
-    $('#isSpecial').val('no');
-    $('.flash-sale-link').hide();
-    $('#isFlash').val('no');
-    $('#variable-btn').hide();
-    $('#simple-btn').hide();
-    $('#external-btn').show();
-    $('#tax-class').hide();
-    showSpecial();
-    showFlash();
-    showAvailtime();
-    } else if (prodcust_type == 1){
-
-    $('.external_link').hide();
-    $('.products_url').removeClass('field-validate');
-    $('.special-link').show();
-    $('#simple-btn').hide();
-    $('#variable-btn').show();
-    $('#external-btn').hide();
-    $('#tax-class').show();
-    $('.flash-sale-link').show();
-    } else if (prodcust_type == 0){
-    $('.external_link').hide();
-    $('.products_url').removeClass('field-validate');
-    $('.special-link').show();
-    $('#simple-btn').show();
-    $('#variable-btn').hide();
-    $('#external-btn').hide();
-    $('#tax-class').show();
-    $('.flash-sale-link').show();
-    }
-
-    }
-
-
     $(document).on('change', '.product-type', function(){
     var product_id = $(this).val();
     $.ajax({
@@ -2439,10 +2336,7 @@
     $('#cart1style').hide();
     }
     })
-
     $(document).on('click', '#regenrate', function(e){
     $('#loader').show();
     })
-
-
 </script>
