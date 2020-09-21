@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Web;
 
 use App\Models\Web\Currency;
@@ -16,16 +17,16 @@ use Lang;
 use View;
 use DB;
 use Cookie;
-class IndexController extends Controller
-{
+
+class IndexController extends Controller {
 
     public function __construct(
-        Index $index,
-        News $news,
-        Languages $languages,
-        Products $products,
-        Currency $currency,
-        Order $order
+            Index $index,
+            News $news,
+            Languages $languages,
+            Products $products,
+            Currency $currency,
+            Order $order
     ) {
         $this->index = $index;
         $this->order = $order;
@@ -36,63 +37,62 @@ class IndexController extends Controller
         $this->theme = new ThemeController();
     }
 
-    public function index()
-    {
+    public function index() {
         $title = array('pageTitle' => Lang::get("website.Home"));
         $final_theme = $this->theme->theme();
-/*********************************************************************/
-/**                   GENERAL CONTENT TO DISPLAY                    **/
-/*********************************************************************/
+        /*         * ****************************************************************** */
+        /**                   GENERAL CONTENT TO DISPLAY                    * */
+        /*         * ****************************************************************** */
         $result = array();
         $result['commonContent'] = $this->index->commonContent();
         $title = array('pageTitle' => Lang::get("website.Home"));
-/********************************************************************/
+        /*         * ***************************************************************** */
 
-/*********************************************************************/
-/**                   GENERAL SETTINGS TO FETCH PRODUCTS           **/
-/*******************************************************************/
+        /*         * ****************************************************************** */
+        /**                   GENERAL SETTINGS TO FETCH PRODUCTS           * */
+        /*         * **************************************************************** */
 
-        /**  SET LIMIT OF PRODUCTS  **/
+        /**  SET LIMIT OF PRODUCTS  * */
         if (!empty($request->limit)) {
             $limit = $request->limit;
         } else {
             $limit = 12;
         }
 
-        /**  MINIMUM PRICE **/
+        /**  MINIMUM PRICE * */
         if (!empty($request->min_price)) {
             $min_price = $request->min_price;
         } else {
             $min_price = '';
         }
 
-        /**  MAXIMUM PRICE  **/
+        /**  MAXIMUM PRICE  * */
         if (!empty($request->max_price)) {
             $max_price = $request->max_price;
         } else {
             $max_price = '';
         }
-/*************************************************************************/
-        /*********************************************************************/
-        /**                     FETCH NEWEST PRODUCTS                       **/
-        /*********************************************************************/
+        /*         * ********************************************************************** */
+        /*         * ****************************************************************** */
+        /**                     FETCH NEWEST PRODUCTS                       * */
+        /*         * ****************************************************************** */
 
         $data = array('page_number' => '0', 'type' => '', 'limit' => 10, 'min_price' => $min_price, 'max_price' => $max_price);
         $newest_products = $this->products->products($data);
         $result['products'] = $newest_products;
-        /*********************************************************************/
-        /**                     Compare Counts                              **/
-        /*********************************************************************/
+        /*         * ****************************************************************** */
+        /**                     Compare Counts                              * */
+        /*         * ****************************************************************** */
 
-/*********************************************************************/
+        /*         * ****************************************************************** */
 
-        /***************************************************************/
-        /**   CART ARRAY RECORDS TO CHECK WETHER OR NOT DISPLAYED--   **/
-        /**  --PRODUCT HAS BEEN ALREADY ADDE TO CART OR NOT           **/
-/***************************************************************/
+        /*         * ************************************************************ */
+        /**   CART ARRAY RECORDS TO CHECK WETHER OR NOT DISPLAYED--   * */
+        /**  --PRODUCT HAS BEEN ALREADY ADDE TO CART OR NOT           * */
+        /*         * ************************************************************ */
         $cart = '';
         $result['cartArray'] = $this->products->cartIdArray($cart);
-/**************************************************************/
+        /*         * *********************************************************** */
 
 //special products
         $data = array('page_number' => '0', 'type' => 'special', 'limit' => $limit, 'min_price' => $min_price, 'max_price' => $max_price);
@@ -156,39 +156,34 @@ class IndexController extends Controller
         }
 
         $result['weeklySoldProducts'] = array('success' => '1', 'product_data' => $detail, 'message' => "Returned all products.", 'total_record' => count($detail));
-        
-        session(['paymentResponseData' => '']); 
-            
-        session(['paymentResponse'=>'']);
-        session(['payment_json','']);
-        
+
+        session(['paymentResponseData' => '']);
+
+        session(['paymentResponse' => '']);
+        session(['payment_json', '']);
+
         return view("web.index", ['title' => $title, 'final_theme' => $final_theme])->with(['result' => $result]);
     }
 
-    public function maintance()
-    {
+    public function maintance() {
         return view('errors.maintance');
     }
 
-    public function error()
-    {
+    public function error() {
         return view('errors.general_error', ['msg' => $msg]);
     }
 
-    public function logout()
-    {
+    public function logout() {
         Auth::guard('customer')->logout();
         return redirect()->back();
     }
-    public function test()
-    {
+
+    public function test() {
         $productcategories = $this->products->productCategories1();
         echo print_r($productcategories);
-
     }
 
-    private function setHeader($header_id)
-    {
+    private function setHeader($header_id) {
         $count = $this->order->countCompare();
         $languages = $this->languages->languages();
         $currencies = $this->currencies->getter();
@@ -222,8 +217,7 @@ class IndexController extends Controller
         return $header;
     }
 
-    private function setBanner($banner_id)
-    {
+    private function setBanner($banner_id) {
         if ($banner_id == 1) {
             $banner = (string) View::make('web.banners.banner1')->render();
         } elseif ($banner_id == 2) {
@@ -268,8 +262,7 @@ class IndexController extends Controller
         return $banner;
     }
 
-    private function setFooter($footer_id)
-    {
+    private function setFooter($footer_id) {
         if ($footer_id == 1) {
             $footer = (string) View::make('web.footers.footer1')->render();
         } elseif ($footer_id == 2) {
@@ -293,9 +286,9 @@ class IndexController extends Controller
         }
         return $footer;
     }
+
     //page
-    public function page(Request $request)
-    {
+    public function page(Request $request) {
 
         $pages = $this->order->getPages($request);
         if (count($pages) > 0) {
@@ -304,14 +297,13 @@ class IndexController extends Controller
             $result['commonContent'] = $this->index->commonContent();
             $result['pages'] = $pages;
             return view("web.page", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
-
         } else {
             return redirect()->intended('/');
         }
     }
+
     //myContactUs
-    public function contactus(Request $request)
-    {
+    public function contactus(Request $request) {
         $title = array('pageTitle' => Lang::get("website.Contact Us"));
         $result = array();
         $final_theme = $this->theme->theme();
@@ -319,9 +311,9 @@ class IndexController extends Controller
 
         return view("web.contact-us", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
     }
+
     //processContactUs
-    public function processContactUs(Request $request)
-    {
+    public function processContactUs(Request $request) {
         $name = $request->name;
         $email = $request->email;
         $subject = $request->subject;
@@ -333,66 +325,63 @@ class IndexController extends Controller
 
         Mail::send('/mail/contactUs', ['data' => $data], function ($m) use ($data) {
             $m->to($data['adminEmail'])->subject(Lang::get("website.contact us title"))->getSwiftMessage()
-                ->getHeaders()
-                ->addTextHeader('x-mailgun-native-send', 'true');
+                    ->getHeaders()
+                    ->addTextHeader('x-mailgun-native-send', 'true');
         });
 
         return redirect()->back()->with('success', Lang::get("website.contact us message"));
     }
 
     //setcookie
-    public function setcookie(Request $request)
-    {
-        Cookie::queue('cookies_data', 1, 4000);
-        return json_encode(array('accept'=>'yes'));
+    public function setcookie(Request $request) {
+        $sessionLfetime = \Config::get('session.lifetime');
+        Cookie::queue('cookies_data', 1, $sessionLfetime);
+        return json_encode(array('accept' => 'yes'));
     }
 
     //newsletter
-    public function newsletter(Request $request)
-    {
+    public function newsletter(Request $request) {
         if (!empty(auth()->guard('customer')->user()->id)) {
-            $customers_id = auth()->guard('customer')->user()->id;  
+            $customers_id = auth()->guard('customer')->user()->id;
             $existUser = DB::table('customers')
-                          ->leftJoin('users','customers.customers_id','=','users.id')
-                          ->where('customers.fb_id', '=', $customers_id)
-                          ->first();
+                    ->leftJoin('users', 'customers.customers_id', '=', 'users.id')
+                    ->where('customers.fb_id', '=', $customers_id)
+                    ->first();
 
-                      
-            if($existUser){                
-                DB::table('customers')->where('user_id','=',$customers_id)->update([
+
+            if ($existUser) {
+                DB::table('customers')->where('user_id', '=', $customers_id)->update([
                     'customers_newsletter' => 1,
                 ]);
-            }else{
+            } else {
                 DB::table('customers')->insertGetId([
                     'user_id' => $customers_id,
                     'customers_newsletter' => 1,
                 ]);
             }
-                                            
         }
         session(['newsletter' => 1]);
-        
+
         return 'subscribed';
     }
 
-
-    public function subscribeMail(Request $request){
+    public function subscribeMail(Request $request) {
         $settings = $this->index->commonContent();
-        if(!empty($settings['setting'][122]->value) and !empty($settings['setting'][122]->value)){        
+        if (!empty($settings['setting'][122]->value) and ! empty($settings['setting'][122]->value)) {
             $email = $request->email;
 
             $list_id = $settings['setting'][123]->value;
             $api_key = $settings['setting'][122]->value;
-            
-            $data_center = substr($api_key,strpos($api_key,'-')+1);
-            
-            $url = 'https://'. $data_center .'.api.mailchimp.com/3.0/lists/'. $list_id .'/members';
-            
+
+            $data_center = substr($api_key, strpos($api_key, '-') + 1);
+
+            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members';
+
             $json = json_encode([
                 'email_address' => $email,
-                'status'        => 'subscribed', //pass 'subscribed' or 'pending'
+                'status' => 'subscribed', //pass 'subscribed' or 'pending'
             ]);
-            
+
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $api_key);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -404,26 +393,23 @@ class IndexController extends Controller
             $result = curl_exec($ch);
             $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            
-            if($status_code==200){
+
+            if ($status_code == 200) {
                 //subscribed
                 print '1';
-            }elseif($status_code==400){
+            } elseif ($status_code == 400) {
                 print '2';
-            }else{
+            } else {
                 print '0';
             }
-        }else{
+        } else {
             print '0';
         }
-        
     }
 
     //setsession
-    public function setSession(Request $request){
-        session(['device_id'=>$request->device_id]);
-        
+    public function setSession(Request $request) {
+        session(['device_id' => $request->device_id]);
     }
-    
 
 }
