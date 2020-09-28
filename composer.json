@@ -26,6 +26,7 @@
         "orangehill/iseed": "^2.6",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
+        "phpoffice/phpspreadsheet": "^1.14",
         "pragmarx/countries": "^0.7.0",
         "razorpay/razorpay": "^2.5",
         "spatie/db-dumper": "^2.14",

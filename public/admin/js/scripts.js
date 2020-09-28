@@ -21,6 +21,7 @@ function simpleProductFields() {
     $('#tax-class').show();
     $('.flash-sale-link').show();
     showProductWeight();
+    showProductPrice();
 }
 function variableProductFields() {
     $('.external_link').hide();
@@ -32,6 +33,7 @@ function variableProductFields() {
     $('#tax-class').show();
     $('.flash-sale-link').show();
     showProductWeight();
+    showProductPrice();
 }
 function externalLinkProductFields() {
     $('.external_link').show();
@@ -49,6 +51,7 @@ function externalLinkProductFields() {
     showFlash();
     showAvailtime();
     showProductWeight();
+    showProductPrice();
 }
 function digitalProductFields() {
     $('.external_link').hide();
@@ -60,7 +63,7 @@ function digitalProductFields() {
     $('#tax-class').show();
     $('.flash-sale-link').show();
     hideProductWeight();
-
+    hideProductPrice();
 }
 //showSpecial
 function showSpecial() {
@@ -109,3 +112,12 @@ function hideProductWeight() {
     $('#products_weight').removeClass('number-validate');
     $('#products_weight_div').hide();
 }
+function showProductPrice() {
+    $('#products_price').addClass('number-validate');
+    $('#products_price_div').show();
+}
+function hideProductPrice() {
+    $('#products_price').removeClass('number-validate');
+    $('#products_price_div').hide();
+}
+

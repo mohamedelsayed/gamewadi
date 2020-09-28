@@ -10,7 +10,6 @@
             <li class="active">{{ trans('labels.AddProduct') }}</li>
         </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
         <div class="row">
@@ -112,9 +111,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
+                                            <div class="col-xs-12 col-md-6" id="products_price_div">
                                                 <div class="form-group">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductsPrice') }}<span style="color:red;">*</span></label>
                                                     <div class="col-sm-10 col-md-8">
@@ -126,7 +124,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group" id="tax-class">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.TaxClass') }} </label>
@@ -476,19 +473,19 @@
 </div>
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script type="text/javascript">
-    $(function() {
+                                                            $(function () {
 
-    //for multiple languages
-    @foreach($result['languages'] as $languages)
-    // Replace the <textarea id="editor1"> with a CKEditor
-    // instance, using default configuration.
-    CKEDITOR.replace('editor{{$languages->languages_id}}');
+                                                                //for multiple languages
+                                                                @foreach($result['languages'] as $languages)
+                                                                // Replace the <textarea id="editor1"> with a CKEditor
+                                                                // instance, using default configuration.
+                                                                CKEDITOR.replace('editor{{$languages->languages_id}}');
 
-    @endforeach
+                                                                @endforeach
 
-    //bootstrap WYSIHTML5 - text editor
-    $(".textarea").wysihtml5();
+                                                                        //bootstrap WYSIHTML5 - text editor
+                                                                        $(".textarea").wysihtml5();
 
-    });
+                                                            });
 </script>
 @endsection

@@ -22,9 +22,7 @@
     <!-- Main content -->
     <section class="content">
         <!-- Info boxes -->
-
         <!-- /.row -->
-
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -129,9 +127,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
+                                            <div class="col-xs-12 col-md-6" id="products_price_div">
                                                 <div class="form-group">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.ProductsPrice') }}</label>
                                                     <div class="col-sm-10 col-md-8">
@@ -143,7 +140,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group" id="tax-class">
                                                     <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('labels.TaxClass') }} </label>
