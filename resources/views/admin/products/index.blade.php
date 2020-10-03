@@ -22,10 +22,8 @@
                             <div class="col-lg-10 form-inline">
                                 <form  name='registration' id="registration" class="registration" method="get">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-
                                     <div class="input-group-form search-panel ">
                                         <select id="FilterBy" type="button" class="btn btn-default dropdown-toggle form-control input-group-form " data-toggle="dropdown" name="categories_id">
-
                                             <option value="" selected disabled hidden>{{trans('labels.ChooseCategory')}}</option>
                                             @foreach ($results['subCategories'] as  $key=>$subCategories)
                                             <option value="{{ $subCategories->id }}"
@@ -117,32 +115,31 @@
                                                 @if(($product->specials_id) !== null)
                                                 @php  $mytime = Carbon\Carbon::now()  @endphp
                                                 <strong>{{ trans('labels.ExpiryDate') }}: </strong>
-
                                                 {{-- @if($product->expires_date > $mytime->toDateTimeString()) --}}
                                                 {{  date('d-m-Y', $product->expires_date) }}
-                                                {{-- @else
-                                        <strong class="badge bg-red">{{ trans('labels.Expired') }}</strong>
-                                                @endif --}}
+                                                {{-- @else                                                 <strong class="badge bg-red"> {{ trans('labels.Expired') }} </strong>                                                @endif --}}
                                                 <br>
                                                 @endif
                                                 @endif
                                             </td>
-                                    <td>
-                                            {{ $product->productupdate }}
-                                        </td>
-
-                                        <td>
-                                            <a class="btn btn-primary" style="width: 100%; margin-bottom: 5px;" href="{{url('admin/products/edit')}}/{{ $product->products_id }}">{{ trans('labels.EditProduct') }}</a>
-                                            </br>
-                                            @if($product->products_type==1)
-                                            <a class="btn btn-info" style="width: 100%;  margin-bottom: 5px;" href="{{url('admin/products/attach/attribute/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductAttributes') }}</a>
-
-                                            </br>
-                                            @endif
-                                            <a class="btn btn-warning" style="width: 100%;  margin-bottom: 5px;" href="{{url('admin/products/images/display/'. $product->products_id) }}">{{ trans('labels.ProductImages') }}</a>
-                                            </br>
-                                            <a class="btn btn-danger" style="width: 100%;  margin-bottom: 5px;" id="deleteProductId" products_id="{{ $product->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
-                                        </td>
+                                            <td>
+                                                {{ $product->productupdate }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" style="width: 100%; margin-bottom: 5px;" href="{{url('admin/products/edit')}}/{{ $product->products_id }}">{{ trans('labels.EditProduct') }}</a>
+                                                </br>
+                                                @if($product->products_type==1)
+                                                <a class="btn btn-info" style="width: 100%;  margin-bottom: 5px;" href="{{url('admin/products/attach/attribute/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductAttributes') }}</a>
+                                                <br>
+                                                @endif
+                                                @if($product->products_type==3)
+                                                <a class="btn btn-info" style="width: 100%;  margin-bottom: 5px;" href="{{url('admin/products/attach/denomination/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductDenominations') }}</a>
+                                                <br>
+                                                @endif
+                                                <a class="btn btn-warning" style="width: 100%;  margin-bottom: 5px;" href="{{url('admin/products/images/display/'. $product->products_id) }}">{{ trans('labels.ProductImages') }}</a>
+                                                <br>
+                                                <a class="btn btn-danger" style="width: 100%;  margin-bottom: 5px;" id="deleteProductId" products_id="{{ $product->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
+                                            </td>
                                         </tr>
                                         @endforeach
                                         @else
@@ -150,7 +147,7 @@
                                             <td colspan="5">{{ trans('labels.NoRecordFound') }}</td>
                                         </tr>
                                         @endif
-                                        </tbody>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -166,7 +163,6 @@
                             }else{
                             $torecord = $results['products']->currentpage()*$results['products']->perpage();
                             }
-
                             @endphp
                             <div class="col-xs-12 col-md-6" style="padding:30px 15px; border-radius:5px;">
                                 <div>Showing {{$fromrecord}} to {{$torecord}}

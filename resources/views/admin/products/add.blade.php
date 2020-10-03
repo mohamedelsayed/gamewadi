@@ -18,7 +18,6 @@
                     <div class="box-header">
                         <h3 class="box-title">{{ trans('labels.AddNewProduct') }} </h3>
                     </div>
-
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="row">
@@ -35,9 +34,7 @@
                                         </div>
                                         @endforeach
                                         @endif
-
                                         {!! Form::open(array('url' =>'admin/products/add', 'method'=>'post', 'class' => 'form-horizontal form-validate', 'enctype'=>'multipart/form-data')) !!}
-
                                         <div class="row">
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group">

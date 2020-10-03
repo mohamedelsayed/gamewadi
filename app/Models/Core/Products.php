@@ -184,14 +184,20 @@ class Products extends Model {
         } else {
             $tax_Class_id = $request->tax_class_id;
         }
+        $price = $request->products_price;
+        $wright = $request->products_weight;
+        if ($request->products_type == 3) {
+            $price = 0;
+            $wright = 0;
+        }
         $products_id = DB::table('products')->insertGetId([
             'products_image' => $uploadImage,
             'manufacturers_id' => $request->manufacturers_id,
             'products_quantity' => 0,
             'products_model' => $request->products_model,
-            'products_price' => $request->products_price,
+            'products_price' => $price,
             'created_at' => $date_added,
-            'products_weight' => $request->products_weight,
+            'products_weight' => $wright,
             'products_status' => $request->products_status,
             'products_tax_class_id' => $tax_Class_id,
             'products_weight_unit' => $request->products_weight_unit,
@@ -1387,7 +1393,6 @@ class Products extends Model {
         $subcategory_id = $request->subcategory_id;
         $setting = new Setting();
         $myVarsetting = new SiteSettingController($setting);
-        $myVaralter = new AlertController($setting);
         $result['languages'] = $myVarsetting->getLanguages();
         $options = DB::table('products_options')
                 ->leftjoin('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'products_options.products_options_id')
@@ -1828,7 +1833,6 @@ class Products extends Model {
                 $stockOut += $products[0]->products_quantity;
             }
         }
-
         $result = array();
         $result['purchasePrice'] = $purchasePrice;
         $result['remainingStock'] = $stockIn - $stockOut;
@@ -1839,11 +1843,132 @@ class Products extends Model {
         } else {
             $minMax = '';
         }
-
         $result['inventory_ref_id'] = $inventory_ref_id;
         $result['products_id'] = $products_id;
         $result['minMax'] = $minMax;
         return $result;
+    }
+
+    public function getProductsAttributesDenominations($product_id = null) {
+        $products_attributes = DB::table('products_attributes')
+                ->join('countries', 'countries.countries_id', '=', 'products_attributes.country_id')
+                ->select('products_attributes.*', 'countries.countries_name')
+                ->where('products_attributes.products_id', '=', $product_id)
+                ->orderBy('products_attributes_id', 'DESC')
+                ->get();
+        return $products_attributes;
+    }
+
+    public function getproductdenomination($request) {
+        $products_id = $request->id;
+        $subcategory_id = $request->subcategory_id;
+        $countries = DB::table('countries')->get();
+        $result['countries'] = $countries;
+        $result['subcategory_id'] = $subcategory_id;
+        $result['data'] = array('products_id' => $products_id);
+        $result['products_attributes'] = $this->getProductsAttributesDenominations($products_id);
+        $result['products_id'] = $products_id;
+        return $result;
+    }
+
+    public function adddenomination($request) {
+        $products_attributes = [];
+        $data = [];
+        $data['msg'] = '';
+        if (!empty($request->country_id) and ! empty($request->products_id) and ! empty($request->denomination) and ! empty($request->options_values_price)) {
+            $checkRecord = DB::table('products_attributes')->where([
+                        'country_id' => $request->country_id,
+                        'denomination' => $request->denomination,
+                        'products_id' => $request->products_id
+                    ])->get();
+            if (count($checkRecord) > 0) {
+                $data['msg'] = 'Already exist before.';
+            } else if (!is_numeric($request->options_values_price)) {
+                $data['msg'] = 'Price must be numeric.';
+            } else {
+                $products_attributes_id = DB::table('products_attributes')->insertGetId([
+                    'products_id' => $request->products_id,
+                    'country_id' => $request->country_id,
+                    'denomination' => $request->denomination,
+                    'options_values_price' => $request->options_values_price,
+                    'price_prefix' => $request->price_prefix,
+                ]);
+                $products_attributes = $this->getProductsAttributesDenominations($request->products_id);
+            }
+        } else {
+            //empty
+            $data['msg'] = 'Empty data.';
+        }
+        if (!empty($products_attributes)) {
+            $data['status'] = 'success';
+        }
+        $data['products_attributes'] = $products_attributes;
+        return $data;
+    }
+
+    public function editdenomination($request) {
+        $products_attributes_id = $request->products_attributes_id;
+        $countries = DB::table('countries')->get();
+        $result['countries'] = $countries;
+        $result['data'] = ['products_id' => $request->products_id,
+            'products_attributes_id' => $products_attributes_id,
+        ];
+        $products_attributes = DB::table('products_attributes')
+                ->join('countries', 'countries.countries_id', '=', 'products_attributes.country_id')
+                ->select('products_attributes.*', 'countries.countries_name')
+                ->where('products_attributes.products_attributes_id', '=', $products_attributes_id)
+                ->get();
+        $result['products_attributes'] = $products_attributes;
+        return $result;
+    }
+
+    public function updatedenomination($request) {
+        $products_attributes = [];
+        $data = [];
+        $data['status'] = 'fail';
+        $data['msg'] = '';
+        if (!empty($request->country_id) and ! empty($request->products_id) and ! empty($request->denomination) and ! empty($request->options_values_price)and ! empty($request->products_attributes_id)) {
+            $checkRecord = DB::table('products_attributes')->where([
+                        'country_id' => $request->country_id,
+                        'denomination' => $request->denomination,
+                        'products_id' => $request->products_id
+                    ])->where('products_attributes_id', '!=', $request->products_attributes_id)->get();
+            if (count($checkRecord) > 0) {
+                //already
+                $data['msg'] = 'Already exist before.';
+            } else if (!is_numeric($request->options_values_price)) {
+                $data['msg'] = 'Price must be numeric.';
+            } else {
+                DB::table('products_attributes')->where('products_attributes_id', '=', $request->products_attributes_id)->update([
+                    'products_id' => $request->products_id,
+                    'country_id' => $request->country_id,
+                    'denomination' => $request->denomination,
+                    'options_values_price' => $request->options_values_price,
+                    'price_prefix' => $request->price_prefix,
+                ]);
+                $products_attributes = $this->getProductsAttributesDenominations($request->products_id);
+            }
+        } else {
+            $data['msg'] = 'Empty data.';
+        }
+        if (!empty($products_attributes)) {
+            $data['status'] = 'success';
+        }
+        $data['products_attributes'] = $products_attributes;
+        return $data;
+    }
+
+    public function deletedenomination($request) {
+        $query = DB::table('products_attributes')->where([
+            'products_attributes_id' => $request->products_attributes_id,
+            'products_id' => $request->products_id
+        ]);
+        $record = $query->get();
+        if ($record && $record[0]) {
+            $query->delete();
+        }
+        $products_attributes = $this->getProductsAttributesDenominations($request->products_id);
+        return $products_attributes;
     }
 
 }

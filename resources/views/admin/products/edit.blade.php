@@ -16,6 +16,9 @@
         @if($product->products_type==1)
         <a class="btn btn-info" style="width: 20%;" href="{{url('admin/products/attach/attribute/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductAttributes') }}</a>
         @endif
+        @if($product->products_type==3)
+        <a class="btn btn-info" style="width: 20%;" href="{{url('admin/products/attach/denomination/display')}}/{{ $product->products_id }}">{{ trans('labels.ProductDenominations') }}</a>
+        @endif
         <a class="btn btn-warning" style="width: 20%;" href="{{url('admin/products/images/display/'. $result['product'][0]->products_id) }}">{{ trans('labels.ProductImages') }}</a>
         <a class="btn btn-danger" style="width: 20%;" id="deleteProductId" products_id="{{ $result['product'][0]->products_id }}">{{ trans('labels.DeleteProduct') }}</a>
     </section>
@@ -576,7 +579,6 @@
 <script src="{!! asset('admin/plugins/jQuery/jQuery-2.2.0.min.js') !!}"></script>
 <script type="text/javascript">
                                                             $(function () {
-
                                                                 //for multiple languages
                                                                 @foreach($result['languages'] as $languages)
                                                                 // Replace the <textarea id="editor1"> with a CKEditor

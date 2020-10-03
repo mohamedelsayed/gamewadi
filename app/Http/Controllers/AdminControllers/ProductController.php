@@ -219,6 +219,8 @@ class ProductController extends Controller {
         $alertSetting = $this->myVaralter->newProductNotification($products_id);
         if ($request->products_type == 1) {
             return redirect('/admin/products/attach/attribute/display/' . $products_id);
+        } elseif ($request->products_type == 3) {
+            return redirect('/admin/products/attach/denomination/display/' . $products_id);
         } else {
             return redirect('admin/products/images/display/' . $products_id);
         }
@@ -266,7 +268,6 @@ class ProductController extends Controller {
     }
 
     public function displayProductImages(Request $request) {
-
         $title = array('pageTitle' => Lang::get("labels.AddImages"));
         $products_id = $request->id;
         $result = $this->products->displayProductImages($request);
@@ -364,12 +365,11 @@ class ProductController extends Controller {
     }
 
     public function updateoption(Request $request) {
-        $products_attributes = $this->products->updateoption($request);
-        return ($products_attributes);
+        $result = $this->products->updateoption($request);
+        return ($result);
     }
 
     public function showdeletemodal(Request $request) {
-
         $products_id = $request->products_id;
         $products_attributes_id = $request->products_attributes_id;
         $result['data'] = array('products_id' => $products_id, 'products_attributes_id' => $products_attributes_id);
@@ -396,9 +396,44 @@ class ProductController extends Controller {
     }
 
     public function currentstock(Request $request) {
-
         $result = $this->products->currentstock($request);
         print_r(json_encode($result));
+    }
+
+    public function productdenominations(Request $request) {
+        $title = array('pageTitle' => Lang::get("labels.AddDenomination"));
+        $result = $this->products->getproductdenomination($request);
+        $result['commonContent'] = $this->Setting->commonContent();
+        return view("admin.products.denomination.add", $title)->with('result', $result);
+    }
+
+    public function adddenomination(Request $request) {
+        $products_attributes = $this->products->adddenomination($request);
+        return ($products_attributes);
+    }
+
+    public function editdenominationform(Request $request) {
+        $result = $this->products->editdenomination($request);
+        $result['commonContent'] = $this->Setting->commonContent();
+        return view("admin/products/pop_up_forms/editdenominationform")->with('result', $result);
+    }
+
+    public function updatedenomination(Request $request) {
+        $result = $this->products->updatedenomination($request);
+        return ($result);
+    }
+
+    public function showdeletedenominationmodal(Request $request) {
+        $products_id = $request->products_id;
+        $products_attributes_id = $request->products_attributes_id;
+        $result['data'] = array('products_id' => $products_id, 'products_attributes_id' => $products_attributes_id);
+        $result['commonContent'] = $this->Setting->commonContent();
+        return view("admin/products/modals/deletedenominationmodal")->with('result', $result);
+    }
+
+    public function deletedenomination(Request $request) {
+        $result = $this->products->deletedenomination($request);
+        return ($result);
     }
 
 }
