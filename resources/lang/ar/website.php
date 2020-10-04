@@ -1,17 +1,6 @@
 <?php
 
 return [
-    /*
-      |--------------------------------------------------------------------------
-      | Authentication Language Lines
-      |--------------------------------------------------------------------------
-      |
-      | The following language lines are used during authentication for various
-      | messages that we need to display to the user. You are free to modify
-      | these language lines according to your application's requirements.
-      |
-     */
-
     'Hotline' => 'الشحن مجانا',
     'SPECIAL DEALS' => 'الشحن مجانا',
     'Call Us Now' => 'الخط الساخن',
@@ -590,4 +579,6 @@ return [
     'Mobile' => 'موبايل',
     'Mobile already exist' => 'الموبايل موجود بالفعل.',
     'Avatar' => 'الصورة',
+    'Please choose the country' => 'Please choose the country',
+    'ChooseCountry' => 'Choose country',
 ];

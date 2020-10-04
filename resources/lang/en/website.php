@@ -1,16 +1,6 @@
 <?php
 
 return [
-    /*
-      |--------------------------------------------------------------------------
-      | Authentication Language Lines
-      |--------------------------------------------------------------------------
-      |
-      | The following language lines are used during authentication for various
-      | messages that we need to display to the user. You are free to modify
-      | these language lines according to your application's requirements.
-      |
-     */
     'Guest Checkout' => 'Guest Checkout',
     'Ops! Product is available in stock But Not Active For Sale. Please contact to the admin' => 'Ops! Product is available in stock But Not Active For Sale. Please contact to the admin',
     'Ops! you have already bought full stock. If you like this product and want more contact to the admin' => 'Ops! you have already bought full stock. If you like this product and want more contact to the admin',
@@ -565,4 +555,6 @@ return [
     'Mobile' => 'Mobile',
     'Mobile already exist' => 'The Mobile has already been taken.',
     'Avatar' => 'Avatar',
+    'Please choose the country' => 'Please choose the country',
+    'ChooseCountry' => 'Choose country',
 ];

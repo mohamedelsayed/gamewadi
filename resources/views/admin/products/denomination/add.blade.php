@@ -58,7 +58,7 @@ $products_attributes = $result['products_attributes'];
                                             {!! Form::hidden('price_prefix',  '+', array('class'=>'form-control', 'id'=>'price_prefix')) !!}
                                             <div class="modal-body">
                                                 <div class="form-group">
-                                                    <label for="name" class="col-sm-2 col-md-4 control-label">{{ trans('labels.Country') }}</label>
+                                                    <label for="country_id" class="col-sm-2 col-md-4 control-label">{{ trans('labels.Country') }}</label>
                                                     <div class="col-sm-10 col-md-8">
                                                         <select class="form-control field-validate" name="country_id">
                                                             <option value="" class="field-validate">{{ trans('labels.ChooseCountry') }}</option>

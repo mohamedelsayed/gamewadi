@@ -31,3 +31,5 @@ yarn-error.log
 tmp
 composer.lock
 /public/resources/assets/images/user_profile
+nbproject/project.xml
+nbproject/*
