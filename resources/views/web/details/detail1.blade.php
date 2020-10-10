@@ -1,14 +1,44 @@
-@php
-$products_id = $result['detail']['product_data'][0]->products_id;
+<?php
+$product_data = null;
+$products_id = null;
 $flash_start_date = null;
-if(isset($result['detail']['product_data'][0]->flash_start_date)){
-$flash_start_date = $result['detail']['product_data'][0]->flash_start_date;
-}
 $server_time = null;
-if(isset($result['detail']['product_data'][0]->server_time)){
-$server_time = $result['detail']['product_data'][0]->server_time;
+if (isset($result['detail']['product_data'][0])) {
+    $product_data = $result['detail']['product_data'][0];
+    $products_id = $product_data->products_id;
+    if (isset($product_data->flash_start_date)) {
+        $flash_start_date = $product_data->flash_start_date;
+    }
+    if (isset($product_data->server_time)) {
+        $server_time = $product_data->server_time;
+    }
 }
-@endphp
+$classRating5 = '';
+$classRating4 = '';
+$classRating3 = '';
+$classRating2 = '';
+$classRating1 = '';
+if ($product_data->rating >= 5) {
+    $classRating5 = 'active';
+}
+if ($product_data->rating >= 4) {
+    $classRating4 = 'active';
+}
+if ($product_data->rating >= 3) {
+    $classRating3 = 'active';
+}
+if ($product_data->rating >= 2) {
+    $classRating2 = 'active';
+}
+if ($product_data->rating >= 1) {
+    $classRating1 = 'active';
+}
+$isDigital = 0;
+if ($result['productType'] == 3) {
+    $isDigital = 1;
+}
+$denominations = $result['denominations'];
+?>
 <div class="container-fuild">
     <nav aria-label="breadcrumb">
         <div class="container">
@@ -20,7 +50,7 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                 @elseif(!empty($result['category_name']) and empty($result['sub_category_name']))
                 <li class="breadcrumb-item active"><a href="{{ URL::to('/shop?category='.$result['category_slug'])}}">{{$result['category_name']}}</a></li>
                 @endif
-                <li class="breadcrumb-item active">{{$result['detail']['product_data'][0]->products_name}}</li>
+                <li class="breadcrumb-item active">{{$product_data->products_name}}</li>
             </ol>
         </div>
     </nav>
@@ -28,8 +58,7 @@ $server_time = $result['detail']['product_data'][0]->server_time;
 <section class="pro-content">
     <div class="container">
         <div class="page-heading-title">
-            <h2> {{$result['detail']['product_data'][0]->products_name}}
-            </h2>
+            <h2> {{$product_data->products_name}}</h2>
         </div>
     </div>
     <section class="product-page">
@@ -38,15 +67,15 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                 <div class="col-12 col-lg-6  ">
                     <div class="slider-wrapper pd2">
                         <div class="slider-for">
-                            @if(!empty($result['detail']['product_data'][0]->products_video_link))
+                            @if(!empty($product_data->products_video_link))
                             <a class="slider-for__item ex1 fancybox-button iframe">
-                                {!! $result['detail']['product_data'][0]->products_video_link !!}
+                                {!! $product_data->products_video_link !!}
                             </a>
                             @endif
-                            <a class="slider-for__item ex1 fancybox-button" href="{{asset('').$result['detail']['product_data'][0]->default_images }}" data-fancybox-group="fancybox-button">
-                                <img src="{{asset('').$result['detail']['product_data'][0]->default_images }}" alt="Zoom Image" />
+                            <a class="slider-for__item ex1 fancybox-button" href="{{asset('').$product_data->default_images }}" data-fancybox-group="fancybox-button">
+                                <img src="{{asset('').$product_data->default_images }}" alt="Zoom Image" />
                             </a>
-                            @foreach( $result['detail']['product_data'][0]->images as $key=>$images )
+                            @foreach( $product_data->images as $key=>$images )
                             @if($images->image_type == 'LARGE')
                             <a class="slider-for__item ex1 fancybox-button" href="{{asset('').$images->image_path }}" data-fancybox-group="fancybox-button" >
                                 <img src="{{asset('').$images->image_path }}" alt="Zoom Image" />
@@ -59,15 +88,15 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                             @endforeach
                         </div>
                         <div class="slider-nav">
-                            @if(!empty($result['detail']['product_data'][0]->products_video_link))
+                            @if(!empty($product_data->products_video_link))
                             <div class="slider-nav__item">
                                 <img src="{{asset('web/images/miscellaneous/video-thumbnail.jpg')}}" alt="Zoom Image"/>
                             </div>
                             @endif
                             <div class="slider-nav__item">
-                                <img src="{{asset('').$result['detail']['product_data'][0]->default_thumb }}" alt="Zoom Image"/>
+                                <img src="{{asset('').$product_data->default_thumb }}" alt="Zoom Image"/>
                             </div>
-                            @foreach( $result['detail']['product_data'][0]->images as $key=>$images )
+                            @foreach( $product_data->images as $key=>$images )
                             @if($images->image_type == 'THUMBNAIL')
                             <div class="slider-nav__item">
                                 <img src="{{asset('').$images->image_path }}" alt="Zoom Image"/>
@@ -97,12 +126,12 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                 <div class="col-12 col-md-12 col-lg-6">
                                     <div class="product">
                                         <article>
-                                            <img src="{{asset('').$result['detail']['product_data'][0]->default_images }}" class="img-fluid" alt="blogImage">
+                                            <img src="{{asset('').$product_data->default_images }}" class="img-fluid" alt="blogImage">
                                             <div class="over"></div>
                                         </article>
                                     </div>
                                 </div>
-                                @foreach( $result['detail']['product_data'][0]->images as $key=>$images )
+                                @foreach( $product_data->images as $key=>$images )
                                 @if($images->image_type == 'LARGE')
                                 <div class="col-12 col-md-12 col-lg-6">
                                     <div class="product">
@@ -132,9 +161,9 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                         <div class="col-12 col-md-12">
                             <div class="badges">
                                 <?php
-                                //dd($result['detail']['product_data'][0]->flash_start_date);
+                                //dd($product_data->flash_start_date);
                                 $current_date = date("Y-m-d", strtotime("now"));
-                                $string = substr($result['detail']['product_data'][0]->products_date_added, 0, strpos($result['detail']['product_data'][0]->products_date_added, ' '));
+                                $string = substr($product_data->products_date_added, 0, strpos($product_data->products_date_added, ' '));
                                 $date = date_create($string);
                                 date_add($date, date_interval_create_from_date_string($web_setting[20]->value . " days"));
                                 $after_date = date_format($date, "Y-m-d");
@@ -144,11 +173,11 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                     print '</span>';
                                 }
                                 $discount_percentage = 0;
-                                if (!empty($result['detail']['product_data'][0]->discount_price)) {
-                                    $discount_price = $result['detail']['product_data'][0]->discount_price * session('currency_value');
+                                if (!empty($product_data->discount_price)) {
+                                    $discount_price = $product_data->discount_price * session('currency_value');
                                 }
-                                $orignal_price = $result['detail']['product_data'][0]->products_price * session('currency_value');
-                                if (!empty($result['detail']['product_data'][0]->discount_price)) {
+                                $orignal_price = $product_data->products_price * session('currency_value');
+                                if (!empty($product_data->discount_price)) {
                                     if (($orignal_price + 0) > 0) {
                                         $discounted_price = $orignal_price - $discount_price;
                                         $discount_percentage = $discounted_price / $orignal_price * 100;
@@ -161,38 +190,66 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                 @if($discount_percentage>0)
                                 <span class="badge badge-danger"><?php echo (int) $discount_percentage; ?>%</span>
                                 @endif
-                                @if($result['detail']['product_data'][0]->is_feature == 1)
+                                @if($product_data->is_feature == 1)
                                 <span class="badge badge-success">@lang('website.Featured')</span>
                                 @endif
                             </div>
-                            @if($result['productType'] == 3)
+                            @if($isDigital == 1)
                             <div class="countries">
                                 <label for="country_id" class="">@lang('website.Please choose the country'):</label>
                                 <div class="col-sm-10 col-md-8">
-                                    <select class="form-control field-validate" name="country_id">
-                                        <option value="" class="field-validate">{{ trans('website.ChooseCountry') }}</option>
+                                    <select class="form-control field-validate" name="country_id" onchange="draw_denomination_table_web(this)">
+                                        <option value="" class="field-validate" disabled selected>{{ trans('website.ChooseCountry') }}</option>
                                         @foreach($result['countries'] as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-5">
+                                <div class="option col-12">
+                                    <h2>Please choose the card value:</h2>
+                                    <div class="listOfValues" style="overflow-y: auto;">
+                                        <div class="qty-table">
+                                            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
+                                                <tr><th>Value</th><th>Price</th><th>Quantity</th></tr>
+                                                <tbody class="denomination_tbody">
+                                                <div id="selectCountryFirst" style="display: block;"><div class="innerSelectCountry"> Please choose the card region first!</div></div>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="_token" value="u8DBG6B8kycYYkdLYtuImAt6tsKErStqS0Zg1UtD">
+                                <input type="hidden" name="brandId" id="brandId" value="5">
+                                <input type="hidden" name="countryId" id="countryId" value="11">
+                                <input type="hidden" name="key" id="key" value="145d60f80e5061e2f43a8ca93cab62b8">
+                                <input type="hidden" name="orderValue" id="orderValue" value="">
+                                <div class="col-12 col-lg-6">
+                                    <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
+                                </div>
+                                <div class="col-12 col-lg-6 mb-5 m-lg-0 errorMsgDiv">
+                                    <input type="button" id="submit-order" name="" value="Buy Now!" onclick="addToCartFront(1)" class="btn btn-primary btn-block disabled">
+                                </div>
+                            </div>
+
                             @endif
-                            <h5 class="pro-title">{{$result['detail']['product_data'][0]->products_name}}</h5>
+                            @if($isDigital == 0)
+                            <h5 class="pro-title">{{$product_data->products_name}}</h5>
                             <div class="price">
                                 <?php
-                                if (!empty($result['detail']['product_data'][0]->discount_price)) {
-                                    $discount_price = $result['detail']['product_data'][0]->discount_price * session('currency_value');
+                                if (!empty($product_data->discount_price)) {
+                                    $discount_price = $product_data->discount_price * session('currency_value');
                                 }
-                                if (!empty($result['detail']['product_data'][0]->flash_price)) {
-                                    $flash_price = $result['detail']['product_data'][0]->flash_price * session('currency_value');
+                                if (!empty($product_data->flash_price)) {
+                                    $flash_price = $product_data->flash_price * session('currency_value');
                                 }
-                                $orignal_price = $result['detail']['product_data'][0]->products_price * session('currency_value');
-                                if (!empty($result['detail']['product_data'][0]->discount_price)) {
+                                $orignal_price = $product_data->products_price * session('currency_value');
+                                if (!empty($product_data->discount_price)) {
                                     if (($orignal_price + 0) > 0) {
                                         $discounted_price = $orignal_price - $discount_price;
                                         $discount_percentage = $discounted_price / $orignal_price * 100;
-                                        $discounted_price = $result['detail']['product_data'][0]->discount_price;
+                                        $discounted_price = $product_data->discount_price;
                                     } else {
                                         $discount_percentage = 0;
                                         $discounted_price = 0;
@@ -201,70 +258,71 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                     $discounted_price = $orignal_price;
                                 }
                                 ?>
-                                @if(!empty($result['detail']['product_data'][0]->flash_price))
+                                @if(!empty($product_data->flash_price))
                                 <sub class="total_price">{{Session::get('symbol_left')}}{{$flash_price+0}}{{Session::get('symbol_right')}}</sub>
                                 <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
-                                @elseif(!empty($result['detail']['product_data'][0]->discount_price))
+                                @elseif(!empty($product_data->discount_price))
                                 <price class="total_price">{{Session::get('symbol_left')}}{{$discount_price+0}}{{Session::get('symbol_right')}}</price>
                                 <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
                                 @else
                                 <price class="total_price">{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}}</price>
                                 @endif
                             </div>
+                            @endif
                             <div class="pro-rating">
                                 <fieldset class="disabled-ratings">
-                                    <label class = "full @if($result['detail']['product_data'][0]->rating >= 5) active @endif" for="star_5" title="@lang('website.awesome_5_stars')"></label>
-                                    <label class = "full @if($result['detail']['product_data'][0]->rating >= 4) active @endif" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
-                                    <label class = "full @if($result['detail']['product_data'][0]->rating >= 3) active @endif" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
-                                    <label class = "full @if($result['detail']['product_data'][0]->rating >= 2) active @endif" for="star_2" title="@lang('website.meh_2_stars')"></label>
-                                    <label class = "full @if($result['detail']['product_data'][0]->rating >= 1) active @endif" for="star1" title="@lang('website.meh_1_stars')"></label>
+                                    <label class = "full {{$classRating5}}" for="star_5" title="@lang('website.awesome_5_stars')"></label>
+                                    <label class = "full {{$classRating4}}" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
+                                    <label class = "full {{$classRating3}}" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
+                                    <label class = "full {{$classRating2}}" for="star_2" title="@lang('website.meh_2_stars')"></label>
+                                    <label class = "full {{$classRating1}}" for="star1" title="@lang('website.meh_1_stars')"></label>
                                 </fieldset>
-                                <a href="#review" class="btn-link">{{$result['detail']['product_data'][0]->total_user_rated}} @lang('website.Reviews') </a>
+                                <a href="#review" class="btn-link">{{$product_data->total_user_rated}} @lang('website.Reviews') </a>
                             </div>
                             <div class="pro-infos">
                                 <div class="pro-single-info"><b>@lang('website.Product ID') :</b>{{$products_id}}</div>
                                 <div class="pro-single-info"><b>@lang('website.Categroy')  :</b>
                                     <?php $cates = ''; ?>
-                                    @foreach($result['detail']['product_data'][0]->categories as $key=>$category)
+                                    @foreach($product_data->categories as $key=>$category)
                                     <?php $cates = "<a href=" . url('shop?category=' . $category->categories_name) . ">" . $category->categories_name . "</a>"; ?>
                                     @endforeach
                                     <?php echo $cates; ?>
                                 </div>
                                 <div class="pro-single-info"><b>@lang('website.Available') :</b>
-                                    @if($result['detail']['product_data'][0]->products_type == 0)
-                                    @if($result['detail']['product_data'][0]->defaultStock == 0)
+                                    @if($product_data->products_type == 0)
+                                    @if($product_data->defaultStock == 0)
                                     <span class="text-secondary">@lang('website.Out of Stock')</span>
                                     @else
                                     <span class="text-secondary">@lang('website.In stock')</span>
                                     @endif
                                     @endif
-                                    @if($result['detail']['product_data'][0]->products_type == 1)
+                                    @if($product_data->products_type == 1)
                                     <span class="text-secondary variable-stock"></span>
                                     @endif
-                                    @if($result['detail']['product_data'][0]->products_type == 2)
+                                    @if($product_data->products_type == 2)
                                     <span class="text-secondary">@lang('website.External')</span>
                                     @endif
                                 </div>
-                                @if($result['detail']['product_data'][0]->products_min_order>0)
-                                @if($result['detail']['product_data'][0]->products_type == 0)
-                                <div class="pro-single-info" id="min_max_setting"><b>@lang('website.Min Order Limit:') :</b><a href="#">{{$result['detail']['product_data'][0]->products_min_order}}</a></div>
-                                @elseif($result['detail']['product_data'][0]->products_type == 1)
+                                @if($product_data->products_min_order>0)
+                                @if($product_data->products_type == 0)
+                                <div class="pro-single-info" id="min_max_setting"><b>@lang('website.Min Order Limit:') :</b><a href="#">{{$product_data->products_min_order}}</a></div>
+                                @elseif($product_data->products_type == 1)
                                 <div class="pro-single-info" id="min_max_setting"></div>
                                 @endif
                                 @endif
                             </div>
                             <form name="attributes" id="add-Product-form" method="post" >
                                 <input type="hidden" name="products_id" value="{{$products_id}}">
-                                <input type="hidden" name="products_price" id="products_price" value="@if(!empty($result['detail']['product_data'][0]->flash_price)) {{$result['detail']['product_data'][0]->flash_price+0}} @elseif(!empty($result['detail']['product_data'][0]->discount_price)){{$result['detail']['product_data'][0]->discount_price+0}}@else{{$result['detail']['product_data'][0]->products_price+0}}@endif">
+                                <input type="hidden" name="products_price" id="products_price" value="@if(!empty($product_data->flash_price)) {{$product_data->flash_price+0}} @elseif(!empty($product_data->discount_price)){{$product_data->discount_price+0}}@else{{$product_data->products_price+0}}@endif">
                                 <input type="hidden" name="checkout" id="checkout_url" value="@if(!empty(app('request')->input('checkout'))) {{ app('request')->input('checkout') }} @else false @endif" >
-                                <input type="hidden" id="max_order" value="@if(!empty($result['detail']['product_data'][0]->products_max_stock)) {{ $result['detail']['product_data'][0]->products_max_stock }} @else 0 @endif" >
+                                <input type="hidden" id="max_order" value="@if(!empty($product_data->products_max_stock)) {{ $product_data->products_max_stock }} @else 0 @endif" >
                                 @if(!empty($result['cart']))
                                 <input type="hidden"  name="customers_basket_id" value="{{$result['cart'][0]->customers_basket_id}}" >
                                 @endif
-                                @if( isset($result['detail']['product_data'][0]->attributes)&& count($result['detail']['product_data'][0]->attributes)>0)
+                                @if( isset($product_data->attributes)&& count($product_data->attributes)>0)
                                 <div class="pro-options row">
                                     <?php $index = 0; ?>
-                                    @foreach( $result['detail']['product_data'][0]->attributes as $key=>$attributes_data )
+                                    @foreach( $product_data->attributes as $key=>$attributes_data )
                                     <?php $functionValue = 'function_' . $key++; ?>
                                     <input type="hidden" name="option_name[]" value="{{ $attributes_data['option']['name'] }}" >
                                     <input type="hidden" name="option_id[]" value="{{ $attributes_data['option']['id'] }}" >
@@ -299,7 +357,7 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                     @endforeach
                                 </div>
                                 @endif
-                                @if(!empty($result['detail']['product_data'][0]->flash_start_date))
+                                @if(!empty($product_data->flash_start_date))
                                 <div class="countdown pro-timer" data-toggle="tooltip" data-placement="bottom" title="@lang('website.Countdown Timer')" id="counter_{{$products_id}}" >
                                     <span class="days">0<small>@lang('website.Days') </small></span>
                                     <span class="hours">0<small>@lang('website.Hours')</small></span>
@@ -307,10 +365,10 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                     <span class="seconds">0<small>@lang('website.Seconds')</small></span>
                                 </div>
                                 @endif
-                                <div class="pro-counter" @if(!empty($result['detail']['product_data'][0]->flash_start_date) and $result['detail']['product_data'][0]->server_time < $result['detail']['product_data'][0]->flash_start_date ) style="display: none" @endif>
+                                <div class="pro-counter" @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date ) style="display: none" @endif>
                                      <div class="input-group item-quantity">
                                         {{-- <input type="text" id="quantity1" name="quantity" class="form-control" value="10">                       --}}
-                                        <input type="text" readonly name="quantity" class="form-control qty" value="@if(!empty($result['cart'])) {{$result['cart'][0]->customers_basket_quantity}} @else @if($result['detail']['product_data'][0]->products_min_order>0 and $result['detail']['product_data'][0]->defaultStock > $result['detail']['product_data'][0]->products_min_order) {{$result['detail']['product_data'][0]->products_min_order}} @else 1 @endif @endif" min="@if($result['detail']['product_data'][0]->products_min_order>0 and $result['detail']['product_data'][0]->defaultStock > $result['detail']['product_data'][0]->products_min_order) {{$result['detail']['product_data'][0]->products_min_order}} @else 1 @endif" max="@if(!empty($result['detail']['product_data'][0]->products_max_stock) and $result['detail']['product_data'][0]->products_max_stock>0 and $result['detail']['product_data'][0]->defaultStock > $result['detail']['product_data'][0]->products_max_stock){{ $result['detail']['product_data'][0]->products_max_stock}}@else{{ $result['detail']['product_data'][0]->defaultStock}}@endif">
+                                        <input type="text" readonly name="quantity" class="form-control qty" value="@if(!empty($result['cart'])) {{$result['cart'][0]->customers_basket_quantity}} @else @if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif @endif" min="@if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif" max="@if(!empty($product_data->products_max_stock) and $product_data->products_max_stock>0 and $product_data->defaultStock > $product_data->products_max_stock){{ $product_data->products_max_stock}}@else{{ $product_data->defaultStock}}@endif">
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-plus1 btn qtyplus">
                                                 <i class="fas fa-plus"></i>
@@ -320,10 +378,10 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                             </button>
                                         </span>
                                     </div>
-                                    @if(!empty($result['detail']['product_data'][0]->flash_start_date) and $result['detail']['product_data'][0]->server_time < $result['detail']['product_data'][0]->flash_start_date )
+                                    @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date )
                                     @else
-                                    @if($result['detail']['product_data'][0]->products_type == 0)
-                                    @if($result['detail']['product_data'][0]->defaultStock == 0)
+                                    @if($product_data->products_type == 0)
+                                    @if($product_data->defaultStock == 0)
                                     <button class="btn btn-lg swipe-to-top  btn-danger " type="button">@lang('website.Out of Stock')</button>
                                     @else
                                     <button class="btn btn-secondary btn-lg swipe-to-top add-to-Cart"  type="button" products_id="{{$products_id}}">@lang('website.Add to Cart')</button>
@@ -333,8 +391,8 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                     <button class="btn btn-danger btn btn-lg swipe-to-top  stock-out-cart" hidden type="button">@lang('website.Out of Stock')</button>
                                     @endif
                                     @endif
-                                    @if($result['detail']['product_data'][0]->products_type == 2)
-                                    <a href="{{$result['detail']['product_data'][0]->products_url}}" target="_blank" class="btn btn-secondary btn-lg swipe-to-top">@lang('website.External Link')</a>
+                                    @if($product_data->products_type == 2)
+                                    <a href="{{$product_data->products_url}}" target="_blank" class="btn btn-secondary btn-lg swipe-to-top">@lang('website.External Link')</a>
                                     @endif
                                 </div>
                             </form>
@@ -363,25 +421,48 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                             </div>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade active show" id="description" aria-labelledby="description-tab">
-                                    <?php echo stripslashes($result['detail']['product_data'][0]->products_description) ?>
+                                    <?php echo stripslashes($product_data->products_description) ?>
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade " id="review" aria-labelledby="review-tab">
                                     <div class="reviews">
-                                        @if(isset($result['detail']['product_data'][0]->reviewed_customers))
+                                        @if(isset($product_data->reviewed_customers))
                                         <div class="review-bubbles">
                                             <h2>
                                                 @lang('website.Customer Reviews')
                                             </h2>
-                                            @foreach($result['detail']['product_data'][0]->reviewed_customers as $key=>$rev)
+                                            @foreach($product_data->reviewed_customers as $key=>$rev)
+                                            @php
+
+                                            $classRev5 = '';
+                                            $classRev4 = '';
+                                            $classRev3 = '';
+                                            $classRev2 = '';
+                                            $classRev1 = '';
+                                            if ($rev->reviews_rating >= 5) {
+                                            $classRev5 = 'active';
+                                            }
+                                            if ($rev->reviews_rating >= 4) {
+                                            $classRev4 = 'active';
+                                            }
+                                            if ($rev->reviews_rating >= 3) {
+                                            $classRev3 = 'active';
+                                            }
+                                            if ($rev->reviews_rating >= 2) {
+                                            $classRev2 = 'active';
+                                            }
+                                            if ($rev->reviews_rating >= 1) {
+                                            $classRev1 = 'active';
+                                            }
+                                            @endphp
                                             <div class="review-bubble-single">
                                                 <div class="review-bubble-bg">
                                                     <div class="pro-rating">
                                                         <fieldset class="disabled-ratings">
-                                                            <label class = "full @if($rev->reviews_rating >= 5) active @endif" for="star_5" title="@lang('website.awesome_5_stars')"></label>
-                                                            <label class = "full @if($rev->reviews_rating >= 4) active @endif" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
-                                                            <label class = "full @if($rev->reviews_rating >= 3) active @endif" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
-                                                            <label class = "full @if($rev->reviews_rating >= 2) active @endif" for="star_2" title="@lang('website.meh_2_stars')"></label>
-                                                            <label class = "full @if($rev->reviews_rating >= 1) active @endif" for="star1" title="@lang('website.meh_1_stars')"></label>
+                                                            <label class = "full {{$classRev5}}" for="star_5" title="@lang('website.awesome_5_stars')"></label>
+                                                            <label class = "full {{$classRev4}}" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
+                                                            <label class = "full {{$classRev3}}" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
+                                                            <label class = "full {{$classRev2}}" for="star_2" title="@lang('website.meh_2_stars')"></label>
+                                                            <label class = "full {{$classRev1}}" for="star1" title="@lang('website.meh_1_stars')"></label>
                                                         </fieldset>
                                                     </div>
                                                     <h4>{{$rev->customers_name}}</h4>
@@ -473,7 +554,7 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                                 @if (date("Y-m-d", $server_time) >= date("Y-m-d", $flash_start_date))
                                                 var product_div_{{$products_id}} = 'product_div_{{$products_id}}';
                                         var counter_id_{{$products_id}} = 'counter_{{$products_id}}';
-                                        var inputTime_{{$products_id}} = "{{date('M d, Y H:i:s' ,$result['detail']['product_data'][0]->flash_expires_date)}}";
+                                        var inputTime_{{$products_id}} = "{{date('M d, Y H:i:s' ,$product_data->flash_expires_date)}}";
                                         // Set the date we're counting down to
                                         var countDownDate_{{$products_id}} = new Date(inputTime_{{$products_id}}).getTime();
                                         // Update the count down every 1 second
@@ -501,5 +582,7 @@ $server_time = $result['detail']['product_data'][0]->server_time;
                                         @endif
                                                 @endif
                                         });
+                                        var denominations = @json($denominations);
         </script>
     </section>
+</section>

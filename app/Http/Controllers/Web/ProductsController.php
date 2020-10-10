@@ -386,16 +386,20 @@ class ProductsController extends Controller {
         }
         $products = $this->products->getProductsBySlug($request->slug);
         if (isset($products[0])) {
-            $productId = $products[0]->products_id;
-            $productType = $products[0]->products_type;
+            $product = $products[0];
+            $productId = $product->products_id;
+            $productType = $product->products_type;
             $countries = [];
+            $denominations = [];
             if ($productType == 3) {
-                $countries = $this->products->getCountriessByProductId($productId);
+                $countries = $this->products->getCountriesByProductId($productId);
+                $denominations = $this->products->getDenominationsByCountriesByProductId($productId);
             }
             $result['countries'] = $countries;
+            $result['denominations'] = $denominations;
             $result['productType'] = $productType;
             //category
-            $category = $this->products->getCategoryByParent($products[0]->products_id);
+            $category = $this->products->getCategoryByParent($product->products_id);
             if (!empty($category) and count($category) > 0) {
                 $category_slug = $category[0]->categories_slug;
                 $category_name = $category[0]->categories_name;
@@ -403,7 +407,7 @@ class ProductsController extends Controller {
                 $category_slug = '';
                 $category_name = '';
             }
-            $sub_category = $this->products->getSubCategoryByParent($products[0]->products_id);
+            $sub_category = $this->products->getSubCategoryByParent($product->products_id);
             if (!empty($sub_category) and count($sub_category) > 0) {
                 $sub_category_name = $sub_category[0]->categories_name;
                 $sub_category_slug = $sub_category[0]->categories_slug;
@@ -415,14 +419,14 @@ class ProductsController extends Controller {
             $result['category_slug'] = $category_slug;
             $result['sub_category_name'] = $sub_category_name;
             $result['sub_category_slug'] = $sub_category_slug;
-            $isFlash = $this->products->getFlashSale($products[0]->products_id);
+            $isFlash = $this->products->getFlashSale($product->products_id);
             if (!empty($isFlash) and count($isFlash) > 0) {
                 $type = "flashsale";
             } else {
                 $type = "";
             }
             $postCategoryId = '';
-            $data = array('page_number' => '0', 'type' => $type, 'products_id' => $products[0]->products_id, 'limit' => $limit, 'min_price' => $min_price, 'max_price' => $max_price);
+            $data = array('page_number' => '0', 'type' => $type, 'products_id' => $product->products_id, 'limit' => $limit, 'min_price' => $min_price, 'max_price' => $max_price);
             $detail = $this->products->products($data);
             $result['detail'] = $detail;
             if (!empty($result['detail']['product_data'][0]->categories) and count($result['detail']['product_data'][0]->categories) > 0) {

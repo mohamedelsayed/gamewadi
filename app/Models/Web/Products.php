@@ -1192,7 +1192,7 @@ class Products extends Model {
         return ($response);
     }
 
-    public function getCountriessByProductId($productId = null) {
+    public function getCountriesByProductId($productId = null) {
         $countries = DB::table('countries')
                 ->leftjoin('products_attributes', 'countries.countries_id', '=', 'products_attributes.country_id')
                 ->select('countries.countries_id', 'countries.countries_name')
@@ -1206,9 +1206,28 @@ class Products extends Model {
                 $countriesData[$country->countries_id] = $country->countries_name;
             }
         }
-//        pr($countriesData);
-//        exit;
         return $countriesData;
+    }
+
+    public function getDenominationsByCountriesByProductId($productId = null) {
+        $products_attributes = DB::table('products_attributes')
+                ->leftjoin('countries', 'countries.countries_id', '=', 'products_attributes.country_id')
+                ->select('products_attributes.*', 'countries.countries_id')//, 'countries.countries_name')
+//                ->groupBy('countries.countries_name')
+                ->where('products_attributes.products_id', '=', $productId)
+                ->orderBy('countries.countries_name', 'DESC')
+                ->orderBy('products_attributes.denomination', 'ASC')
+                ->orderBy('products_attributes.options_values_price', 'ASC')
+                ->get();
+        $products_attributesData = [];
+        if ($products_attributes) {
+            foreach ($products_attributes as $products_attribute) {
+                $products_attributesData[$products_attribute->countries_id][] = $products_attribute;
+            }
+        }
+//        pr($products_attributesData);
+//        exit;
+        return $products_attributesData;
     }
 
 }

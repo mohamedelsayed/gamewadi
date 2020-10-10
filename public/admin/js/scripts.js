@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function () {
     $(document).on('click', '#addDenomination', function (e) {
         $("#loader").show();
         var formData = $('#adddenominationfrom').serialize();
