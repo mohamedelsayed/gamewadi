@@ -1225,8 +1225,6 @@ class Products extends Model {
                 $products_attributesData[$products_attribute->countries_id][] = $products_attribute;
             }
         }
-//        pr($products_attributesData);
-//        exit;
         return $products_attributesData;
     }
 
