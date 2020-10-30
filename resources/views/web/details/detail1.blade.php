@@ -38,6 +38,8 @@ if ($result['productType'] == 3) {
     $isDigital = 1;
 }
 $denominations = $result['denominations'];
+//pr($product_data);
+//exit;
 ?>
 <div class="container-fuild">
     <nav aria-label="breadcrumb">
