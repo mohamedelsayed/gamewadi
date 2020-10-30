@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class Installation
-{
+class Installation {
+
     /**
      * Handle an incoming request.
      *
@@ -13,11 +13,11 @@ class Installation
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-      if(!file_exists(storage_path('installed'))){
-        return redirect('/install');
-      }
+    public function handle($request, Closure $next) {
+        if (!file_exists(storage_path('installed'))) {
+//        return redirect('/install');
+        }
         return $next($request);
     }
+
 }
