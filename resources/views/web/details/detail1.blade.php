@@ -65,7 +65,7 @@ $denominations = $result['denominations'];
     </div>
     <section class="product-page">
         <div class="container">
-            <div class="row">
+            <div class="row m-0">
                 <div class="col-12 col-lg-6  ">
                     <div class="slider-wrapper pd2">
                         <div class="slider-for">
@@ -159,47 +159,47 @@ $denominations = $result['denominations'];
                     </div>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <div class="row">
-                        <div class="col-12 col-md-12">
-                            <div class="badges">
-                                <?php
-                                //dd($product_data->flash_start_date);
-                                $current_date = date("Y-m-d", strtotime("now"));
-                                $string = substr($product_data->products_date_added, 0, strpos($product_data->products_date_added, ' '));
-                                $date = date_create($string);
-                                date_add($date, date_interval_create_from_date_string($web_setting[20]->value . " days"));
-                                $after_date = date_format($date, "Y-m-d");
-                                if ($after_date >= $current_date) {
-                                    print '<span class="badge badge-info">';
-                                    print __('website.New');
-                                    print '</span>';
+                    <div class="row m-0 ">
+                        <div class="badges">
+                            <?php
+                            //dd($product_data->flash_start_date);
+                            $current_date = date("Y-m-d", strtotime("now"));
+                            $string = substr($product_data->products_date_added, 0, strpos($product_data->products_date_added, ' '));
+                            $date = date_create($string);
+                            date_add($date, date_interval_create_from_date_string($web_setting[20]->value . " days"));
+                            $after_date = date_format($date, "Y-m-d");
+                            if ($after_date >= $current_date) {
+                                print '<span class="badge badge-info">';
+                                print __('website.New');
+                                print '</span>';
+                            }
+                            $discount_percentage = 0;
+                            if (!empty($product_data->discount_price)) {
+                                $discount_price = $product_data->discount_price * session('currency_value');
+                            }
+                            $orignal_price = $product_data->products_price * session('currency_value');
+                            if (!empty($product_data->discount_price)) {
+                                if (($orignal_price + 0) > 0) {
+                                    $discounted_price = $orignal_price - $discount_price;
+                                    $discount_percentage = $discounted_price / $orignal_price * 100;
+                                } else {
+                                    $discount_percentage = 0;
+                                    $discounted_price = 0;
                                 }
-                                $discount_percentage = 0;
-                                if (!empty($product_data->discount_price)) {
-                                    $discount_price = $product_data->discount_price * session('currency_value');
-                                }
-                                $orignal_price = $product_data->products_price * session('currency_value');
-                                if (!empty($product_data->discount_price)) {
-                                    if (($orignal_price + 0) > 0) {
-                                        $discounted_price = $orignal_price - $discount_price;
-                                        $discount_percentage = $discounted_price / $orignal_price * 100;
-                                    } else {
-                                        $discount_percentage = 0;
-                                        $discounted_price = 0;
-                                    }
-                                }
-                                ?>
-                                @if($discount_percentage>0)
-                                <span class="badge badge-danger"><?php echo (int) $discount_percentage; ?>%</span>
-                                @endif
-                                @if($product_data->is_feature == 1)
-                                <span class="badge badge-success">@lang('website.Featured')</span>
-                                @endif
-                            </div>
-                            @if($isDigital == 1)
-                            <div class="countries">
-                                <label for="country_id" class="">@lang('website.Please choose the country'):</label>
-                                <div class="col-sm-10 col-md-8">
+                            }
+                            ?>
+                            @if($discount_percentage>0)
+                            <span class="badge badge-danger"><?php echo (int) $discount_percentage; ?>%</span>
+                            @endif
+                            @if($product_data->is_feature == 1)
+                            <span class="badge badge-success">@lang('website.Featured')</span>
+                            @endif
+                        </div>
+                        @if($isDigital == 1)
+                        <div class="col-12 p-0 w-100 countries">
+                            <label class="w-100" for="country_id" class="">@lang('website.Please choose the country'):</label>
+                            <div class="w-100">
+                                <div class="w-75 select-control">
                                     <select class="form-control field-validate" name="country_id" onchange="draw_denomination_table_web(this)">
                                         <option value="" class="field-validate" disabled selected>{{ trans('website.ChooseCountry') }}</option>
                                         @foreach($result['countries'] as $key => $value)
@@ -208,215 +208,217 @@ $denominations = $result['denominations'];
                                     </select>
                                 </div>
                             </div>
-                            <div class="row mb-5">
-                                <div class="option col-12">
-                                    <h2>Please choose the card value:</h2>
-                                    <div class="listOfValues" style="overflow-y: auto;">
-                                        <div class="qty-table">
-                                            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
-                                                <tr><th>Value</th><th>Price</th><th>Quantity</th></tr>
-                                                <tbody class="denomination_tbody">
-                                                <div id="selectCountryFirst" style="display: block;"><div class="innerSelectCountry"> Please choose the card region first!</div></div>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                        </div>
+                        <div class="option col-12 p-0 my-3">
+                            <h2>Please choose the card value:</h2>
+                            <div class="listOfValues" style="overflow-y: auto;">
+                                <div class="qty-table">
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
+                                        <tr><th>Value</th><th>Price</th><th>Quantity</th></tr>
+                                        <tbody class="denomination_tbody">
+                                        <div id="selectCountryFirst" style="display: flex;"><div class="innerSelectCountry"> Please choose the card region first!</div></div>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <input type="hidden" name="_token" value="u8DBG6B8kycYYkdLYtuImAt6tsKErStqS0Zg1UtD">
-                                <input type="hidden" name="brandId" id="brandId" value="5">
-                                <input type="hidden" name="countryId" id="countryId" value="11">
-                                <input type="hidden" name="key" id="key" value="145d60f80e5061e2f43a8ca93cab62b8">
-                                <input type="hidden" name="orderValue" id="orderValue" value="">
-                                <div class="col-12 col-lg-6">
-                                    <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
-                                </div>
-                                <div class="col-12 col-lg-6 mb-5 m-lg-0 errorMsgDiv">
-                                    <input type="button" id="submit-order" name="" value="Buy Now!" onclick="addToCartFront(1)" class="btn btn-primary btn-block disabled">
-                                </div>
-                            </div>
-
-                            @endif
-                            @if($isDigital == 0)
-                            <h5 class="pro-title">{{$product_data->products_name}}</h5>
-                            <div class="price">
-                                <?php
-                                if (!empty($product_data->discount_price)) {
-                                    $discount_price = $product_data->discount_price * session('currency_value');
-                                }
-                                if (!empty($product_data->flash_price)) {
-                                    $flash_price = $product_data->flash_price * session('currency_value');
-                                }
-                                $orignal_price = $product_data->products_price * session('currency_value');
-                                if (!empty($product_data->discount_price)) {
-                                    if (($orignal_price + 0) > 0) {
-                                        $discounted_price = $orignal_price - $discount_price;
-                                        $discount_percentage = $discounted_price / $orignal_price * 100;
-                                        $discounted_price = $product_data->discount_price;
-                                    } else {
-                                        $discount_percentage = 0;
-                                        $discounted_price = 0;
-                                    }
-                                } else {
-                                    $discounted_price = $orignal_price;
-                                }
-                                ?>
-                                @if(!empty($product_data->flash_price))
-                                <sub class="total_price">{{Session::get('symbol_left')}}{{$flash_price+0}}{{Session::get('symbol_right')}}</sub>
-                                <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
-                                @elseif(!empty($product_data->discount_price))
-                                <price class="total_price">{{Session::get('symbol_left')}}{{$discount_price+0}}{{Session::get('symbol_right')}}</price>
-                                <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
-                                @else
-                                <price class="total_price">{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}}</price>
-                                @endif
-                            </div>
-                            @endif
-                            <div class="pro-rating">
-                                <fieldset class="disabled-ratings">
-                                    <label class = "full {{$classRating5}}" for="star_5" title="@lang('website.awesome_5_stars')"></label>
-                                    <label class = "full {{$classRating4}}" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
-                                    <label class = "full {{$classRating3}}" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
-                                    <label class = "full {{$classRating2}}" for="star_2" title="@lang('website.meh_2_stars')"></label>
-                                    <label class = "full {{$classRating1}}" for="star1" title="@lang('website.meh_1_stars')"></label>
-                                </fieldset>
-                                <a href="#review" class="btn-link">{{$product_data->total_user_rated}} @lang('website.Reviews') </a>
-                            </div>
-                            <div class="pro-infos">
-                                <div class="pro-single-info"><b>@lang('website.Product ID') :</b>{{$products_id}}</div>
-                                <div class="pro-single-info"><b>@lang('website.Categroy')  :</b>
-                                    <?php $cates = ''; ?>
-                                    @foreach($product_data->categories as $key=>$category)
-                                    <?php $cates = "<a href=" . url('shop?category=' . $category->categories_name) . ">" . $category->categories_name . "</a>"; ?>
-                                    @endforeach
-                                    <?php echo $cates; ?>
-                                </div>
-                                <div class="pro-single-info"><b>@lang('website.Available') :</b>
-                                    @if($product_data->products_type == 0)
-                                    @if($product_data->defaultStock == 0)
-                                    <span class="text-secondary">@lang('website.Out of Stock')</span>
-                                    @else
-                                    <span class="text-secondary">@lang('website.In stock')</span>
-                                    @endif
-                                    @endif
-                                    @if($product_data->products_type == 1)
-                                    <span class="text-secondary variable-stock"></span>
-                                    @endif
-                                    @if($product_data->products_type == 2)
-                                    <span class="text-secondary">@lang('website.External')</span>
-                                    @endif
-                                </div>
-                                @if($product_data->products_min_order>0)
-                                @if($product_data->products_type == 0)
-                                <div class="pro-single-info" id="min_max_setting"><b>@lang('website.Min Order Limit:') :</b><a href="#">{{$product_data->products_min_order}}</a></div>
-                                @elseif($product_data->products_type == 1)
-                                <div class="pro-single-info" id="min_max_setting"></div>
-                                @endif
-                                @endif
-                            </div>
-                            <form name="attributes" id="add-Product-form" method="post" >
-                                <input type="hidden" name="products_id" value="{{$products_id}}">
-                                <input type="hidden" name="products_price" id="products_price" value="@if(!empty($product_data->flash_price)) {{$product_data->flash_price+0}} @elseif(!empty($product_data->discount_price)){{$product_data->discount_price+0}}@else{{$product_data->products_price+0}}@endif">
-                                <input type="hidden" name="checkout" id="checkout_url" value="@if(!empty(app('request')->input('checkout'))) {{ app('request')->input('checkout') }} @else false @endif" >
-                                <input type="hidden" id="max_order" value="@if(!empty($product_data->products_max_stock)) {{ $product_data->products_max_stock }} @else 0 @endif" >
-                                @if(!empty($result['cart']))
-                                <input type="hidden"  name="customers_basket_id" value="{{$result['cart'][0]->customers_basket_id}}" >
-                                @endif
-                                @if( isset($product_data->attributes)&& count($product_data->attributes)>0)
-                                <div class="pro-options row">
-                                    <?php $index = 0; ?>
-                                    @foreach( $product_data->attributes as $key=>$attributes_data )
-                                    <?php $functionValue = 'function_' . $key++; ?>
-                                    <input type="hidden" name="option_name[]" value="{{ $attributes_data['option']['name'] }}" >
-                                    <input type="hidden" name="option_id[]" value="{{ $attributes_data['option']['id'] }}" >
-                                    <input type="hidden" name="{{ $functionValue }}" id="{{ $functionValue }}" value="0" >
-                                    <input id="attributeid_<?php echo $index ?>" type="hidden" value="">
-                                    <input id="attribute_sign_<?php echo $index ?>" type="hidden" value="">
-                                    <input id="attributeids_<?php echo $index ?>" type="hidden" name="attributeid[]" value="" >
-                                    <div class="attributes col-12 col-md-4 box">
-                                        <label class="">{{ $attributes_data['option']['name'] }}</label>
-                                        <div class="select-control">
-                                            <select name="{{ $attributes_data['option']['id'] }}" onChange="getQuantity()" class="currentstock form-control attributeid_<?php echo $index++ ?>" attributeid = "{{ $attributes_data['option']['id'] }}">
-                                                @if(!empty($result['cart']))
-                                                @php
-                                                $value_ids = array();
-                                                foreach($result['cart'][0]->attributes as $values){
-                                                $value_ids[] = $values->options_values_id;
-                                                }
-                                                @endphp
-                                                @foreach($attributes_data['values'] as $values_data)
-                                                @if(!empty($result['cart']))
-                                                <option @if(in_array($values_data['id'],$value_ids)) selected @endif attributes_value="{{ $values_data['products_attributes_id'] }}" value="{{ $values_data['id'] }}" prefix = '{{ $values_data['price_prefix'] }}'  value_price ="{{ $values_data['price']+0 }}" >{{ $values_data['value'] }}</option>
-                                                @endif
-                                                @endforeach
-                                                @else
-                                                @foreach($attributes_data['values'] as $values_data)
-                                                <option attributes_value="{{ $values_data['products_attributes_id'] }}" value="{{ $values_data['id'] }}" prefix = '{{ $values_data['price_prefix'] }}'  value_price ="{{ $values_data['price']+0 }}" >{{ $values_data['value'] }}</option>
-                                                @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                @endif
-                                @if(!empty($product_data->flash_start_date))
-                                <div class="countdown pro-timer" data-toggle="tooltip" data-placement="bottom" title="@lang('website.Countdown Timer')" id="counter_{{$products_id}}" >
-                                    <span class="days">0<small>@lang('website.Days') </small></span>
-                                    <span class="hours">0<small>@lang('website.Hours')</small></span>
-                                    <span class="mintues">0<small>@lang('website.Minutes')</small></span>
-                                    <span class="seconds">0<small>@lang('website.Seconds')</small></span>
-                                </div>
-                                @endif
-                                <div class="pro-counter" @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date ) style="display: none" @endif>
-                                     <div class="input-group item-quantity">
-                                        {{-- <input type="text" id="quantity1" name="quantity" class="form-control" value="10">                       --}}
-                                        <input type="text" readonly name="quantity" class="form-control qty" value="@if(!empty($result['cart'])) {{$result['cart'][0]->customers_basket_quantity}} @else @if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif @endif" min="@if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif" max="@if(!empty($product_data->products_max_stock) and $product_data->products_max_stock>0 and $product_data->defaultStock > $product_data->products_max_stock){{ $product_data->products_max_stock}}@else{{ $product_data->defaultStock}}@endif">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="quantity-plus1 btn qtyplus">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                            <button type="button" class="quantity-minus1 btn qtyminus">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date )
-                                    @else
-                                    @if($product_data->products_type == 0)
-                                    @if($product_data->defaultStock == 0)
-                                    <button class="btn btn-lg swipe-to-top  btn-danger " type="button">@lang('website.Out of Stock')</button>
-                                    @else
-                                    <button class="btn btn-secondary btn-lg swipe-to-top add-to-Cart"  type="button" products_id="{{$products_id}}">@lang('website.Add to Cart')</button>
-                                    @endif
-                                    @else
-                                    <button class="btn btn-secondary btn-lg swipe-to-top  add-to-Cart stock-cart" hidden type="button" products_id="{{$products_id}}">@lang('website.Add to Cart')</button>
-                                    <button class="btn btn-danger btn btn-lg swipe-to-top  stock-out-cart" hidden type="button">@lang('website.Out of Stock')</button>
-                                    @endif
-                                    @endif
-                                    @if($product_data->products_type == 2)
-                                    <a href="{{$product_data->products_url}}" target="_blank" class="btn btn-secondary btn-lg swipe-to-top">@lang('website.External Link')</a>
-                                    @endif
-                                </div>
-                            </form>
-                            <div class="pro-sub-buttons">
-                                <div class="buttons">
-                                    <button class="btn btn-link is_liked" products_id="<?php echo $products_id ?>" style="padding-left: 0;"><i class="fas fa-heart"></i> @lang('website.Add to Wishlist') </button>
-                                    <button type="button" class="btn btn-link" onclick="myFunction3({{$products_id}})"><i class="fas fa-align-right"></i>@lang('website.Add to Compare')</button>
-                                </div>
-                                <!-- AddToAny BEGIN -->
-                                <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
-                                    <a class="a2a_button_facebook"></a>
-                                    <a class="a2a_button_twitter"></a>
-                                    <a class="a2a_button_email"></a>
-                                </div>
-                                <script async src="https://static.addtoany.com/menu/page.js"></script>
-                                <!-- AddToAny END -->
                             </div>
                         </div>
+                        <input type="hidden" name="_token" value="u8DBG6B8kycYYkdLYtuImAt6tsKErStqS0Zg1UtD">
+                        <input type="hidden" name="brandId" id="brandId" value="5">
+                        <input type="hidden" name="countryId" id="countryId" value="11">
+                        <input type="hidden" name="key" id="key" value="145d60f80e5061e2f43a8ca93cab62b8">
+                        <input type="hidden" name="orderValue" id="orderValue" value="">
+                        <div class="col-12 col-lg-6">
+                            <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
+                        </div>
+                        <div class="col-12 col-lg-6 mb-5 m-lg-0 errorMsgDiv">
+                            <input type="button" id="submit-order" name="" value="Buy Now!" onclick="addToCartFront(1)" class="btn btn-primary btn-block disabled">
+                        </div>
+
+                        @endif
+                        @if($isDigital == 0)
+                        <h5 class="pro-title">{{$product_data->products_name}}</h5>
+                        <div class="price">
+                            <?php
+                            if (!empty($product_data->discount_price)) {
+                                $discount_price = $product_data->discount_price * session('currency_value');
+                            }
+                            if (!empty($product_data->flash_price)) {
+                                $flash_price = $product_data->flash_price * session('currency_value');
+                            }
+                            $orignal_price = $product_data->products_price * session('currency_value');
+                            if (!empty($product_data->discount_price)) {
+                                if (($orignal_price + 0) > 0) {
+                                    $discounted_price = $orignal_price - $discount_price;
+                                    $discount_percentage = $discounted_price / $orignal_price * 100;
+                                    $discounted_price = $product_data->discount_price;
+                                } else {
+                                    $discount_percentage = 0;
+                                    $discounted_price = 0;
+                                }
+                            } else {
+                                $discounted_price = $orignal_price;
+                            }
+                            ?>
+                            @if(!empty($product_data->flash_price))
+                            <sub class="total_price">{{Session::get('symbol_left')}}{{$flash_price+0}}{{Session::get('symbol_right')}}</sub>
+                            <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
+                            @elseif(!empty($product_data->discount_price))
+                            <price class="total_price">{{Session::get('symbol_left')}}{{$discount_price+0}}{{Session::get('symbol_right')}}</price>
+                            <span>{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}} </span>
+                            @else
+                            <price class="total_price">{{Session::get('symbol_left')}}{{$orignal_price+0}}{{Session::get('symbol_right')}}</price>
+                            @endif
+                        </div>
+                        @endif
+                        <div class="col-12 p-0 pro-rating">
+                            <fieldset class="disabled-ratings">
+                                <label class = "full {{$classRating5}}" for="star_5" title="@lang('website.awesome_5_stars')"></label>
+                                <label class = "full {{$classRating4}}" for="star_4" title="@lang('website.pretty_good_4_stars')"></label>
+                                <label class = "full {{$classRating3}}" for="star_3" title="@lang('website.pretty_good_3_stars')"></label>
+                                <label class = "full {{$classRating2}}" for="star_2" title="@lang('website.meh_2_stars')"></label>
+                                <label class = "full {{$classRating1}}" for="star1" title="@lang('website.meh_1_stars')"></label>
+                            </fieldset>
+                            <a href="#review" class="btn-link">{{$product_data->total_user_rated}} @lang('website.Reviews') </a>
+                        </div>
+                        @if($isDigital == 0)
+                        <div class="col-12 p-0 pro-infos">
+                            <div class="pro-single-info"><b>@lang('website.Product ID') :</b>{{$products_id}}</div>
+                            <div class="pro-single-info"><b>@lang('website.Categroy')  :</b>
+                                <?php $cates = ''; ?>
+                                @foreach($product_data->categories as $key=>$category)
+                                <?php $cates = "<a href=" . url('shop?category=' . $category->categories_name) . ">" . $category->categories_name . "</a>"; ?>
+                                @endforeach
+                                <?php echo $cates; ?>
+                            </div>
+                            <div class="pro-single-info"><b>@lang('website.Available') :</b>
+                                @if($product_data->products_type == 0)
+                                @if($product_data->defaultStock == 0)
+                                <span class="text-secondary">@lang('website.Out of Stock')</span>
+                                @else
+                                <span class="text-secondary">@lang('website.In stock')</span>
+                                @endif
+                                @endif
+                                @if($product_data->products_type == 1)
+                                <span class="text-secondary variable-stock"></span>
+                                @endif
+                                @if($product_data->products_type == 2)
+                                <span class="text-secondary">@lang('website.External')</span>
+                                @endif
+                            </div>
+                            @if($product_data->products_min_order>0)
+                            @if($product_data->products_type == 0)
+                            <div class="pro-single-info" id="min_max_setting"><b>@lang('website.Min Order Limit:') :</b><a href="#">{{$product_data->products_min_order}}</a></div>
+                            @elseif($product_data->products_type == 1)
+                            <div class="pro-single-info" id="min_max_setting"></div>
+                            @endif
+                            @endif
+                        </div>
+                        @endif
+                        @if($isDigital == 0)
+                        <form class="col-12 p-0" name="attributes" id="add-Product-form" method="post" >
+                            <input type="hidden" name="products_id" value="{{$products_id}}">
+                            <input type="hidden" name="products_price" id="products_price" value="@if(!empty($product_data->flash_price)) {{$product_data->flash_price+0}} @elseif(!empty($product_data->discount_price)){{$product_data->discount_price+0}}@else{{$product_data->products_price+0}}@endif">
+                            <input type="hidden" name="checkout" id="checkout_url" value="@if(!empty(app('request')->input('checkout'))) {{ app('request')->input('checkout') }} @else false @endif" >
+                            <input type="hidden" id="max_order" value="@if(!empty($product_data->products_max_stock)) {{ $product_data->products_max_stock }} @else 0 @endif" >
+                            @if(!empty($result['cart']))
+                            <input type="hidden"  name="customers_basket_id" value="{{$result['cart'][0]->customers_basket_id}}" >
+                            @endif
+                            @if( isset($product_data->attributes)&& count($product_data->attributes)>0)
+                            <div class="pro-options row m-0">
+                                <?php $index = 0; ?>
+                                @foreach( $product_data->attributes as $key=>$attributes_data )
+                                <?php $functionValue = 'function_' . $key++; ?>
+                                <input type="hidden" name="option_name[]" value="{{ $attributes_data['option']['name'] }}" >
+                                <input type="hidden" name="option_id[]" value="{{ $attributes_data['option']['id'] }}" >
+                                <input type="hidden" name="{{ $functionValue }}" id="{{ $functionValue }}" value="0" >
+                                <input id="attributeid_<?php echo $index ?>" type="hidden" value="">
+                                <input id="attribute_sign_<?php echo $index ?>" type="hidden" value="">
+                                <input id="attributeids_<?php echo $index ?>" type="hidden" name="attributeid[]" value="" >
+                                <div class="attributes col-12 col-md-4 box">
+                                    <label class="">{{ $attributes_data['option']['name'] }}</label>
+                                    <div class="select-control">
+                                        <select name="{{ $attributes_data['option']['id'] }}" onChange="getQuantity()" class="currentstock form-control attributeid_<?php echo $index++ ?>" attributeid = "{{ $attributes_data['option']['id'] }}">
+                                            @if(!empty($result['cart']))
+                                            @php
+                                            $value_ids = array();
+                                            foreach($result['cart'][0]->attributes as $values){
+                                            $value_ids[] = $values->options_values_id;
+                                            }
+                                            @endphp
+                                            @foreach($attributes_data['values'] as $values_data)
+                                            @if(!empty($result['cart']))
+                                            <option @if(in_array($values_data['id'],$value_ids)) selected @endif attributes_value="{{ $values_data['products_attributes_id'] }}" value="{{ $values_data['id'] }}" prefix = '{{ $values_data['price_prefix'] }}'  value_price ="{{ $values_data['price']+0 }}" >{{ $values_data['value'] }}</option>
+                                            @endif
+                                            @endforeach
+                                            @else
+                                            @foreach($attributes_data['values'] as $values_data)
+                                            <option attributes_value="{{ $values_data['products_attributes_id'] }}" value="{{ $values_data['id'] }}" prefix = '{{ $values_data['price_prefix'] }}'  value_price ="{{ $values_data['price']+0 }}" >{{ $values_data['value'] }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+                            @if(!empty($product_data->flash_start_date))
+                            <div class="countdown pro-timer" data-toggle="tooltip" data-placement="bottom" title="@lang('website.Countdown Timer')" id="counter_{{$products_id}}" >
+                                <span class="days">0<small>@lang('website.Days') </small></span>
+                                <span class="hours">0<small>@lang('website.Hours')</small></span>
+                                <span class="mintues">0<small>@lang('website.Minutes')</small></span>
+                                <span class="seconds">0<small>@lang('website.Seconds')</small></span>
+                            </div>
+                            @endif
+                            <div class="pro-counter" @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date ) style="display: none" @endif>
+                                <div class="input-group item-quantity">
+                                    {{-- <input type="text" id="quantity1" name="quantity" class="form-control" value="10">                       --}}
+                                    <input type="text" readonly name="quantity" class="form-control qty" value="@if(!empty($result['cart'])) {{$result['cart'][0]->customers_basket_quantity}} @else @if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif @endif" min="@if($product_data->products_min_order>0 and $product_data->defaultStock > $product_data->products_min_order) {{$product_data->products_min_order}} @else 1 @endif" max="@if(!empty($product_data->products_max_stock) and $product_data->products_max_stock>0 and $product_data->defaultStock > $product_data->products_max_stock){{ $product_data->products_max_stock}}@else{{ $product_data->defaultStock}}@endif">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="quantity-plus1 btn qtyplus">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button type="button" class="quantity-minus1 btn qtyminus">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                @if(!empty($product_data->flash_start_date) and $product_data->server_time < $product_data->flash_start_date )
+                                @else
+                                @if($product_data->products_type == 0)
+                                @if($product_data->defaultStock == 0)
+                                <button class="btn btn-lg swipe-to-top  btn-danger " type="button">@lang('website.Out of Stock')</button>
+                                @else
+                                <button class="btn btn-secondary btn-lg swipe-to-top add-to-Cart"  type="button" products_id="{{$products_id}}">@lang('website.Add to Cart')</button>
+                                @endif
+                                @else
+                                <button class="btn btn-secondary btn-lg swipe-to-top  add-to-Cart stock-cart" hidden type="button" products_id="{{$products_id}}">@lang('website.Add to Cart')</button>
+                                <button class="btn btn-danger btn btn-lg swipe-to-top  stock-out-cart" hidden type="button">@lang('website.Out of Stock')</button>
+                                @endif
+                                @endif
+                                @if($product_data->products_type == 2)
+                                <a href="{{$product_data->products_url}}" target="_blank" class="btn btn-secondary btn-lg swipe-to-top">@lang('website.External Link')</a>
+                                @endif
+                            </div>
+                        </form>
+                        @endif
+                        <div class="pro-sub-buttons">
+                            <div class="buttons">
+                                <button class="btn btn-link is_liked" products_id="<?php echo $products_id ?>" style="padding-left: 0;"><i class="fas fa-heart"></i> @lang('website.Add to Wishlist') </button>
+                                <button type="button" class="btn btn-link" onclick="myFunction3({{$products_id}})"><i class="fas fa-align-right"></i>@lang('website.Add to Compare')</button>
+                            </div>
+                            <!-- AddToAny BEGIN -->
+                            <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+                                <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                <a class="a2a_button_facebook"></a>
+                                <a class="a2a_button_twitter"></a>
+                                <a class="a2a_button_email"></a>
+                            </div>
+                            <script async src="https://static.addtoany.com/menu/page.js"></script>
+                            <!-- AddToAny END -->
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-md-12">
+                    <div class="row m-0">
+                        <div class="col-12 col-md-12 p-0">
                             <div class="nav nav-pills" role="tablist">
                                 <a class="nav-link nav-item  active" href="#description" id="description-tab" data-toggle="pill" role="tab">@lang('website.Descriptions')</a>
                                 <a class="nav-link nav-item" href="#review" id="review-tab" data-toggle="pill" role="tab" >@lang('website.Reviews')</a>
@@ -482,7 +484,7 @@ $denominations = $result['denominations'];
                                                 <input value="{{$products_id}}" type="hidden" name="products_id">
                                                 <h2>@lang('website.Write a Review')</h2>
                                                 <div class="write-review-box">
-                                                    <div class="from-group row mb-3">
+                                                    <div class="from-group row m-0 mb-3">
                                                         <div class="col-12"> <label for="inlineFormInputGroup2">@lang('website.Rating')</label></div>
                                                         <div class="pro-rating col-12">
                                                             <fieldset class="ratings">
@@ -499,7 +501,7 @@ $denominations = $result['denominations'];
                                                             </fieldset>
                                                         </div>
                                                     </div>
-                                                    <div class="from-group row mb-3">
+                                                    <div class="from-group row m-0 mb-3">
                                                         <div class="col-12"> <label for="inlineFormInputGroup3">@lang('website.Review')</label></div>
                                                         <div class="input-group col-12">
                                                             <textarea name="reviews_text" id="reviews_text" class="form-control" id="inlineFormInputGroup3" placeholder="@lang('website.Write Your Review')"></textarea>
@@ -526,7 +528,7 @@ $denominations = $result['denominations'];
     </section>
     <section class="product-content pro-content">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row m-0 justify-content-center">
                 <div class="col-12 col-lg-6">
                     <div class="pro-heading-title">
                         <h2> @lang('website.Related Products')
@@ -551,40 +553,40 @@ $denominations = $result['denominations'];
             </div>
         </div>
         <script type="text/javascript">
-                                        jQuery(document).ready(function(e) {
-                                        @if (!empty($flash_start_date))
-                                                @if (date("Y-m-d", $server_time) >= date("Y-m-d", $flash_start_date))
-                                                var product_div_{{$products_id}} = 'product_div_{{$products_id}}';
-                                        var counter_id_{{$products_id}} = 'counter_{{$products_id}}';
-                                        var inputTime_{{$products_id}} = "{{date('M d, Y H:i:s' ,$product_data->flash_expires_date)}}";
-                                        // Set the date we're counting down to
-                                        var countDownDate_{{$products_id}} = new Date(inputTime_{{$products_id}}).getTime();
-                                        // Update the count down every 1 second
-                                        var x_{{$products_id}} = setInterval(function() {
-                                        // Get todays date and time
-                                        var now = new Date().getTime();
-                                        // Find the distance between now and the count down date
-                                        var distance_{{$products_id}} = countDownDate_{{$products_id}} - now;
-                                        // Time calculations for days, hours, minutes and seconds
-                                        var days_{{$products_id}} = Math.floor(distance_{{$products_id}} / (1000 * 60 * 60 * 24));
-                                        var hours_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                        var minutes_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60 * 60)) / (1000 * 60));
-                                        var seconds_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60)) / 1000);
-                                        var days_text = "@lang('website.Days')";
-                                        // Display the result in the element with id="demo"
-                                        document.getElementById(counter_id_{{$products_id}}).innerHTML = "<span class='days'>" + days_{{$products_id}} + "<small>@lang('website.Days')</small></span> <span class='hours'>" + hours_{{$products_id}} + "<small>@lang('website.Hours')</small></span> <span class='mintues'> "
-                                                + minutes_{{$products_id}} + "<small>@lang('website.Minutes')</small></span> <span class='seconds'>" + seconds_{{$products_id}} + "<small>@lang('website.Seconds')</small></span> ";
-                                        // If the count down is finished, write some text
-                                        if (distance_{{$products_id}} < 0) {
-                                        clearInterval(x_{{$products_id}});
-                                        //document.getElementById(counter_id_{{$products_id}}).innerHTML = "EXPIRED";
-                                        document.getElementById('product_div_{{$products_id}}').remove();
-                                        }
-                                        }, 1000);
-                                        @endif
-                                                @endif
-                                        });
-                                        var denominations = @json($denominations);
+                                    jQuery(document).ready(function(e) {
+                                    @if (!empty($flash_start_date))
+                                            @if (date("Y-m-d", $server_time) >= date("Y-m-d", $flash_start_date))
+                                            var product_div_{{$products_id}} = 'product_div_{{$products_id}}';
+                                    var counter_id_{{$products_id}} = 'counter_{{$products_id}}';
+                                    var inputTime_{{$products_id}} = "{{date('M d, Y H:i:s' ,$product_data->flash_expires_date)}}";
+                                    // Set the date we're counting down to
+                                    var countDownDate_{{$products_id}} = new Date(inputTime_{{$products_id}}).getTime();
+                                    // Update the count down every 1 second
+                                    var x_{{$products_id}} = setInterval(function() {
+                                    // Get todays date and time
+                                    var now = new Date().getTime();
+                                    // Find the distance between now and the count down date
+                                    var distance_{{$products_id}} = countDownDate_{{$products_id}} - now;
+                                    // Time calculations for days, hours, minutes and seconds
+                                    var days_{{$products_id}} = Math.floor(distance_{{$products_id}} / (1000 * 60 * 60 * 24));
+                                    var hours_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    var minutes_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60 * 60)) / (1000 * 60));
+                                    var seconds_{{$products_id}} = Math.floor((distance_{{$products_id}} % (1000 * 60)) / 1000);
+                                    var days_text = "@lang('website.Days')";
+                                    // Display the result in the element with id="demo"
+                                    document.getElementById(counter_id_{{$products_id}}).innerHTML = "<span class='days'>" + days_{{$products_id}} + "<small>@lang('website.Days')</small></span> <span class='hours'>" + hours_{{$products_id}} + "<small>@lang('website.Hours')</small></span> <span class='mintues'> "
+                                            + minutes_{{$products_id}} + "<small>@lang('website.Minutes')</small></span> <span class='seconds'>" + seconds_{{$products_id}} + "<small>@lang('website.Seconds')</small></span> ";
+                                    // If the count down is finished, write some text
+                                    if (distance_{{$products_id}} < 0) {
+                                    clearInterval(x_{{$products_id}});
+                                    //document.getElementById(counter_id_{{$products_id}}).innerHTML = "EXPIRED";
+                                    document.getElementById('product_div_{{$products_id}}').remove();
+                                    }
+                                    }, 1000);
+                                    @endif
+                                            @endif
+                                    });
+                                    var denominations = @json($denominations);
         </script>
     </section>
 </section>

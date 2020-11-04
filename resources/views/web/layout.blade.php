@@ -3,6 +3,7 @@
     <head>
         @include('web.common.gtag')
         @include('web.common.meta')
+        <link rel="stylesheet" type="text/css" href="{!! asset('web/css/newStyle.css') !!}" />
     </head>
     <!-- dir="rtl" -->
     <body class="animation-s<?php

@@ -1,0 +1,65 @@
+.pro-single-info{
+    margin-bottom: 10px;
+}
+.qty-table {
+    position: relative;
+}
+#selectCountryFirst {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    background-color: #000000b0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-shadow: 0 2px black;
+    font-size: 18px;
+    font-weight: bold;
+}
+.table.table-striped {
+    height: 203px;
+    overflow: auto;
+    display: inline-block;
+    max-width: 100%;
+}
+.option h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.table th, .table td{
+    width: 33.33%;
+}
+.qty-control input[type="text"] {
+    width: 50%;
+    margin: 0 10px;
+    height: 25px;
+    vertical-align: text-bottom;
+    border-radius: 3px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+.table-striped tbody tr{
+    background-color: rgb(255 255 255) !important;
+}
+.qty-control i.qty-decrease ,
+.qty-control i.qty-increase{
+    background-color: #da4336;
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: bold;
+    font-style: normal;
+}
+.pro-content {
+    overflow: hidden;
+    padding-top: 50px;
+}
