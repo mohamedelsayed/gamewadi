@@ -210,13 +210,19 @@ $denominations = $result['denominations'];
                             </div>
                         </div>
                         <div class="option col-12 p-0 my-3">
-                            <h2>Please choose the card value:</h2>
+                            <h2>{{ trans('website.Please choose the card value')}}:</h2>
                             <div class="listOfValues" style="overflow-y: auto;">
                                 <div class="qty-table">
                                     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
-                                        <tr><th>Value</th><th>Price</th><th>Quantity</th></tr>
+                                        <tr>
+                                            <th>{{ trans('website.Value')}}</th>
+                                            <th>{{ trans('website.Price')}}</th>
+                                            <th>{{ trans('website.Quantity')}}</th>
+                                        </tr>
                                         <tbody class="denomination_tbody">
-                                        <div id="selectCountryFirst" style="display: flex;"><div class="innerSelectCountry"> Please choose the card region first!</div></div>
+                                        <div id="selectCountryFirst" style="display: flex;">
+                                            <div class="innerSelectCountry">{{ trans('Please choose the card region first')}}!</div>
+                                        </div>
                                         </tbody>
                                     </table>
                                 </div>

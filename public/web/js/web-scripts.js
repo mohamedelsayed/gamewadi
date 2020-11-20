@@ -2,7 +2,7 @@ $(document).ready(function () {
 });
 function draw_denomination_table_web(selectObject) {
     var country_id = selectObject.value;
-    console.log(country_id);
+//    console.log(country_id);
     var html = '';
     var denominationsIn = denominations[country_id];
     if (denominationsIn && denominationsIn.length > 0) {

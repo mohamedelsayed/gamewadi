@@ -581,4 +581,9 @@ return [
     'Avatar' => 'الصورة',
     'Please choose the country' => 'Please choose the country',
     'ChooseCountry' => 'Choose country',
+    'Please choose the card value' => 'Please choose the card value',
+    'Value' => 'Value',
+    'Price' => 'Price',
+    'Quantity' => 'Quantity',
+    'Please choose the card region first' => 'Please choose the card region first',
 ];
