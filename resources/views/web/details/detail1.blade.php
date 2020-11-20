@@ -592,7 +592,10 @@ $denominations = $result['denominations'];
                                     @endif
                                             @endif
                                     });
-                                    var denominations = @json($denominations);
+                                    var isDigital = {{$isDigital}};
+                                    @if ($isDigital == 1)
+                                            var denominations = @json($denominations);
+                                    @endif
         </script>
     </section>
 </section>

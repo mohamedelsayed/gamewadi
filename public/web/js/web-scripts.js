@@ -1,8 +1,16 @@
 $(document).ready(function () {
+    if ((typeof isDigital !== "undefined") && isDigital == 1) {
+        var country_id = $('select[name=country_id] option:eq(2)').val();
+        showDenominationsByCountryId(country_id);
+    }
 });
 function draw_denomination_table_web(selectObject) {
     var country_id = selectObject.value;
 //    console.log(country_id);
+    showDenominationsByCountryId(country_id);
+    $('#selectCountryFirst').hide();
+}
+function showDenominationsByCountryId(country_id) {
     var html = '';
     var denominationsIn = denominations[country_id];
     if (denominationsIn && denominationsIn.length > 0) {
@@ -24,6 +32,5 @@ function draw_denomination_table_web(selectObject) {
                     + '</tr>';
         }
     }
-    $('#selectCountryFirst').hide();
     $('.denomination_tbody').html(html);
 }
