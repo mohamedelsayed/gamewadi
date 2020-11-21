@@ -10,31 +10,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Lang;
 use Session;
 
-class Cart extends Model
-{
+class Cart extends Model {
+
     //mycart
-    public function myCart($baskit_id)
-    {
+    public function myCart($baskit_id) {
         $cart = DB::table('customers_basket')
-            ->join('products', 'products.products_id', '=', 'customers_basket.products_id')
-            ->join('products_description', 'products_description.products_id', '=', 'products.products_id')
-            ->LeftJoin('image_categories', function ($join) {
-                $join->on('image_categories.image_id', '=', 'products.products_image')
+                ->join('products', 'products.products_id', '=', 'customers_basket.products_id')
+                ->join('products_description', 'products_description.products_id', '=', 'products.products_id')
+                ->LeftJoin('image_categories', function ($join) {
+                    $join->on('image_categories.image_id', '=', 'products.products_image')
                     ->where(function ($query) {
                         $query->where('image_categories.image_type', '=', 'THUMBNAIL')
-                            ->where('image_categories.image_type', '!=', 'THUMBNAIL')
-                            ->orWhere('image_categories.image_type', '=', 'ACTUAL');
+                        ->where('image_categories.image_type', '!=', 'THUMBNAIL')
+                        ->orWhere('image_categories.image_type', '=', 'ACTUAL');
                     });
-            })
-            ->select('customers_basket.*',
-                'image_categories.path as image_path', 'products.products_model as model',
-                'products.products_type as products_type', 'products.products_min_order as min_order', 'products.products_max_stock as max_order',
-                'products.products_image as image', 'products_description.products_name as products_name', 'products.products_price as price',
-                'products.products_weight as weight', 'products.products_weight_unit as unit', 'products.products_slug')
-            ->where([
-                ['customers_basket.is_order', '=', '0'],
-                ['products_description.language_id', '=', Session::get('language_id')],
-            ]);
+                })
+                ->select('customers_basket.*',
+                        'image_categories.path as image_path', 'products.products_model as model',
+                        'products.products_type as products_type', 'products.products_min_order as min_order', 'products.products_max_stock as max_order',
+                        'products.products_image as image', 'products_description.products_name as products_name', 'products.products_price as price',
+                        'products.products_weight as weight', 'products.products_weight_unit as unit', 'products.products_slug')
+                ->where([
+            ['customers_basket.is_order', '=', '0'],
+            ['products_description.language_id', '=', Session::get('language_id')],
+        ]);
 
         if (empty(session('customers_id'))) {
             $cart->where('customers_basket.session_id', '=', Session::getId());
@@ -54,41 +53,40 @@ class Cart extends Model
             foreach ($baskit as $cart_data) {
                 //products_image
                 $default_images = DB::table('image_categories')
-                    ->where('image_id', '=', $cart_data->image)
-                    ->where('image_type', 'THUMBNAIL')
-                    ->first();
+                        ->where('image_id', '=', $cart_data->image)
+                        ->where('image_type', 'THUMBNAIL')
+                        ->first();
 
                 if ($default_images) {
                     $cart_data->image_path = $default_images->path;
                 } else {
                     $default_images = DB::table('image_categories')
-                        ->where('image_id', '=', $cart_data->image)
-                        ->where('image_type', 'Medium')
-                        ->first();
+                            ->where('image_id', '=', $cart_data->image)
+                            ->where('image_type', 'Medium')
+                            ->first();
 
                     if ($default_images) {
                         $cart_data->image_path = $default_images->path;
                     } else {
                         $default_images = DB::table('image_categories')
-                            ->where('image_id', '=', $cart_data->image)
-                            ->where('image_type', 'ACTUAL')
-                            ->first();
+                                ->where('image_id', '=', $cart_data->image)
+                                ->where('image_type', 'ACTUAL')
+                                ->first();
                         $cart_data->image_path = $default_images->path;
                     }
-
                 }
 
 
-                 //categories
-                 $categories = DB::table('products_to_categories')
-                    ->leftjoin('categories', 'categories.categories_id', 'products_to_categories.categories_id')
-                    ->leftjoin('categories_description', 'categories_description.categories_id', 'products_to_categories.categories_id')
-                    ->select('categories.categories_id', 'categories_description.categories_name', 'categories.categories_image', 'categories.categories_icon', 'categories.parent_id')
-                    ->where('products_id', '=', $cart_data->products_id)
-                    ->where('categories_description.language_id', '=', Session::get('language_id'))->get();
-                if(!empty($categories) and count($categories)>0){
+                //categories
+                $categories = DB::table('products_to_categories')
+                                ->leftjoin('categories', 'categories.categories_id', 'products_to_categories.categories_id')
+                                ->leftjoin('categories_description', 'categories_description.categories_id', 'products_to_categories.categories_id')
+                                ->select('categories.categories_id', 'categories_description.categories_name', 'categories.categories_image', 'categories.categories_icon', 'categories.parent_id')
+                                ->where('products_id', '=', $cart_data->products_id)
+                                ->where('categories_description.language_id', '=', Session::get('language_id'))->get();
+                if (!empty($categories) and count($categories) > 0) {
                     $cart_data->categories = $categories;
-                }else{
+                } else {
                     $cart_data->categories = array();
                 }
                 array_push($result, $cart_data);
@@ -112,23 +110,21 @@ class Cart extends Model
                         $result[$index]->max_order = $stocks;
                     }
                     $index++;
-
                 } else {
 
                     $attributes = DB::table('customers_basket_attributes')
-                        ->join('products_options', 'products_options.products_options_id', '=', 'customers_basket_attributes.products_options_id')
-                        ->join('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'customers_basket_attributes.products_options_id')
-                        ->join('products_options_values', 'products_options_values.products_options_values_id', '=', 'customers_basket_attributes.products_options_values_id')
-                        ->leftjoin('products_options_values_descriptions', 'products_options_values_descriptions.products_options_values_id', '=', 'customers_basket_attributes.products_options_values_id')
-                        ->leftjoin('products_attributes', function ($join) {
-                            $join->on('customers_basket_attributes.products_id', '=', 'products_attributes.products_id')->on('customers_basket_attributes.products_options_id', '=', 'products_attributes.options_id')->on('customers_basket_attributes.products_options_values_id', '=', 'products_attributes.options_values_id');
-                        })
-                        ->select('products_options_descriptions.options_name as attribute_name', 'products_options_values_descriptions.options_values_name as attribute_value', 'customers_basket_attributes.products_options_id as options_id', 'customers_basket_attributes.products_options_values_id as options_values_id', 'products_attributes.price_prefix as prefix', 'products_attributes.products_attributes_id as products_attributes_id', 'products_attributes.options_values_price as values_price')
-
-                        ->where('customers_basket_attributes.products_id', '=', $cart_data->products_id)
-                        ->where('customers_basket_id', '=', $cart_data->customers_basket_id)
-                        ->where('products_options_descriptions.language_id', '=', Session::get('language_id'))
-                        ->where('products_options_values_descriptions.language_id', '=', Session::get('language_id'));
+                            ->join('products_options', 'products_options.products_options_id', '=', 'customers_basket_attributes.products_options_id')
+                            ->join('products_options_descriptions', 'products_options_descriptions.products_options_id', '=', 'customers_basket_attributes.products_options_id')
+                            ->join('products_options_values', 'products_options_values.products_options_values_id', '=', 'customers_basket_attributes.products_options_values_id')
+                            ->leftjoin('products_options_values_descriptions', 'products_options_values_descriptions.products_options_values_id', '=', 'customers_basket_attributes.products_options_values_id')
+                            ->leftjoin('products_attributes', function ($join) {
+                                $join->on('customers_basket_attributes.products_id', '=', 'products_attributes.products_id')->on('customers_basket_attributes.products_options_id', '=', 'products_attributes.options_id')->on('customers_basket_attributes.products_options_values_id', '=', 'products_attributes.options_values_id');
+                            })
+                            ->select('products_options_descriptions.options_name as attribute_name', 'products_options_values_descriptions.options_values_name as attribute_value', 'customers_basket_attributes.products_options_id as options_id', 'customers_basket_attributes.products_options_values_id as options_values_id', 'products_attributes.price_prefix as prefix', 'products_attributes.products_attributes_id as products_attributes_id', 'products_attributes.options_values_price as values_price')
+                            ->where('customers_basket_attributes.products_id', '=', $cart_data->products_id)
+                            ->where('customers_basket_id', '=', $cart_data->customers_basket_id)
+                            ->where('products_options_descriptions.language_id', '=', Session::get('language_id'))
+                            ->where('products_options_values_descriptions.language_id', '=', Session::get('language_id'));
 
                     if (empty(session('customers_id'))) {
                         $attributes->where('customers_basket_attributes.session_id', '=', Session::getId());
@@ -145,9 +141,7 @@ class Cart extends Model
                     foreach ($attributes_data as $attributes_datas) {
                         if ($cart_data->products_type == '1') {
                             $products_attributes_id[] = $attributes_datas->products_attributes_id;
-
                         }
-
                     }
                     $myVar = new Products();
 
@@ -175,7 +169,6 @@ class Cart extends Model
                             $coupons = DB::table('coupons')->where('coupans_id', '=', $coupons_data)->get();
                             $result2[$index2++] = $coupons[0];
                         }
-
                     }
 
                     $result[$index]->coupons = $result2;
@@ -186,17 +179,17 @@ class Cart extends Model
         }
         return ($result);
     }
+
     //getCart
-    public function cart($request)
-    {
+    public function cart($request) {
 
         $cart = DB::table('customers_basket')
-            ->join('products', 'products.products_id', '=', 'customers_basket.products_id')
-            ->join('products_description', 'products_description.products_id', '=', 'products.products_id')
-            ->leftJoin('price_by_currency', 'products.products_id', '=', 'price_by_currency.product_id')
-            ->LeftJoin('image_categories', 'products.products_image', '=', 'image_categories.image_id')
-            ->leftJoin('currencies', 'price_by_currency.currency_id', '=', 'currencies.id')
-            ->select('currencies.symbol_left as currency_symbol_left', 'currencies.symbol_right as currency_symbol_right', 'price_by_currency.price as price', 'image_categories.path as image_path', 'customers_basket.*', 'products.products_model as model', 'products.products_image as image', 'products_description.products_name as products_name', 'products.products_quantity as quantity', 'products.products_price as price', 'products.products_weight as weight', 'products.products_weight_unit as unit')->where('customers_basket.is_order', '=', '0')->where('products_description.language_id', '=', Session::get('language_id'));
+                        ->join('products', 'products.products_id', '=', 'customers_basket.products_id')
+                        ->join('products_description', 'products_description.products_id', '=', 'products.products_id')
+                        ->leftJoin('price_by_currency', 'products.products_id', '=', 'price_by_currency.product_id')
+                        ->LeftJoin('image_categories', 'products.products_image', '=', 'image_categories.image_id')
+                        ->leftJoin('currencies', 'price_by_currency.currency_id', '=', 'currencies.id')
+                        ->select('currencies.symbol_left as currency_symbol_left', 'currencies.symbol_right as currency_symbol_right', 'price_by_currency.price as price', 'image_categories.path as image_path', 'customers_basket.*', 'products.products_model as model', 'products.products_image as image', 'products_description.products_name as products_name', 'products.products_quantity as quantity', 'products.products_price as price', 'products.products_weight as weight', 'products.products_weight_unit as unit')->where('customers_basket.is_order', '=', '0')->where('products_description.language_id', '=', Session::get('language_id'));
 
         if (empty(session('customers_id'))) {
             $cart->where('customers_basket.session_id', '=', Session::getId());
@@ -206,14 +199,12 @@ class Cart extends Model
 
         $baskit = $cart->groupBy('customers_basket.products_id')->get();
 
-        
+
 
         return ($baskit);
-
     }
 
-    public function editcart($request)
-    {
+    public function editcart($request) {
         $index = new Index();
         $products = new Products();
         $result = array();
@@ -245,8 +236,8 @@ class Cart extends Model
         $result['sub_category_slug'] = $sub_category_slug;
 
         $isFlash = DB::table('flash_sale')->where('products_id', $result['cart'][0]->products_id)
-            ->where('flash_expires_date', '>=', time())->where('flash_status', '=', 1)
-            ->get();
+                ->where('flash_expires_date', '>=', time())->where('flash_status', '=', 1)
+                ->get();
 
         if (!empty($isFlash) and count($isFlash) > 0) {
             $type = "flashsale";
@@ -278,8 +269,7 @@ class Cart extends Model
         return $result;
     }
 
-    public function deleteCart($request)
-    {
+    public function deleteCart($request) {
         session(['out_of_stock' => 0]);
         $baskit_id = $request->id;
 
@@ -291,14 +281,12 @@ class Cart extends Model
             ['customers_basket_id', '=', $baskit_id],
         ])->delete();
         $check = DB::table('customers_basket')
-            ->where('customers_basket.session_id', '=', Session::getId())
-            ->first();
+                ->where('customers_basket.session_id', '=', Session::getId())
+                ->first();
         return $check;
-
     }
 
-    public function cartIdArray($request)
-    {
+    public function cartIdArray($request) {
 
         $cart = DB::table('customers_basket')->where('customers_basket.is_order', '=', '0');
 
@@ -317,11 +305,9 @@ class Cart extends Model
         }
 
         return ($result);
-
     }
 
-    public function updatesinglecart($request)
-    {
+    public function updatesinglecart($request) {
         $index = new Index();
         $products = new Products();
         $products_id = $request->products_id;
@@ -374,14 +360,14 @@ class Cart extends Model
         );
         //update into cart
         DB::table('customers_basket')->where('customers_basket_id', '=', $basket_id)->update(
-            [
-                'customers_id' => $customers_id,
-                'products_id' => $products_id,
-                'session_id' => $session_id,
-                'customers_basket_quantity' => $customers_basket_quantity,
-                'final_price' => $final_price,
-                'customers_basket_date_added' => $customers_basket_date_added,
-            ]);
+                [
+                    'customers_id' => $customers_id,
+                    'products_id' => $products_id,
+                    'session_id' => $session_id,
+                    'customers_basket_quantity' => $customers_basket_quantity,
+                    'final_price' => $final_price,
+                    'customers_basket_date_added' => $customers_basket_date_added,
+        ]);
 
         if (count($request->option_id) > 0) {
             foreach ($request->option_id as $option_id) {
@@ -391,13 +377,12 @@ class Cart extends Model
                     ['products_id', '=', $products_id],
                     ['products_options_id', '=', $option_id],
                 ])->update(
-                    [
-                        'customers_id' => $customers_id,
-                        'products_options_values_id' => $request->$option_id,
-                        'session_id' => $session_id,
-                    ]);
+                        [
+                            'customers_id' => $customers_id,
+                            'products_options_values_id' => $request->$option_id,
+                            'session_id' => $session_id,
+                ]);
             }
-
         }
         //apply coupon
         if (count(session('coupon')) > 0) {
@@ -414,8 +399,7 @@ class Cart extends Model
         return $result;
     }
 
-    public function addToCart($request)
-    {
+    public function addToCart($request) {
         $index = new Index();
         $products = new Products();
 
@@ -453,23 +437,21 @@ class Cart extends Model
         if (empty($customers_id)) {
 
             $exist = DB::table('customers_basket')->where([
-                ['session_id', '=', $session_id],
-                ['products_id', '=', $products_id],
-                ['is_order', '=', 0],
-            ])->get();
-
+                        ['session_id', '=', $session_id],
+                        ['products_id', '=', $products_id],
+                        ['is_order', '=', 0],
+                    ])->get();
         } else {
 
             $exist = DB::table('customers_basket')->where([
-                ['customers_id', '=', $customers_id],
-                ['products_id', '=', $products_id],
-                ['is_order', '=', 0],
-            ])->get();
-
+                        ['customers_id', '=', $customers_id],
+                        ['products_id', '=', $products_id],
+                        ['is_order', '=', 0],
+                    ])->get();
         }
         $isFlash = DB::table('flash_sale')->where('products_id', $products_id)
-            ->where('flash_expires_date', '>=', time())->where('flash_status', '=', 1)
-            ->get();
+                ->where('flash_expires_date', '>=', time())->where('flash_status', '=', 1)
+                ->get();
         //get products detail  is not default
         if (!empty($isFlash) and count($isFlash) > 0) {
             $type = "flashsale";
@@ -500,7 +482,6 @@ class Cart extends Model
                 }
 
                 // if ($count >= $result['detail']['product_data'][0]->defaultStock || $count > $result['detail']['product_data'][0]->products_max_stock and $result['detail']['product_data'][0]->products_max_stock != null) {
-
                 //     return array('status' => 'exceed', 'defaultStock' => $result['detail']['product_data'][0]->defaultStock, 'already_added' => $exist[0]->customers_basket_quantity, 'remain_pieces' => $remain);
                 // }
             } else {
@@ -540,7 +521,6 @@ class Cart extends Model
                     }
                 }
             }
-
         }
 
         //check quantity
@@ -551,13 +531,11 @@ class Cart extends Model
             $content = $products->productQuantity($qunatity);
             //dd($content);
             $stocks = $content['remainingStock'];
-
         } else {
             $stocks = $result['detail']['product_data'][0]->defaultStock;
-
         }
 
-        if ($stocks <= $result['detail']['product_data'][0]->products_max_stock or $result['detail']['product_data'][0]->products_max_stock ==0) {
+        if ($stocks <= $result['detail']['product_data'][0]->products_max_stock or $result['detail']['product_data'][0]->products_max_stock == 0) {
             $stocksToValid = $stocks;
         } else {
             $stocksToValid = $result['detail']['product_data'][0]->products_max_stock;
@@ -591,14 +569,14 @@ class Cart extends Model
         if ($request->customers_basket_id) {
             $basket_id = $request->customers_basket_id;
             DB::table('customers_basket')->where('customers_basket_id', '=', $basket_id)->update(
-                [
-                    'customers_id' => $customers_id,
-                    'products_id' => $products_id,
-                    'session_id' => $session_id,
-                    'customers_basket_quantity' => $customers_basket_quantity,
-                    'final_price' => $final_price,
-                    'customers_basket_date_added' => $customers_basket_date_added,
-                ]);
+                    [
+                        'customers_id' => $customers_id,
+                        'products_id' => $products_id,
+                        'session_id' => $session_id,
+                        'customers_basket_quantity' => $customers_basket_quantity,
+                        'final_price' => $final_price,
+                        'customers_basket_date_added' => $customers_basket_date_added,
+            ]);
 
             if (count($request->option_id) > 0) {
                 foreach ($request->option_id as $option_id) {
@@ -608,56 +586,53 @@ class Cart extends Model
                         ['products_id', '=', $products_id],
                         ['products_options_id', '=', $option_id],
                     ])->update(
-                        [
-                            'customers_id' => $customers_id,
-                            'products_options_values_id' => $request->$option_id,
-                            'session_id' => $session_id,
-                        ]);
+                            [
+                                'customers_id' => $customers_id,
+                                'products_options_values_id' => $request->$option_id,
+                                'session_id' => $session_id,
+                    ]);
                 }
-
             }
         } else {
             //insert into cart
             if (count($exist) == 0) {
 
                 $customers_basket_id = DB::table('customers_basket')->insertGetId(
-                    [
-                        'customers_id' => $customers_id,
-                        'products_id' => $products_id,
-                        'session_id' => $session_id,
-                        'customers_basket_quantity' => $customers_basket_quantity,
-                        'final_price' => $final_price,
-                        'customers_basket_date_added' => $customers_basket_date_added,
-                    ]);
+                        [
+                            'customers_id' => $customers_id,
+                            'products_id' => $products_id,
+                            'session_id' => $session_id,
+                            'customers_basket_quantity' => $customers_basket_quantity,
+                            'final_price' => $final_price,
+                            'customers_basket_date_added' => $customers_basket_date_added,
+                ]);
 
                 if (!empty($request->option_id) && count($request->option_id) > 0) {
                     foreach ($request->option_id as $option_id) {
 
                         DB::table('customers_basket_attributes')->insert(
-                            [
-                                'customers_id' => $customers_id,
-                                'products_id' => $products_id,
-                                'products_options_id' => $option_id,
-                                'products_options_values_id' => $request->$option_id,
-                                'session_id' => $session_id,
-                                'customers_basket_id' => $customers_basket_id,
-                            ]);
-
+                                [
+                                    'customers_id' => $customers_id,
+                                    'products_id' => $products_id,
+                                    'products_options_id' => $option_id,
+                                    'products_options_values_id' => $request->$option_id,
+                                    'session_id' => $session_id,
+                                    'customers_basket_id' => $customers_basket_id,
+                        ]);
                     }
-
                 } else if (!empty($detail['product_data'][0]->attributes)) {
 
                     foreach ($detail['product_data'][0]->attributes as $attribute) {
 
                         DB::table('customers_basket_attributes')->insert(
-                            [
-                                'customers_id' => $customers_id,
-                                'products_id' => $products_id,
-                                'products_options_id' => $attribute['option']['id'],
-                                'products_options_values_id' => $attribute['values'][0]['id'],
-                                'session_id' => $session_id,
-                                'customers_basket_id' => $customers_basket_id,
-                            ]);
+                                [
+                                    'customers_id' => $customers_id,
+                                    'products_id' => $products_id,
+                                    'products_options_id' => $attribute['option']['id'],
+                                    'products_options_values_id' => $attribute['values'][0]['id'],
+                                    'session_id' => $session_id,
+                                    'customers_basket_id' => $customers_basket_id,
+                        ]);
                     }
                 }
             } else {
@@ -673,40 +648,38 @@ class Cart extends Model
                             $totalAttribute = '0';
                             foreach ($request->option_id as $option_id) {
                                 $checkexistAttributes = DB::table('customers_basket_attributes')->where([
-                                    ['customers_basket_id', '=', $exists->customers_basket_id],
-                                    ['products_id', '=', $products_id],
-                                    ['products_options_id', '=', $option_id],
-                                    ['customers_id', '=', $customers_id],
-                                    ['products_options_values_id', '=', $request->$option_id],
-                                    ['session_id', '=', $session_id],
-                                ])->get();
+                                            ['customers_basket_id', '=', $exists->customers_basket_id],
+                                            ['products_id', '=', $products_id],
+                                            ['products_options_id', '=', $option_id],
+                                            ['customers_id', '=', $customers_id],
+                                            ['products_options_values_id', '=', $request->$option_id],
+                                            ['session_id', '=', $session_id],
+                                        ])->get();
                                 $totalAttribute++;
                                 if (count($checkexistAttributes) > 0) {
                                     $existAttribute++;
                                 } else {
                                     $existAttribute = 0;
                                 }
-
                             }
 
                             if ($totalAttribute == $existAttribute) {
                                 $basket_id = $exists->customers_basket_id;
                             }
                         }
-
                     } else
                     if (!empty($detail['product_data'][0]->attributes)) {
                         foreach ($exist as $exists) {
                             $totalAttribute = '0';
                             foreach ($detail['product_data'][0]->attributes as $attribute) {
                                 $checkexistAttributes = DB::table('customers_basket_attributes')->where([
-                                    ['customers_basket_id', '=', $exists->customers_basket_id],
-                                    ['products_id', '=', $products_id],
-                                    ['products_options_id', '=', $attribute['option']['id']],
-                                    ['customers_id', '=', $customers_id],
-                                    ['products_options_values_id', '=', $attribute['values'][0]['id']],
-                                    ['products_options_id', '=', $option_id],
-                                ])->get();
+                                            ['customers_basket_id', '=', $exists->customers_basket_id],
+                                            ['products_id', '=', $products_id],
+                                            ['products_options_id', '=', $attribute['option']['id']],
+                                            ['customers_id', '=', $customers_id],
+                                            ['products_options_values_id', '=', $attribute['values'][0]['id']],
+                                            ['products_options_id', '=', $option_id],
+                                        ])->get();
                                 $totalAttribute++;
                                 if (count($checkexistAttributes) > 0) {
                                     $existAttribute++;
@@ -718,57 +691,99 @@ class Cart extends Model
                                 }
                             }
                         }
-
                     }
 
                     //attribute exist
                     if ($basket_id == 0) {
 
                         $customers_basket_id = DB::table('customers_basket')->insertGetId(
-                            [
-                                'customers_id' => $customers_id,
-                                'products_id' => $products_id,
-                                'session_id' => $session_id,
-                                'customers_basket_quantity' => $customers_basket_quantity,
-                                'final_price' => $final_price,
-                                'customers_basket_date_added' => $customers_basket_date_added,
-                            ]);
+                                [
+                                    'customers_id' => $customers_id,
+                                    'products_id' => $products_id,
+                                    'session_id' => $session_id,
+                                    'customers_basket_quantity' => $customers_basket_quantity,
+                                    'final_price' => $final_price,
+                                    'customers_basket_date_added' => $customers_basket_date_added,
+                        ]);
 
                         if (count($request->option_id) > 0) {
                             foreach ($request->option_id as $option_id) {
 
                                 DB::table('customers_basket_attributes')->insert(
-                                    [
-                                        'customers_id' => $customers_id,
-                                        'products_id' => $products_id,
-                                        'products_options_id' => $option_id,
-                                        'products_options_values_id' => $request->$option_id,
-                                        'session_id' => $session_id,
-                                        'customers_basket_id' => $customers_basket_id,
-                                    ]);
-
+                                        [
+                                            'customers_id' => $customers_id,
+                                            'products_id' => $products_id,
+                                            'products_options_id' => $option_id,
+                                            'products_options_values_id' => $request->$option_id,
+                                            'session_id' => $session_id,
+                                            'customers_basket_id' => $customers_basket_id,
+                                ]);
                             }
-
                         } else if (!empty($detail['product_data'][0]->attributes)) {
 
                             foreach ($detail['product_data'][0]->attributes as $attribute) {
 
                                 DB::table('customers_basket_attributes')->insert(
-                                    [
-                                        'customers_id' => $customers_id,
-                                        'products_id' => $products_id,
-                                        'products_options_id' => $attribute['option']['id'],
-                                        'products_options_values_id' => $attribute['values'][0]['id'],
-                                        'session_id' => $session_id,
-                                        'customers_basket_id' => $customers_basket_id,
-                                    ]);
+                                        [
+                                            'customers_id' => $customers_id,
+                                            'products_id' => $products_id,
+                                            'products_options_id' => $attribute['option']['id'],
+                                            'products_options_values_id' => $attribute['values'][0]['id'],
+                                            'session_id' => $session_id,
+                                            'customers_basket_id' => $customers_basket_id,
+                                ]);
                             }
                         }
-
                     } else {
 
                         //update into cart
                         DB::table('customers_basket')->where('customers_basket_id', '=', $basket_id)->update(
+                                [
+                                    'customers_id' => $customers_id,
+                                    'products_id' => $products_id,
+                                    'session_id' => $session_id,
+                                    'customers_basket_quantity' => DB::raw('customers_basket_quantity+' . $customers_basket_quantity),
+                                    'final_price' => $final_price,
+                                    'customers_basket_date_added' => $customers_basket_date_added,
+                        ]);
+
+                        if (count($request->option_id) > 0) {
+                            foreach ($request->option_id as $option_id) {
+
+                                DB::table('customers_basket_attributes')->where([
+                                    ['customers_basket_id', '=', $basket_id],
+                                    ['products_id', '=', $products_id],
+                                    ['products_options_id', '=', $option_id],
+                                ])->update(
+                                        [
+                                            'customers_id' => $customers_id,
+                                            'products_options_values_id' => $request->$option_id,
+                                            'session_id' => $session_id,
+                                ]);
+                            }
+                        } else if (!empty($detail['product_data'][0]->attributes)) {
+
+                            foreach ($detail['product_data'][0]->attributes as $attribute) {
+
+                                DB::table('customers_basket_attributes')->where([
+                                    ['customers_basket_id', '=', $basket_id],
+                                    ['products_id', '=', $products_id],
+                                    ['products_options_id', '=', $option_id],
+                                ])->update(
+                                        [
+                                            'customers_id' => $customers_id,
+                                            'products_id' => $products_id,
+                                            'products_options_id' => $attribute['option']['id'],
+                                            'products_options_values_id' => $attribute['values'][0]['id'],
+                                            'session_id' => $session_id,
+                                            'customers_basket_id' => $customers_basket_id,
+                                ]);
+                            }
+                        }
+                    }
+                } else {
+                    //update into cart
+                    DB::table('customers_basket')->where('customers_basket_id', '=', $exist[0]->customers_basket_id)->update(
                             [
                                 'customers_id' => $customers_id,
                                 'products_id' => $products_id,
@@ -776,57 +791,7 @@ class Cart extends Model
                                 'customers_basket_quantity' => DB::raw('customers_basket_quantity+' . $customers_basket_quantity),
                                 'final_price' => $final_price,
                                 'customers_basket_date_added' => $customers_basket_date_added,
-                            ]);
-
-                        if (count($request->option_id) > 0) {
-                            foreach ($request->option_id as $option_id) {
-
-                                DB::table('customers_basket_attributes')->where([
-                                    ['customers_basket_id', '=', $basket_id],
-                                    ['products_id', '=', $products_id],
-                                    ['products_options_id', '=', $option_id],
-                                ])->update(
-                                    [
-                                        'customers_id' => $customers_id,
-                                        'products_options_values_id' => $request->$option_id,
-                                        'session_id' => $session_id,
-                                    ]);
-                            }
-
-                        } else if (!empty($detail['product_data'][0]->attributes)) {
-
-                            foreach ($detail['product_data'][0]->attributes as $attribute) {
-
-                                DB::table('customers_basket_attributes')->where([
-                                    ['customers_basket_id', '=', $basket_id],
-                                    ['products_id', '=', $products_id],
-                                    ['products_options_id', '=', $option_id],
-                                ])->update(
-                                    [
-                                        'customers_id' => $customers_id,
-                                        'products_id' => $products_id,
-                                        'products_options_id' => $attribute['option']['id'],
-                                        'products_options_values_id' => $attribute['values'][0]['id'],
-                                        'session_id' => $session_id,
-                                        'customers_basket_id' => $customers_basket_id,
-                                    ]);
-                            }
-                        }
-
-                    }
-
-                } else {
-                    //update into cart
-                    DB::table('customers_basket')->where('customers_basket_id', '=', $exist[0]->customers_basket_id)->update(
-                        [
-                            'customers_id' => $customers_id,
-                            'products_id' => $products_id,
-                            'session_id' => $session_id,
-                            'customers_basket_quantity' => DB::raw('customers_basket_quantity+' . $customers_basket_quantity),
-                            'final_price' => $final_price,
-                            'customers_basket_date_added' => $customers_basket_date_added,
-                        ]);
-
+                    ]);
                 }
                 //apply coupon
                 if (count(session('coupon')) > 0) {
@@ -839,17 +804,15 @@ class Cart extends Model
                         }
                     }
                 }
-
             }
         }
         $result['commonContent'] = $index->commonContent();
         return $result;
     }
 
-    public function common_apply_coupon($coupon_code)
-    {
+    public function common_apply_coupon($coupon_code) {
         $result = array();
-        
+
         //current date
         $currentDate = date('Y-m-d 00:00:00', time());
 
@@ -869,7 +832,6 @@ class Cart extends Model
             foreach (session('coupon') as $session_coupon) {
                 array_push($session_coupon_data, $session_coupon);
                 $session_coupon_ids[] = $session_coupon->coupans_id;
-
             }
         }
 
@@ -913,9 +875,9 @@ class Cart extends Model
                         if ($coupons[0]->exclude_sale_items == 1) {
                             $products_id = $cart->products_id;
                             $sales_item = DB::table('specials')->where([
-                                ['status', '=', '1'],
-                                ['expires_date', '>', $currentDate],
-                                ['products_id', '=', $products_id]])->select('products_id', 'specials_new_products_price as specials_price')->get();
+                                        ['status', '=', '1'],
+                                        ['expires_date', '>', $currentDate],
+                                        ['products_id', '=', $products_id]])->select('products_id', 'specials_new_products_price as specials_price')->get();
 
                             if (count($sales_item) > 0) {
                                 $exclude_sale_items[] = $sales_item[0]->products_id;
@@ -930,7 +892,6 @@ class Cart extends Model
 
                     if ($coupons[0]->individual_use == '1' and $individual_use > 0) {
                         $response = array('success' => '2', 'message' => Lang::get("website.The coupon cannot be used in conjunction with other coupons"));
-
                     } else {
 
                         //check limit
@@ -961,11 +922,9 @@ class Cart extends Model
 
                                             $coupon_discount = $coupons[0]->amount;
                                             $coupon[] = $coupons[0];
-
                                         } else {
                                             $response = array('success' => '2', 'message' => Lang::get("website.Coupon amount is greater than total price"));
                                         }
-
                                     } elseif ($coupons[0]->discount_type == 'percent') {
                                         $current_discount = $coupons[0]->amount / 100 * $cart_price;
                                         $cart_price = $cart_price - $current_discount;
@@ -976,7 +935,6 @@ class Cart extends Model
                                         } else {
                                             $response = array('success' => '2', 'message' => Lang::get("website.Coupon amount is greater than total price"));
                                         }
-
                                     } elseif ($coupons[0]->discount_type == 'fixed_product') {
 
                                         $product_discount_price = 0;
@@ -1015,9 +973,7 @@ class Cart extends Model
                                                             $items_greater_price++;
                                                         }
                                                     }
-
                                                 }
-
                                             } else if (!empty($coupon[0]->excluded_product_categories)) {
 
                                                 //get category ids
@@ -1048,7 +1004,6 @@ class Cart extends Model
                                                         }
                                                     }
                                                 }
-
                                             } else {
                                                 //if coupon is apply for specific product
                                                 if (!empty($coupons[0]->product_ids) and in_array($cart->products_id, $coupons[0]->product_ids)) {
@@ -1073,7 +1028,6 @@ class Cart extends Model
                                                     }
                                                 }
                                             }
-
                                         }
 
                                         //check if all cart products are equal to that product which have greater discount amount
@@ -1082,9 +1036,7 @@ class Cart extends Model
                                         } else {
                                             $coupon_discount = $product_discount_price;
                                             $coupon[] = $coupons[0];
-
                                         }
-
                                     } elseif ($coupons[0]->discount_type == 'percent_product') {
 
                                         $product_discount_price = 0;
@@ -1122,9 +1074,7 @@ class Cart extends Model
                                                             $items_greater_price++;
                                                         }
                                                     }
-
                                                 }
-
                                             } else if (!empty($coupon[0]->excluded_product_categories)) {
 
                                                 //get category ids
@@ -1154,9 +1104,7 @@ class Cart extends Model
                                                             $items_greater_price++;
                                                         }
                                                     }
-
                                                 }
-
                                             } else {
 
                                                 //if coupon is apply for specific product
@@ -1182,7 +1130,6 @@ class Cart extends Model
                                                     }
                                                 }
                                             }
-
                                         }
 
                                         //check if all cart products are equal to that product which have greater discount amount
@@ -1192,20 +1139,15 @@ class Cart extends Model
                                             $coupon_discount = $product_discount_price;
                                             $coupon[] = $coupons[0];
                                         }
-
                                     }
                                 }
-
                             }
-
                         }
-
                     }
-
                 }
             }
-            
-            if(empty($response)){
+
+            if (empty($response)) {
                 if (!in_array($coupons[0]->coupans_id, $session_coupon_ids)) {
 
                     if (count($session_coupon_data) > 0) {
@@ -1216,32 +1158,27 @@ class Cart extends Model
                     $session_coupon_data[$index] = $coupons[0];
                     session(['coupon_discount' => session('coupon_discount') + $coupon_discount]);
                     $response = array('success' => '1', 'message' => Lang::get("website.Couponisappliedsuccessfully"));
-    
                 } else {
                     $response = array('success' => '0', 'message' => Lang::get("website.Coupon is already applied"));
                 }
-    
+
                 session(['coupon' => $session_coupon_data]);
             }
-           
-
         } else {
 
             $response = array('success' => '0', 'message' => Lang::get("website.Coupon does not exist"));
         }
 
         return $response;
-
     }
 
-    public function updateRecord($customers_basket_id, $customers_id, $session_id, $quantity)
-    {
+    public function updateRecord($customers_basket_id, $customers_id, $session_id, $quantity) {
         DB::table('customers_basket')->where('customers_basket_id', '=', $customers_basket_id)->update(
-            [
-                'customers_id' => $customers_id,
-                'session_id' => $session_id,
-                'customers_basket_quantity' => $quantity,
-            ]);
+                [
+                    'customers_id' => $customers_id,
+                    'session_id' => $session_id,
+                    'customers_basket_quantity' => $quantity,
+        ]);
     }
 
 }

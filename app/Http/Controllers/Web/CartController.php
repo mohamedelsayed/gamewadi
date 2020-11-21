@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Web;
 
 //use Mail;
@@ -7,36 +8,30 @@ use App\Models\Web\Cart;
 use App\Models\Web\Index;
 //for password encryption or hash protected
 use App\Models\Web\Products;
-
 //for authenitcate login data
 use Carbon;
-
 //for requesting a value
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
 //for Carbon a value
 use Lang;
 use Session;
 
-class CartController extends Controller
-{
+class CartController extends Controller {
 
     public function __construct(
-        Index $index,
-        Products $products,
-        Cart $cart
+            Index $index,
+            Products $products,
+            Cart $cart
     ) {
         $this->index = $index;
         $this->products = $products;
         $this->cart = $cart;
         $this->theme = new ThemeController();
-
     }
 
     //myCart
-    public function viewcart(Request $request)
-    {
+    public function viewcart(Request $request) {
 
         $title = array('pageTitle' => Lang::get("website.View Cart"));
         $result = array();
@@ -60,8 +55,7 @@ class CartController extends Controller
     }
 
     //eidtCart
-    public function editcart(Request $request, $id, $slug)
-    {
+    public function editcart(Request $request, $id, $slug) {
 
         $title = array('pageTitle' => Lang::get('website.Product Detail'));
         $result = array();
@@ -151,12 +145,10 @@ class CartController extends Controller
         $result['cart'] = $this->cart->myCart($id);
 
         return view("web.detail", ['title' => $title, 'final_theme' => $final_theme])->with('result', $result);
-
     }
 
     //deleteCart
-    public function deleteCart(Request $request)
-    {
+    public function deleteCart(Request $request) {
 
         $check = $this->cart->deleteCart($request);
         //apply coupon
@@ -178,17 +170,15 @@ class CartController extends Controller
             if (empty($check)) {
                 $message = Lang::get("website.Cart item has been deleted successfully");
                 return redirect('/')->with('message', $message);
-
             } else {
                 $message = Lang::get("website.Cart item has been deleted successfully");
                 $final_theme = $this->index->finalTheme();
-                return view("web.headers.cartButtons.cartButton".$final_theme->header)->with('result', $result);
+                return view("web.headers.cartButtons.cartButton" . $final_theme->header)->with('result', $result);
             }
         } else {
             if (empty($check)) {
                 $message = Lang::get("website.Cart item has been deleted successfully");
                 return redirect('/')->with('message', $message);
-
             } else {
                 $message = Lang::get("website.Cart item has been deleted successfully");
                 return redirect()->back()->with('message', $message);
@@ -197,47 +187,41 @@ class CartController extends Controller
     }
 
     //getCart
-    public function cartIdArray($request)
-    {
+    public function cartIdArray($request) {
         $this->cart->cartIdArray($request);
     }
 
     //updatesinglecart
-    public function updatesinglecart(Request $request)
-    {
+    public function updatesinglecart(Request $request) {
         $this->cart->updatesinglecart($request);
         $final_theme = $this->index->finalTheme();
-        return view("web.headers.cartButtons.cartButton".$final_theme->header)->with('result', $result);
+        return view("web.headers.cartButtons.cartButton" . $final_theme->header)->with('result', $result);
     }
 
     //addToCart
-    public function addToCart(Request $request)
-    {
+    public function addToCart(Request $request) {
         $result = $this->cart->addToCart($request);
         if (!empty($result['status']) && $result['status'] == 'exceed') {
             return $result;
         }
-        
+
         $final_theme = $this->index->finalTheme();
-        return view("web.headers.cartButtons.cartButton".$final_theme->header)->with('result', $result);
+        return view("web.headers.cartButtons.cartButton" . $final_theme->header)->with('result', $result);
     }
 
     //addToCartFixed
-    public function addToCartFixed(Request $request)
-    {
-        $result['commonContent'] = $this->index->commonContent();        
+    public function addToCartFixed(Request $request) {
+        $result['commonContent'] = $this->index->commonContent();
         return view("web.headers.cartButtons.cartButtonFixed")->with('result', $result);
     }
 
-    public function addToCartResponsive(Request $request)
-    {
-        $result['commonContent'] = $this->index->commonContent();        
+    public function addToCartResponsive(Request $request) {
+        $result['commonContent'] = $this->index->commonContent();
         return view("web.headers.cartButtons.cartButton")->with('result', $result);
-    }   
+    }
 
     //updateCart
-    public function updateCart(Request $request)
-    {
+    public function updateCart(Request $request) {
 
         if (empty(session('customers_id'))) {
             $customers_id = '';
@@ -251,12 +235,10 @@ class CartController extends Controller
 
         $message = Lang::get("website.Cart has been updated successfully");
         return redirect()->back()->with('message', $message);
-
     }
 
     //apply_coupon
-    public function apply_coupon(Request $request)
-    {
+    public function apply_coupon(Request $request) {
 
         $result = array();
         $coupon_code = $request->coupon_code;
@@ -271,8 +253,7 @@ class CartController extends Controller
     }
 
     //removeCoupon
-    public function removeCoupon(Request $request)
-    {
+    public function removeCoupon(Request $request) {
         $coupons_id = $request->id;
 
         $session_coupon_data = session('coupon');
@@ -289,7 +270,6 @@ class CartController extends Controller
 
         $message = Lang::get("website.Coupon has been removed successfully");
         return redirect()->back()->with('message', $message);
-
     }
 
 }
