@@ -228,18 +228,10 @@ $denominations = $result['denominations'];
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="_token" value="u8DBG6B8kycYYkdLYtuImAt6tsKErStqS0Zg1UtD">
-                        <input type="hidden" name="brandId" id="brandId" value="5">
-                        <input type="hidden" name="countryId" id="countryId" value="11">
-                        <input type="hidden" name="key" id="key" value="145d60f80e5061e2f43a8ca93cab62b8">
-                        <input type="hidden" name="orderValue" id="orderValue" value="">
-                        <div class="col-12 col-lg-6">
+                        <input type="hidden" name="countryId" id="countryId" value="">
+                        <div class="col-12 col-lg-6 d-none" id="addToCartDigital">
                             <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
                         </div>
-                        <div class="col-12 col-lg-6 mb-5 m-lg-0 errorMsgDiv">
-                            <input type="button" id="submit-order" name="" value="Buy Now!" onclick="addToCartFront(1)" class="btn btn-primary btn-block disabled">
-                        </div>
-
                         @endif
                         @if($isDigital == 0)
                         <h5 class="pro-title">{{$product_data->products_name}}</h5>

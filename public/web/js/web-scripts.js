@@ -1,6 +1,7 @@
 $(document).ready(function () {
     if ((typeof isDigital !== "undefined") && isDigital == 1) {
         var country_id = $('select[name=country_id] option:eq(1)').val();
+//        console.log(country_id);
         showDenominationsByCountryId(country_id);
     }
 });
@@ -8,7 +9,9 @@ function draw_denomination_table_web(selectObject) {
     var country_id = selectObject.value;
 //    console.log(country_id);
     showDenominationsByCountryId(country_id);
+    $('#countryId').val(country_id);
     $('#selectCountryFirst').hide();
+//    $('#addToCartDigital').removeClass('d-none');
 }
 function showDenominationsByCountryId(country_id) {
     var html = '';
