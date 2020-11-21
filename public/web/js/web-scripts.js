@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if ((typeof isDigital !== "undefined") && isDigital == 1) {
-        var country_id = $('select[name=country_id] option:eq(2)').val();
+        var country_id = $('select[name=country_id] option:eq(1)').val();
         showDenominationsByCountryId(country_id);
     }
 });
