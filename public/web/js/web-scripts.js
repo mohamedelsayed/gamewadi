@@ -40,7 +40,7 @@ function showDenominationsByCountryId(country_id) {
                     + '</td>'
                     + '<td><div class="qty-control">'
                     + '<i class="qty-decrease">-</i>'
-                    + '<input type="text" onkeypress="validate(event)" name="quantity[]" placeholder="0" value="0" data-qty="" data-price="10.000">'
+                    + '<input type="number" name="quantity[]" placeholder="0" value="0" data-qty="" data-price="10.000">'
                     + '<i class="qty-increase">+</i><i class="max-qty" data-max-qty="100"></i>'
                     + '</div><input type="hidden" name="price[]" value="10.000">'
                     + '<input type="hidden" name="counter[]" value="100">'
