@@ -10,12 +10,14 @@ $(document).ready(function () {
         count = count < 0 ? 0 : count;
         $input.val(count);
         $input.change();
+        showHideAddToCartDigital();
         return false;
     });
     $('body').on('click', '.qty-increase', function () {
         var $input = $(this).parent().find('input');
         $input.val(parseInt($input.val()) + 1);
         $input.change();
+        showHideAddToCartDigital();
         return false;
     });
 });
@@ -33,23 +35,37 @@ function showDenominationsByCountryId(country_id) {
     if (denominationsIn && denominationsIn.length > 0) {
         for (i = 0; i < denominationsIn.length; i++) {
             let item = denominationsIn[i];
+//            console.log(item);
             html += '<tr>'
                     + '<td>' + item.denomination + '</td>'
                     + '<td>' + item.options_values_price
 //    +'<br><small style="color:#A7578F; text-decoration:line-through;"> $ 11.000</small>'
                     + '</td>'
-                    + '<td><div class="qty-control">'
+                    + '<td>'
+                    + '<div class="qty-control">'
                     + '<i class="qty-decrease">-</i>'
-                    + '<input type="number" name="quantity[]" placeholder="0" value="0" data-qty="" data-price="10.000">'
+                    + '<input class="quantityDigitalImput" type="number" name="quantity[]" placeholder="0" value="0" >'
                     + '<i class="qty-increase">+</i><i class="max-qty" data-max-qty="100"></i>'
-                    + '</div><input type="hidden" name="price[]" value="10.000">'
-                    + '<input type="hidden" name="counter[]" value="100">'
-                    + '<input type="hidden" name="denoId[]" value="71">'
-                    + '<input type="hidden" name="type[]" value="s">'
-                    + '<input type="hidden" name="kry[]" value="54c8606694bd05ce8db4e73ce06954d0">'
+                    + '</div>'
+                    + '<input type="hidden" name="productsAttributesId[]" value="' + item.products_attributes_id + '">'
+                    + '<input type="hidden" name="countryId[]" value="' + item.country_id + '">'
+                    + '<input type="hidden" name="productsId[]" value="' + item.products_id + '">'
                     + '</td>'
                     + '</tr>';
         }
     }
     $('.denomination_tbody').html(html);
+    showHideAddToCartDigital();
+}
+function showHideAddToCartDigital() {
+    var sum = 0;
+    $('.quantityDigitalImput').each(function () {
+        sum += parseInt($(this).val());
+    });
+//    console.log(sum);
+    if (sum > 0) {
+        $('#addToCartDigital').removeClass('d-none');
+    } else {
+        $('#addToCartDigital').addClass('d-none');
+    }
 }

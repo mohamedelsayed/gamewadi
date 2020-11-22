@@ -228,7 +228,6 @@ $denominations = $result['denominations'];
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="countryId" id="countryId" value="">
                         <div class="col-12 col-lg-6 d-none" id="addToCartDigital">
                             <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
                         </div>
