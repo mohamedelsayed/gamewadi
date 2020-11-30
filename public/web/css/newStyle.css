@@ -63,3 +63,9 @@
     overflow: hidden;
     padding-top: 50px;
 }
+.quantityDigitalImput {
+    width: 50%;
+    vertical-align: text-bottom;
+    margin: 0 10px;
+    text-align: center;
+}
