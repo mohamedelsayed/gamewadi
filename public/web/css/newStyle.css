@@ -4,6 +4,9 @@
 .qty-table {
     position: relative;
 }
+.qty-control {
+    display: flex;
+}
 #selectCountryFirst {
     position: absolute;
     top: 0;
