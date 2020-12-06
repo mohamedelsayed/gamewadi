@@ -1217,7 +1217,7 @@ class Cart extends Model {
                 } else {
 //                    return array('status' => 'exceed');
                     return array('status' => 'exceed',
-//                                               'defaultStock' => $product->defaultStock,
+//                                               'defgitaultStock' => $product->defaultStock,
 //                                               'already_added' => $exist[0]->customers_basket_quantity,
                         'remain_pieces' => $remainingStock);
                 }
