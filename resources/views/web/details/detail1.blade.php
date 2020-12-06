@@ -209,28 +209,32 @@ $denominations = $result['denominations'];
                                 </div>
                             </div>
                         </div>
-                        <div class="option col-12 p-0 my-3">
-                            <h2>{{ trans('website.Please choose the card value')}}:</h2>
-                            <div class="listOfValues" style="overflow-y: auto;">
-                                <div class="qty-table">
-                                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
-                                        <tr>
-                                            <th>{{ trans('website.Value')}}</th>
-                                            <th>{{ trans('website.Price')}}</th>
-                                            <th>{{ trans('website.Quantity')}}</th>
-                                        </tr>
-                                        <tbody class="denomination_tbody">
-                                        <div id="selectCountryFirst" style="display: flex;">
-                                            <div class="innerSelectCountry">{{ trans('Please choose the card region first')}}!</div>
-                                        </div>
-                                        </tbody>
-                                    </table>
+                        <form id="addToCartDigitalform">
+                            <input type="hidden" name="products_id" value="{{$products_id}}">
+                            <input id="countryId" type="hidden" name="countryId" value="">
+                            <div class="option col-12 p-0 my-3">
+                                <h2>{{ trans('website.Please choose the card value')}}:</h2>
+                                <div class="listOfValues" style="overflow-y: auto;">
+                                    <div class="qty-table">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" class="table table-striped">
+                                            <tr>
+                                                <th>{{ trans('website.Value')}}</th>
+                                                <th>{{ trans('website.Price')}}</th>
+                                                <th>{{ trans('website.Quantity')}}</th>
+                                            </tr>
+                                            <tbody class="denomination_tbody">
+                                            <div id="selectCountryFirst" style="display: flex;">
+                                                <div class="innerSelectCountry">{{ trans('Please choose the card region first')}}!</div>
+                                            </div>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-lg-6 d-none" id="addToCartDigital">
-                            <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartFront()" name="">Add To Cart</button>
-                        </div>
+                            <div class="col-12 col-lg-6 d-none" id="addToCartDigital">
+                                <button class="btn btn-primary btn-block disabled mb-3 mb-lg-0" type="button" id="addToCart" onclick="addToCartDigital()" name="">Add To Cart</button>
+                            </div>
+                        </form>
                         @endif
                         @if($isDigital == 0)
                         <h5 class="pro-title">{{$product_data->products_name}}</h5>

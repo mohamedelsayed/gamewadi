@@ -31,6 +31,7 @@ function draw_denomination_table_web(selectObject) {
 }
 function showDenominationsByCountryId(country_id) {
     var html = '';
+    $('#countryId').val(country_id);
     var denominationsIn = denominations[country_id];
     if (denominationsIn && denominationsIn.length > 0) {
         for (i = 0; i < denominationsIn.length; i++) {
@@ -48,8 +49,6 @@ function showDenominationsByCountryId(country_id) {
                     + '<i class="qty-increase">+</i><i class="max-qty" data-max-qty="100"></i>'
                     + '</div>'
                     + '<input type="hidden" name="productsAttributesId[]" value="' + item.products_attributes_id + '">'
-                    + '<input type="hidden" name="countryId[]" value="' + item.country_id + '">'
-                    + '<input type="hidden" name="productsId[]" value="' + item.products_id + '">'
                     + '</td>'
                     + '</tr>';
         }
@@ -68,4 +67,38 @@ function showHideAddToCartDigital() {
     } else {
         $('#addToCartDigital').addClass('d-none');
     }
+}
+function addToCartDigital() {
+    var formData = jQuery("#addToCartDigitalform").serialize();
+    jQuery.ajax({
+        url: "/addToCart",
+        headers: {'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+        type: "POST",
+        data: formData,
+        success: function (res) {
+            console.log(res);
+            if (res['status'] == 'exceed') {
+                notificationWishlist("@lang('website.Ops! Product is available in stock But Not Active For Sale. Please contact to the admin')");
+            } else {
+                jQuery('.head-cart-content').html(res);
+                jQuery(parent).addClass('active');
+
+                jQuery.ajax({
+
+                    url: '{{ URL::to("/addToCartFixed")}}',
+                    headers: {'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+
+                    type: "POST",
+                    data: '&products_id=' + '',
+                    success: function (res) {
+                        jQuery('.head-cart-content-fixed').html(res);
+                    },
+                });
+                notificationWishlist("@lang('website.Product Added Successfully Thanks.Continue Shopping')");
+                //alert("Congrates!", "Product Added Successfully Thanks.Continue Shopping", "success",{button: false});
+
+            }
+
+        }
+    });
 }

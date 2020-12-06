@@ -826,7 +826,8 @@ class Products extends Model {
             $inventory_ref_id = array();
             foreach ($inventories as $inventory) {
 
-                $totalAttribute = DB::table('inventory_detail')->where('inventory_detail.inventory_ref_id', '=', $inventory->inventory_ref_id)->get();
+                $totalAttribute = DB::table('inventory_detail')
+                                ->where('inventory_detail.inventory_ref_id', '=', $inventory->inventory_ref_id)->get();
                 $totalAttributes = count($totalAttribute);
 
                 if ($postAttributes > $totalAttributes) {
@@ -1096,7 +1097,7 @@ class Products extends Model {
 
         $price = DB::table('products_to_categories')
                 ->join('products', 'products.products_id', '=', 'products_to_categories.products_id');
-        if (isset($categories_id) and ! empty($categories_id)) {
+        if (isset($categories_id) and!empty($categories_id)) {
             $price->where('products_to_categories.categories_id', '=', $categories_id);
         }
 
@@ -1115,14 +1116,14 @@ class Products extends Model {
             $join->on('specials.products_id', '=', 'products.products_id')->where('status', '=', '1')->where('expires_date', '>', $currentDate);
         });
 
-        if (isset($categories_id) and ! empty($categories_id)) {
+        if (isset($categories_id) and!empty($categories_id)) {
             $product->LeftJoin('products_to_categories', 'products.products_id', '=', 'products_to_categories.products_id')->select('products_to_categories.*', 'products.*', 'products_description.*', 'manufacturers.*', 'manufacturers_info.manufacturers_url', 'specials.specials_new_products_price as discount_price');
         } else {
             $product->select('products.*', 'products_description.*', 'manufacturers.*', 'manufacturers_info.manufacturers_url', 'specials.specials_new_products_price as discount_price');
         }
         $product->where('products_description.language_id', '=', Session::get('language_id'));
 
-        if (isset($categories_id) and ! empty($categories_id)) {
+        if (isset($categories_id) and!empty($categories_id)) {
             $product->where('products_to_categories.categories_id', '=', $categories_id);
         }
 
