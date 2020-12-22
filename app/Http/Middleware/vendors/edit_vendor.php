@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Middleware\vendor;
+namespace App\Http\Middleware\vendors;
 
 use Closure;
 use Auth;
 use DB;
 
-class edit_vendor
-{
+class edit_vendor {
+
     /**
      * Handle an incoming request.
      *
@@ -15,16 +15,16 @@ class edit_vendor
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
-      $check =  DB::table('manage_role')
-                 ->where('user_types_id',Auth()->user()->role_id)
-                 ->where('vendors_update',1)
-                 ->first();
-        if($check == null){
-          return  redirect('not_allowed');
-        }else{
-          return $next($request);
+    public function handle($request, Closure $next) {
+        $check = DB::table('manage_role')
+                ->where('user_types_id', Auth()->user()->role_id)
+                ->where('vendors_update', 1)
+                ->first();
+        if ($check == null) {
+            return redirect('not_allowed');
+        } else {
+            return $next($request);
         }
     }
+
 }

@@ -143,9 +143,11 @@ Route::group(['middleware' => ['installer']], function () {
         Route::get('/filter', 'ProductController@filter')->middleware('view_product');
         Route::group(['prefix' => 'inventory'], function () {
             Route::get('/display', 'ProductController@addinventoryfromsidebar')->middleware('view_product');
+            Route::get('/digital', 'ProductController@addinventoryDigital')->middleware('view_product');
             // Route::post('/addnewstock', 'ProductController@addinventory')->middleware('view_product');
             Route::get('/ajax_min_max/{id}/', 'ProductController@ajax_min_max')->middleware('view_product');
             Route::get('/ajax_attr/{id}/', 'ProductController@ajax_attr')->middleware('view_product');
+            Route::get('/getCountriesDenominations/{id}/', 'ProductController@getCountriesDenominations')->middleware('view_product');
             Route::post('/addnewstock', 'ProductController@addnewstock')->middleware('add_product');
             Route::post('/addminmax', 'ProductController@addminmax')->middleware('add_product');
             Route::get('/addproductimages/{id}/', 'ProductController@addproductimages')->middleware('add_product');

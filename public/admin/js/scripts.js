@@ -1,3 +1,4 @@
+var productInventoryDenominations = [];
 $(document).ready(function () {
     $(document).on('click', '#addDenomination', function (e) {
         $("#loader").show();
@@ -86,6 +87,11 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    $(document).on('change', '.product-digital-inventory', function () {
+        var product_id = $(this).val();
+        getProductsInventoryMinMax(product_id);
+        getProductsInventoryCountriesDenominations(product_id);
     });
 });
 //prodcust_type
@@ -229,4 +235,101 @@ function drawDenominations(products_attributes) {
         showData = "<tr><td colspan='5'><strong>No Record Found!</strong></td></tr>";
     }
     $(".contentDenomination").html(showData);
+}
+function getProductsInventoryMinMax(product_id) {
+    $.ajax({
+        url: "/admin/products/inventory/ajax_min_max" + '/' + product_id,
+        type: "GET",
+        success: function (res) {
+            //console.log(res.products[0].products_type);
+            if (res.products[0].products_type == '0') {
+                $('#inventory_ref_id').val('0');
+            } else {
+                $('#inventory_ref_id').val('');
+            }
+            $('#current_stocks').html(res.stocks);
+            $('#total_purchases').html(res.purchase_price);
+            if (res.length != '') {
+                $('#min_level').val(res.min_level);
+                $('#max_level').val(res.max_level);
+                $('#purchase_price').val(res.purchase_price);
+                $('#stocks').val(res.stocks);
+            } else {
+                $('.addError').show();
+            }
+        }
+    });
+}
+function getProductsInventoryCountriesDenominations(product_id) {
+    $("#loader").show();
+    $.ajax({
+        url: "/admin/products/inventory/getCountriesDenominations" + '/' + product_id,
+        type: "GET",
+        success: function (res) {
+//            console.log(res);
+            var countries = res.countries;
+            productInventoryDenominations = res.denominations;
+            var html = '';
+            html += '<option value="" class="field-validate" disabled selected>Choose Country</option>';
+            if (countries) {
+                for (var key in countries) {
+                    html += '<option value="' + key + '">' + countries[key] + '</option>';
+                }
+            }
+            $('#countriesSelect').html(html);
+            $('#countryWrapper').show();
+            $('#denominationsWrapper').hide();
+            $("#loader").hide();
+        }
+    });
+}
+function showDenominationsByCountry(selectObject) {
+    var country_id = selectObject.value;
+    var html = '';
+    html += '<option value="" class="field-validate" disabled selected>Choose Denomination</option>';
+    var denominationsIn = productInventoryDenominations[country_id];
+    if (denominationsIn && denominationsIn.length > 0) {
+        for (i = 0; i < denominationsIn.length; i++) {
+            let item = denominationsIn[i];
+            html += '<option value="' + item.products_attributes_id + '">' + item.denomination + '</option>';
+//            console.log(item);
+        }
+    }
+    $('#denominationsSelect').html(html);
+    $('#denominationsWrapper').show();
+}
+function getDenominationCurrentstock(selectObject) {
+//    var products_attributes_id = selectObject.value;
+    $("#loader").show();
+    var formData = $('#addewinventoryfrom').serialize();
+    $.ajax({
+        url: "/admin/products/attach/attribute/default/options/currentstock",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        success: function (res) {
+            $("#loader").hide();
+            console.log(res);
+            $('#current_stocks').html(res.remainingStock);
+            //console.log(res.remainingStock);
+            var min_level = 0;
+            var max_level = 0;
+            var inventory_ref_id = res.inventory_ref_id;
+            var purchasePrice = res.purchasePrice;
+            var products_id = res.products_id;
+            if (res.minMax != '') {
+                min_level = res.minMax[0].min_level;
+                max_level = res.minMax[0].max_level;
+                var products_id = res.minMax[0].products_id;
+                $('.products_id').val(products_id);
+                $('#inventory_pro_id').val(products_id);
+            }
+            $('#min_level').val(min_level);
+            $('#products_id').val(products_id);
+            $('#max_level').val(max_level);
+            $('#inventory_ref_id').val(inventory_ref_id);
+            $('#inventory_pro_id').val(products_id);
+            $('#total_purchases').html(purchasePrice);
+        }
+    });
 }

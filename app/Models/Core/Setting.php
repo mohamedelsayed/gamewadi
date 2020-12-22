@@ -468,10 +468,8 @@ class Setting extends Model {
     }
 
     public function deleteunits($request) {
-
         DB::table('units')->where('unit_id', $request->id)->delete();
         DB::table('units_descriptions')->where('unit_id', $request->id)->delete();
-
         return "success";
     }
 
@@ -484,19 +482,14 @@ class Setting extends Model {
                     ->first();
         }
         $result['roles'] = $roles;
-
         $settings = DB::table('settings')->get();
         $setting = array();
-
         foreach ($settings as $key => $value) {
             $setting[$value->name] = $value->value;
         }
-
         $result['setting'] = $setting;
         $result['new_reviews'] = DB::table('reviews')->where('reviews_read', 0)->count();
-
         $result['currency'] = DB::table('currencies')->where('is_default', '1')->first();
-
         return $result;
     }
 

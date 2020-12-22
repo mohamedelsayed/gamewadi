@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Lang;
 
 class ProductController extends Controller {
 
-    public function __construct(Products $products, Languages $language, Images $images, Categories $category, Setting $setting,
+    public function __construct(Products $products, Languages $language,
+            Images $images, Categories $category, Setting $setting,
             Manufacturers $manufacturer, Reviews $reviews) {
         parent::__construct();
         $this->category = $category;
@@ -230,19 +231,18 @@ class ProductController extends Controller {
         $title = array('pageTitle' => Lang::get("labels.ProductInventory"));
         $id = $request->id;
         $result = $this->products->addinventory($id);
-
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.products.inventory.add", $title)->with('result', $result);
     }
 
     public function ajax_min_max($id) {
-        $title = array('pageTitle' => Lang::get("labels.ProductInventory"));
+//        $title = array('pageTitle' => Lang::get("labels.ProductInventory"));
         $result = $this->products->ajax_min_max($id);
         return $result;
     }
 
     public function ajax_attr($id) {
-        $title = array('pageTitle' => Lang::get("labels.ProductInventory"));
+//        $title = array('pageTitle' => Lang::get("labels.ProductInventory"));
         $result = $this->products->ajax_attr($id);
         $result['commonContent'] = $this->Setting->commonContent();
         return view("admin.products.inventory.attribute_div")->with('result', $result);
@@ -256,13 +256,11 @@ class ProductController extends Controller {
     }
 
     public function addnewstock(Request $request) {
-
         $this->products->addnewstock($request);
         return redirect()->back()->withErrors([Lang::get("labels.inventoryaddedsuccessfully")]);
     }
 
     public function addminmax(Request $request) {
-
         $this->products->addminmax($request);
         return redirect()->back()->withErrors([Lang::get("labels.Min max level added successfully")]);
     }
@@ -297,14 +295,12 @@ class ProductController extends Controller {
     }
 
     public function updateproductimage(Request $request) {
-
         $title = array('pageTitle' => Lang::get("labels.Manage Values"));
         $result = $this->products->updateproductimage($request);
         return redirect()->back();
     }
 
     public function deleteproductimagemodal(Request $request) {
-
         $products_id = $request->products_id;
         $id = $request->id;
         $result['data'] = array('products_id' => $products_id, 'id' => $id);
@@ -378,7 +374,6 @@ class ProductController extends Controller {
     }
 
     public function deleteoption(Request $request) {
-
         $products_attributes = $this->products->deleteoption($request);
         return ($products_attributes);
     }
@@ -397,7 +392,8 @@ class ProductController extends Controller {
 
     public function currentstock(Request $request) {
         $result = $this->products->currentstock($request);
-        print_r(json_encode($result));
+        return $result;
+//        print_r(json_encode($result));
     }
 
     public function productdenominations(Request $request) {
@@ -434,6 +430,23 @@ class ProductController extends Controller {
     public function deletedenomination(Request $request) {
         $result = $this->products->deletedenomination($request);
         return ($result);
+    }
+
+    public function addinventoryDigital(Request $request) {
+        $title = array('pageTitle' => Lang::get("labels.ProductDigitalInventory"));
+        $result = $this->products->addinventoryDigital();
+        $result['commonContent'] = $this->Setting->commonContent();
+        return view("admin.products.inventory.addDigital", $title)->with('result', $result);
+    }
+
+    public function getCountriesDenominations($id) {
+        $result = [];
+        $webProducts = new \App\Models\Web\Products();
+        $countries = $webProducts->getCountriesByProductId($id);
+        $denominations = $webProducts->getDenominationsByCountriesByProductId($id);
+        $result['countries'] = $countries;
+        $result['denominations'] = $denominations;
+        return $result;
     }
 
 }

@@ -2170,4 +2170,6 @@ return [
     'EditDenomination' => 'Edit denomination',
     'DeleteDenomination' => 'Delete denomination',
     'DeleteDenominationText' => 'Are you sure you want to delete this Denomination?',
+    'ProductDigitalInventory' => 'Product Digital Inventory',
+    'digitalInventory' => 'Digital Inventory',
 ];

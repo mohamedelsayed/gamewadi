@@ -200,7 +200,7 @@ $denominations = $result['denominations'];
                             <label class="w-100" for="country_id" class="">@lang('website.Please choose the country'):</label>
                             <div class="w-100">
                                 <div class="w-75 select-control">
-                                    <select class="form-control field-validate" name="country_id" onchange="draw_denomination_table_web(this)">
+                                    <select class="form-control field-validate" name="country_id" onchange="draw_denomination_table_web(this);">
                                         <option value="" class="field-validate" disabled selected>{{ trans('website.ChooseCountry') }}</option>
                                         @foreach($result['countries'] as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>

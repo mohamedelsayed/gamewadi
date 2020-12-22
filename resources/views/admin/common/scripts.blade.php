@@ -75,7 +75,7 @@ url: '{{ URL::to("admin/media/delete")}}',
         location.reload();
         }
         },
-        });
+});
 } else{
 alert('Please choose image first.');
 }
@@ -262,7 +262,7 @@ $(document).ready(function () {
 $.ajaxSetup({
 headers: {
 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        }
+}
 });
 $(function () {
 
@@ -281,22 +281,22 @@ $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30
 //Date picker
 $('#datepicker').datepicker({
 autoclose: true
-        });
+});
 //iCheck for checkbox and radio inputs
 $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
         radioClass: 'iradio_minimal-blue'
-        });
+});
 //Red color scheme for iCheck
 $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
 checkboxClass: 'icheckbox_minimal-red',
         radioClass: 'iradio_minimal-red'
-        });
+});
 //Flat red color scheme for iCheck
 $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
 checkboxClass: 'icheckbox_flat-green',
         radioClass: 'iradio_flat-green'
-        });
+});
 //Colorpicker
 $(".my-colorpicker1").colorpicker();
 //color picker with addon
@@ -304,7 +304,7 @@ $(".my-colorpicker2").colorpicker();
 //Timepicker
 $(".timepicker").timepicker({
 showInputs: false
-        });
+});
 });
 function propchecked(parents_id){
 //alert(parents_id);
@@ -346,7 +346,7 @@ $('#dob').datepicker({
 autoclose: true,
         format: 'dd/mm/yyyy',
         endDate: "today"
-        });
+});
 // check parents categories
 // $(document).on('click', '.categories', function(){
 // 	if($(this).is(':checked')){
@@ -504,7 +504,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/currentstock")
         $('#inventory_pro_id').val(products_id);
         $('#total_purchases').html(purchasePrice);
         },
-        });
+});
 });
 //add-inventory
 $(document).on('click', '#add-inventory', function(e){
@@ -517,7 +517,7 @@ url: '{{ URL::to("admin/addnewstock")}}',
         $('#addewinventoryfrom').reset();
         $('#addinventoryModal').modal('hide');
         },
-        });
+});
 })
 
         //ajax call for add option value
@@ -537,7 +537,7 @@ url: '{{ URL::to("admin/products/attributes/options/values/addattributevalue")}}
         $('#addAttributeModal').modal('hide');
         $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
         },
-        });
+});
 });
 //ajax call for add option value
 $(document).on('click', '.update-value', function(e){
@@ -557,7 +557,7 @@ url: '{{ URL::to("admin/products/attributes/options/values/updateattributevalue"
         $('.addError').hide();
         $("#content_" + products_options_id + '_' + language_id).parent('tbody').html(res);
         },
-        });
+});
 });
 //deleteattribute
 $(document).on('click', '#deleteAttribute', function(e){
@@ -577,7 +577,7 @@ url: '{{ URL::to("admin/products/attributes/options/values/delete")}}',
         $('#deleteValueModal').modal('hide');
         location.reload();
         },
-        });
+});
 });
 //ajax call for submit value
 $(document).on('click', '#addAttribute', function(e){
@@ -607,7 +607,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/add")}}',
         $('.addError').html(res.msg);
         }
         },
-        });
+});
 });
 //ajax call for submit value
 $(document).on('click', '#addDefaultAttribute', function(e){
@@ -638,7 +638,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default")}}',
         $('.addDefaultError').html(res.msg);
         }
         },
-        });
+});
 });
 //onchange get zones agains country
 $(document).on('change', '#entry_country_id', function(e){
@@ -720,7 +720,7 @@ url: "{{url('admin/customers/addcustomeraddress')}}",
         }
         location.reload();
         },
-        });
+});
 }
 $("#loader").hide();
 });
@@ -737,7 +737,7 @@ url: "{{url('admin/customers/editaddress')}}",
         $('#editAddressModal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //editproductattributemodal
 $(document).on('click', '.editproductattributemodal', function(){
@@ -754,7 +754,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/edit")}}',
         $('#editproductattributemodal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //editdefaultattributemodal
 $(document).on('click', '.editdefaultattributemodal', function(){
@@ -771,7 +771,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/edit')}}",
         $('#editdefaultattributemodal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //udpate address
 $(document).on('click', '#updateAddress', function(e){
@@ -809,7 +809,7 @@ url: "{{url('admin/customers/updateaddress')}}",
 
 
         },
-        });
+});
 }
 $("#loader").hide();
 });
@@ -840,7 +840,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/update")}}',
         $('.addError').html(res.msg);
         }
         },
-        });
+});
 });
 $(document).on('click', '#updateDefaultAttribute', function(e){
 $("#loader").show();
@@ -869,7 +869,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/update')}}",
         $('.addError').html(res.msg);
         }
         },
-        });
+});
 });
 //deleteAddressModal
 $(document).on('click', '#deleteSliderId', function(){
@@ -889,7 +889,7 @@ $('#customers_dob').datepicker({
 autoclose: true,
         format: 'dd/mm/yyyy',
         endDate: "today"
-        });
+});
 //deleteAddress
 // $(document).on('click', '#deleteAddressBtn', function(){
 // 	$("#loader").show();
@@ -961,7 +961,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/options/showdeletemoda
         $('#deleteproductattributemodal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //deletedefaultattributemodal
 $(document).on('click', '.deletedefaultattributemodal', function(){
@@ -976,7 +976,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/deletedefaultattribute
         $('#deletedefaultattributemodal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //deleteOption
 $(document).on('click', '.deleteOption', function(){
@@ -999,7 +999,7 @@ url: "{{ URL::to('admin/products/attributes/options/values/checkattributeassocia
         $(".contentAttribute").html(res);
         }
         },
-        });
+});
 });
 // delete-value
 $(document).on('click', '.delete-value', function(){
@@ -1032,7 +1032,7 @@ url: "{{ URL::to('admin/products/attributes/options/values/checkvalueassociate')
 
 
         },
-        });
+});
 });
 //deleteProductAttribute
 $(document).on('click', '#deleteProductAttribute', function(){
@@ -1065,7 +1065,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/delete')}}",
         $(".contentAttribute").html(res);
         }
         },
-        });
+});
 });
 //deletedefaultattributemodal
 $(document).on('click', '#deleteDefaultAttribute', function(){
@@ -1098,7 +1098,7 @@ url: "{{ URL::to('admin/products/attach/attribute/default/delete')}}",
         $(".contentDefaultAttribute").html(res);
         }
         },
-        });
+});
 });
 //ajax call for submit value
 $(document).on('click', '#addImage', function(e){
@@ -1129,7 +1129,7 @@ url: '{{ URL::to("admin/addnewproductimage")}}',
         cache: false,
         contentType: false,
         processData: false
-        });
+});
 });
 //website_themes
 $(document).on('click', '.website_themes', function(){
@@ -1145,7 +1145,7 @@ url: '{{ URL::to("admin/updateWebTheme")}}',
         }
         },
         dataType: 'html'
-        });
+});
 });
 //editproductimagesmodal
 $(document).on('click', '.editProductImagesModal', function(){
@@ -1160,7 +1160,7 @@ url: '{{ URL::to("admin/editproductimage")}}',
         $('#editProductImagesModal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 $(document).on('click', '#updateProductImage', function(e){
 $("#loader").show();
@@ -1190,7 +1190,7 @@ url: "{{ URL::to('admin/updateproductimage')}}",
         cache: false,
         contentType: false,
         processData: false
-        });
+});
 });
 $("#sendNotificaionForm").submit(function(){
 $('.not-sent').addClass('hide');
@@ -1212,7 +1212,7 @@ url: "{{ URL::to('admin/devices/notifyUser')}}",
         $('.not-sent').removeClass('hide');
         }
         },
-        });
+});
 return false;
 });
 //send-notificaion
@@ -1236,7 +1236,7 @@ url: "{{ URL::to('admin/devices/notifyUser')}}",
         $('.not-sent').removeClass('hide');
         }
         },
-        });
+});
 return false;
 });
 //send push Notification
@@ -1263,7 +1263,7 @@ url: "{{ URL::to('admin/devices/notifyUser')}}",
         $('.not-sent').removeClass('hide');
         }
         },
-        });
+});
 });
 //deleteProductImagesModal
 $(document).on('click', '.deleteProductImagesModal', function(){
@@ -1278,7 +1278,7 @@ url: '{{ URL::to("admin/products/images/deleteproductimagemodal")}}',
         $('#deleteProductImageModal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //deleteproductimage
 $(document).on('click', '#deleteProductImage', function(){
@@ -1306,7 +1306,7 @@ url: "{{ URL::to('admin/products/images/deleteproductimage')}}",
         $(".contentImages").html(showData);
         }
         },
-        });
+});
 });
 //ajax call for notification pop
 $(document).on('click', '#notification-popup', function(){
@@ -1320,7 +1320,7 @@ url: '{{ URL::to("admin/devices/customerNotification")}}',
         $('#notificationModal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //ajax call for manage role
 $(document).on('click', '.manage-role-popup', function(){
@@ -1334,7 +1334,7 @@ url: '{{ URL::to("admin/managerolepopup")}}',
         $('#manageRoleModal').modal('show');
         },
         dataType: 'html'
-        });
+});
 });
 //get products for coupon
 $(document).on('focus', '.couponProdcuts input', function(){
@@ -1346,7 +1346,7 @@ url: "{{URL::to('admin/couponProducts')}}",
         success: function (data) {
         },
         dataType: 'html'
-        });
+});
 });
 //call function on window load
 @if (Request::path() == 'admin/editproduct/*')
@@ -1504,7 +1504,7 @@ url: '{{ URL::to("admin/shippingmethods/defaultShippingMethod")}}',
         success: function (data) {
         $('.default-div').removeClass('hidden');
         },
-        });
+});
 });
 //product options language
 $(document).on('change', '.language_id', function(){
@@ -1556,7 +1556,7 @@ url: '{{ URL::to("admin/languages/default")}}',
         success: function (data) {
         location.reload();
         },
-        });
+});
 });
 $(document).on('click', '.default_pay_method', function(){
 var method_id = $(this).val();
@@ -1567,7 +1567,7 @@ url: '{{ URL::to("admin/paymentmethods/active")}}',
         success: function (data) {
         location.reload();
         },
-        });
+});
 });
 });
 // function getOptions(languages_id) {
@@ -1591,7 +1591,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValu
         success: function (data) {
         $('.products_options_values_id').html(data);
         },
-        });
+});
 }
 
 // function getEditOptions(languages_id) {
@@ -1616,7 +1616,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValu
         success: function (data) {
         $('.edit-products_options_values_id').html(data);
         },
-        });
+});
 }
 
 // function getAdditionalOptions(languages_id) {
@@ -1641,7 +1641,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValu
         success: function (data) {
         $('.additional_products_options_values_id').html(data);
         },
-        });
+});
 }
 
 // function getEditAdditionalOptions(languages_id) {
@@ -1666,7 +1666,7 @@ url: '{{ URL::to("admin/products/attach/attribute/default/options/getOptionsValu
         success: function (data) {
         $('.edit-additional-products_options_values_id').html(data);
         },
-        });
+});
 }
 
 //getSubCategory
@@ -1694,14 +1694,14 @@ url: getCategories,
         $("#sub_category_id").html("<option value=''>Please Select</option>");
         }
         },
-        });
+});
 }
 }
 $(function () {
 $('.datepicker').datepicker({
 autoclose: true,
         format: 'dd/mm/yyyy'
-        });
+});
 });
 function banner_type(){
 var type = $(this).val();
@@ -1812,7 +1812,7 @@ $("[href='#" + parent_id + "']").css('color', 'red');
 var position = $("[href='#" + parent_id + "']").offset().top;
 $("body, html").animate({
 scrollTop: position
-        } /* speed */);
+} /* speed */);
 }
 $(this).closest(".form-group").addClass('has-error');
 //$(this).next(".error-content").removeClass('hidden');
@@ -1991,29 +1991,7 @@ $('#password').removeClass('field-validate');
 });
 $(document).on('change', '.product-type', function(){
 var product_id = $(this).val();
-$.ajax({
-url: '{{ URL::to("admin/products/inventory/ajax_min_max")}}' + '/' + product_id,
-        type: "GET",
-        success: function (res) {
-        //console.log(res.products[0].products_type);
-        if (res.products[0].products_type == '0'){
-        $('#inventory_ref_id').val('0');
-        } else{
-        $('#inventory_ref_id').val('');
-        }
-
-        $('#current_stocks').html(res.stocks);
-        $('#total_purchases').html(res.purchase_price);
-        if (res.length != ''){
-        $('#min_level').val(res.min_level);
-        $('#max_level').val(res.max_level);
-        $('#purchase_price').val(res.purchase_price);
-        $('#stocks').val(res.stocks);
-        } else{
-        $('.addError').show();
-        }
-        },
-        });
+getProductsInventoryMinMax(product_id);
 $.ajax({
 url: '{{ URL::to("admin/products/inventory/ajax_attr")}}' + '/' + product_id,
         type: "GET",
@@ -2028,7 +2006,7 @@ url: '{{ URL::to("admin/products/inventory/ajax_attr")}}' + '/' + product_id,
         $('#attribute-btn').show();
         }
         },
-        });
+});
 });
 function cancelOrder() {
 var status_id = $("#status_id").val();
@@ -2082,7 +2060,7 @@ paramName: 'file',
 $('.thumb-url').tooltip({
 trigger: 'click',
         placement: 'bottom'
-        });
+});
 function setTooltip(btn, message) {
 $(btn).tooltip('hide')
         .attr('data-original-title', message)
@@ -2115,13 +2093,13 @@ $(".image_embed").html(data);
 });
 });
 function ConfirmDelete()
-        {
-        var Delete = confirm("Are you sure you want to delete?");
-        if (Delete)
-                return true;
-        else
-                return false;
-        }
+{
+var Delete = confirm("Are you sure you want to delete?");
+if (Delete)
+        return true;
+else
+        return false;
+}
 
 $("select.show-html").imagepicker();
 $("#AddImage").click(function(){ window.location.href = '{{url("admin/media/addimages")}}'; });
@@ -2288,7 +2266,7 @@ url: '{{ URL::to("admin/media/refresh")}}',
         }
         $("select.show-html").imagepicker();
         },
-        });
+});
 });
 $(document).on('click', '.price_included_tax', function(e){
 var val = $(this).val();
@@ -2321,7 +2299,7 @@ url: '{{ URL::to("admin/managements/checkpassword")}}',
         }
 
         },
-        });
+});
 } else{
 $("#passowrd-error").show();
 setTimeout(function(){ $("#passowrd-error").hide(); }, 3000);

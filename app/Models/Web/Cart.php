@@ -1198,12 +1198,8 @@ class Cart extends Model {
                 if ($symbol == '-') {
                     $final_price = intval($final_price) - intval($values_price);
                 }
-
-
-
                 $qunatity['products_id'] = $request->products_id;
                 $qunatity['attributes'] = [$attributeid];
-
                 $content = $products->productQuantity($qunatity);
 //                pr($content);
                 $remainingStock = $content['remainingStock'];
