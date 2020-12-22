@@ -298,8 +298,7 @@ function showDenominationsByCountry(selectObject) {
     $('#denominationsSelect').html(html);
     $('#denominationsWrapper').show();
 }
-function getDenominationCurrentstock(selectObject) {
-//    var products_attributes_id = selectObject.value;
+function getDenominationCurrentstock() {
     $("#loader").show();
     var formData = $('#addewinventoryfrom').serialize();
     $.ajax({

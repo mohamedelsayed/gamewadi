@@ -82,9 +82,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group" id="denominationsWrapper" style="display: none;">
-                                                                    <label for="name" class="col-sm-2 col-md-4 control-label">{{ trans('labels.Denomination') }}<span style="color:red;">*</span> </label>
+                                                                    <label for="name" class="col-sm-2 col-md-4 control-label">{{ trans('labels.Denomination') }}<span style="color:red;">*</span> </label> 
                                                                     <div class="col-sm-10 col-md-8">
-                                                                        <select class="form-control field-validate product-digital-denomination" name="attribute_id" id="denominationsSelect" onchange="getDenominationCurrentstock(this);" > </select>
+                                                                        <select class="form-control field-validate product-digital-denomination" name="attribute_id" id="denominationsSelect" onchange="getDenominationCurrentstock();" > </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
